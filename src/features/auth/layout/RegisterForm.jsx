@@ -8,17 +8,17 @@ const RegisterForm = () => {
     const {
         form,
         errors,
-        verified,
-        code,
-        setCode,
-        showCodeInput,
-        sendLoading,
-        timer,
+        //verified,
+        //code,
+        //setCode,
+        //showCodeInput,
+        //sendLoading,
+        //timer,
         passwordStrength,
         handleChange,
-        formatTime,
-        sendCode,
-        verifyCode,
+        //formatTime,
+        //sendCode,
+        //verifyCode,
         handleSubmit,
     } = useAuth();
 
@@ -40,8 +40,8 @@ const RegisterForm = () => {
                             value={form.name}
                             onChange={handleChange}
                         />
-                        {errors.name && <p className={styles.error}>{errors.name}</p>}
                     </div>
+                    {errors.name && <p className={styles.error}>{errors.name}</p>}
                 </div>
 
                 <div>
@@ -65,6 +65,9 @@ const RegisterForm = () => {
                             {/*</button>*/}
                         </div>
                     </div>
+                    {errors.email && (
+                        <p className={styles.error}>{errors.email}</p>
+                    )}
                 </div>
                 {/*<div>*/}
                 {/*    {showCodeInput && (*/}
@@ -134,13 +137,13 @@ const RegisterForm = () => {
                             value={form.confirmPassword}
                             onChange={handleChange}
                         />
-                        {errors.confirmPassword && (
-                            <p className={styles.error}>{errors.confirmPassword}</p>
-                        )}
                     </div>
+                    {errors.confirmPassword && (
+                        <p className={styles.error}>{errors.confirmPassword}</p>
+                    )}
                 </div>
                 {/*disabled={!verified}*/}
-                <button className={styles.primaryButton}>
+                <button type="submit" className={styles.primaryButton}>
                     회원가입
                 </button>
                 <p className={styles.footerText}>

@@ -6,12 +6,12 @@ import axios from "axios";
 const useAuth= () => {
     const [form, setForm] = useState({name: "", email: "", password: "", confirmPassword: "",});
     const [errors, setErrors] = useState({});
-    const [verified, setVerified] = useState(false);
+    //const [verified, setVerified] = useState(false);
     const [code, setCode] = useState("");
-    const [showCodeInput, setShowCodeInput] = useState(false);
-    const [sendLoading, setSendLoading] = useState(false);
-    const [timer, setTimer] = useState(0);
-    const [intervalId, setIntervalId] = useState(null);
+    //const [showCodeInput, setShowCodeInput] = useState(false);
+    //const [sendLoading, setSendLoading] = useState(false);
+    //const [timer, setTimer] = useState(0);
+    //const [intervalId, setIntervalId] = useState(null);
     const [passwordStrength, setPasswordStrength] = useState("");
     const navigate = useNavigate();
     const handleChange = (e) => {
@@ -35,25 +35,25 @@ const useAuth= () => {
         if (form.password.length < 8 || form.password.length > 20) newErrors.password = "비밀번호 8~20자";
         if (form.password !== form.confirmPassword) newErrors.confirmPassword = "비밀번호 불일치";
         if (form.name.length < 2 || form.name.length > 20) newErrors.name = "이름은 2~20자";
-        if (!verified) newErrors.emailVerify = "이메일 인증 필요";
+        //if (!verified) newErrors.emailVerify = "이메일 인증 필요";
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    const startTimer = (sec) => {
-        if (intervalId) clearInterval(intervalId);
-        setTimer(sec);
-        const id = setInterval(() => {
-            setTimer((prev) => {
-                if (prev <= 1) {
-                    clearInterval(id);
-                    return 0;
-                }
-                return prev - 1;
-            });
-        }, 1000);
-        setIntervalId(id);
-    };
+    // const startTimer = (sec) => {
+    //     if (intervalId) clearInterval(intervalId);
+    //     setTimer(sec);
+    //     const id = setInterval(() => {
+    //         setTimer((prev) => {
+    //             if (prev <= 1) {
+    //                 clearInterval(id);
+    //                 return 0;
+    //             }
+    //             return prev - 1;
+    //         });
+    //     }, 1000);
+    //     setIntervalId(id);
+    // };
 
     const formatTime = (sec) => {
         const m = Math.floor(sec / 60);
@@ -109,12 +109,12 @@ const useAuth= () => {
     return {
         form,
         errors,
-        verified,
+        //verified,
         code,
         setCode,
-        showCodeInput,
-        sendLoading,
-        timer,
+        //showCodeInput,
+        //sendLoading,
+        //timer,
         passwordStrength,
         handleChange,
         formatTime,
