@@ -1,38 +1,15 @@
-export const routes = {
-  public: [
-    {
-      path: "/login",
-      element: <LoginPage />,
-    },
-  ],
+export const ROUTES = {
+  LOGIN: "/login",
 
-  student: [
-    {
-      path: "/student/mypage",
-      element: <StudentMyPage />,
-    },
-    {
-      path: "/student/class",
-      element: <StudentClassPage />,
-    },
-    {
-      path: "/student/class/:id",
-      element: <StudentClassDetailPage />,
-    },
-  ],
+  STUDENT: {
+    MYPAGE: "/student/mypage",
+    CLASS: (id = ":id") => `/student/class/${id}`,
+    CLASS_DETAIL: (id = ":id") => `/student/class/${id}/detail`,
+  },
 
-  teacher: [
-    {
-      path: "/teacher/mypage",
-      element: <TeacherMyPage />,
-    },
-    {
-      path: "/teacher/class",
-      element: <TeacherClass />,
-    },
-    {
-      path: "/teacher/class/:id",
-      element: <TeacherClassDetailPage />,
-    },
-  ],
+  TEACHER: {
+    MYPAGE: "/teacher/mypage",
+    CLASS: (id = ":id") => `/teacher/class/${id}`,
+    CLASS_DETAIL: (id = ":id") => `/teacher/class/${id}/detail`,
+  },
 };

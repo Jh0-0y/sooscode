@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ROUTES } from "../constants/routes";
 
 // pages
 import LoginPage from "../pages/login/LoginPage.jsx";
@@ -11,23 +12,23 @@ import TeacherMyPage from "../pages/teacher/TeacherMyPage.jsx";
 import TeacherClassPage from "../pages/teacher/TeacherClassPage.jsx";
 import TeacherClassDetailPage from "../pages/teacher/TeacherClassDetailPage.jsx";
 
-
 export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
 
-        <Route path="/login" element={<LoginPage />} />
+        {/* Login */}
+        <Route path={ROUTES.LOGIN} element={<LoginPage />} />
 
         {/* Student */}
-        <Route path="/student/mypage" element={<StudentMyPage />} />
-        <Route path="/student/class/:id" element={<StudentClassPage />} />
-        <Route path="/student/class/:id/detail" element={<StudentClassDetailPage />} />
+        <Route path={ROUTES.STUDENT.MYPAGE} element={<StudentMyPage />} />
+        <Route path={ROUTES.STUDENT.CLASS()} element={<StudentClassPage />} />
+        <Route path={ROUTES.STUDENT.CLASS_DETAIL()} element={<StudentClassDetailPage />} />
 
         {/* Teacher */}
-        <Route path="/teacher/mypage" element={<TeacherMyPage />} />
-        <Route path="/teacher/class/:id" element={<TeacherClassPage />} />
-        <Route path="/teacher/class/:id/detail" element={<TeacherClassDetailPage />} />
+        <Route path={ROUTES.TEACHER.MYPAGE} element={<TeacherMyPage />} />
+        <Route path={ROUTES.TEACHER.CLASS()} element={<TeacherClassPage />} />
+        <Route path={ROUTES.TEACHER.CLASS_DETAIL()} element={<TeacherClassDetailPage />} />
 
       </Routes>
     </BrowserRouter>
