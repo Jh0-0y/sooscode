@@ -1,9 +1,9 @@
-package com.sooscode.sooscode_api.domain.chatting.service;
+package com.sooscode.sooscode_api.domain.chat.service;
 
-import com.sooscode.sooscode_api.domain.chatting.entity.ChatMessage;
-import com.sooscode.sooscode_api.domain.chatting.entity.ChatMessageReaction;
-import com.sooscode.sooscode_api.domain.chatting.repository.ChatMessageReactionRepository;
-import com.sooscode.sooscode_api.domain.chatting.repository.ChatMessageRepository;
+import com.sooscode.sooscode_api.domain.chat.entity.ChatMessage;
+import com.sooscode.sooscode_api.domain.chat.entity.ChatMessageReaction;
+import com.sooscode.sooscode_api.domain.chat.repository.ChatMessageReactionRepository;
+import com.sooscode.sooscode_api.domain.chat.repository.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -21,9 +21,6 @@ public class ChatMessageReactionServiceImpl implements ChatMessageReactionServic
 
     private final ChatMessageReactionRepository reactionRepository;
     private final ChatMessageRepository messageRepository;
-
-    // 🔥 STOMP 브로드캐스트 용
-    private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     public void like(Long messageId, String reactorNickname) {

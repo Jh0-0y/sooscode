@@ -1,4 +1,4 @@
-package com.sooscode.sooscode_api.domain.chatting.service;
+package com.sooscode.sooscode_api.domain.chat.service;
 
 import java.util.List;
 

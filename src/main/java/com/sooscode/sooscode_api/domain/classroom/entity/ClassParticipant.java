@@ -1,5 +1,6 @@
 package com.sooscode.sooscode_api.domain.classroom.entity;
 
+
 import com.sooscode.sooscode_api.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,17 +9,17 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "class_assignment")
+@Table(name = "class_participant")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class ClassAssignment {
+public class ClassParticipant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "class_assignment_id")
-    private Long classAssignmentId;
+    @Column(name = "class_participant_id")
+    private Long classParticipantId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

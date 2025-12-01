@@ -1,7 +1,6 @@
 package com.sooscode.sooscode_api.application.chatting.controller;
 
-import com.sooscode.sooscode_api.domain.chatting.entity.ChatMessage;
-import com.sooscode.sooscode_api.domain.chatting.service.ChatService;
+import com.sooscode.sooscode_api.domain.chat.entity.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
