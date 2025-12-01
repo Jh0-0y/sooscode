@@ -3,19 +3,17 @@ import { ROUTES } from "../constants/routes";
 
 // pages
 
-import StudentMyPage from "../pages/student/StudentMyPage.jsx";
-import StudentClassOnline from "../pages/student/StudentClassOnline.jsx";
-import StudentClassOffline from "../pages/student/StudentClassOffline.jsx";
-import StudentClassDetail from "../pages/student/StudentClassDetail.jsx";
+import StudentClassDetail from "../pages/classDetail/StudentClassDetail.jsx";
+import TeacherClassDetail from "../pages/classDetail/TeacherClassDetail.jsx";
 
-import TeacherMyPage from "../pages/teacher/TeacherMyPage.jsx";
-import TeacherClassOnline from "../pages/teacher/TeacherClassOnline.jsx";
-import TeacherClassOffline from "../pages/teacher/TeacherClassOffline.jsx";
-import TeacherClassDetail from "../pages/teacher/TeacherClassDetail.jsx";
+import StudentClassJoin from "../pages/classJoin/StudentClassJoin.jsx";
+import TeacherClassJoin from "../pages/classJoin/TeacherClassJoin.jsx";
 
 import AuthPage from "@/pages/auth/AuthPage.jsx";
 import AuthLayout from "@/features/auth/layout/AuthLayout.jsx";
 import {useEffect, useState} from "react";
+import StudentMypage from "../pages/Mypage/StudentMypage.jsx";
+import TeacherMypage from "../pages/Mypage/TeacherMypage.jsx";
 
 export default function AppRouter() {
     // 추후 Redis도입 시 삭제 될 코드
@@ -36,15 +34,13 @@ export default function AppRouter() {
           </Route>
 
           {/* Student */}
-        <Route path={ROUTES.STUDENT.MYPAGE} element={<StudentMyPage />} />
-        <Route path={ROUTES.STUDENT.ONLINECLASS()} element={<StudentClassOnline />} />
-        <Route path={ROUTES.STUDENT.OFFLINECLASS()} element={<StudentClassOffline />} />
+        <Route path={ROUTES.STUDENT.MYPAGE} element={<StudentMypage />} />
+        <Route path={ROUTES.STUDENT.CLASS_JOIN()} element={<StudentClassJoin />} />
         <Route path={ROUTES.STUDENT.CLASS_DETAIL()} element={<StudentClassDetail />} />
 
         {/* Teacher */}
-        <Route path={ROUTES.TEACHER.MYPAGE} element={<TeacherMyPage />} />
-        <Route path={ROUTES.TEACHER.ONLINECLASS()} element={<TeacherClassOnline />} />
-        <Route path={ROUTES.TEACHER.OFFLINECLASS()} element={<TeacherClassOffline />} />
+        <Route path={ROUTES.TEACHER.MYPAGE} element={<TeacherMypage />} />
+        <Route path={ROUTES.TEACHER.CLASS_JOIN()} element={<TeacherClassJoin />} />
         <Route path={ROUTES.TEACHER.CLASS_DETAIL()} element={<TeacherClassDetail />} />
 
       </Routes>

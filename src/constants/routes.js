@@ -5,15 +5,13 @@ export const ROUTES = {
 
   STUDENT: {
     MYPAGE: "/student/mypage",
-    ONLINECLASS: (id = ":id") => `/student/class/${id}/online`,
-    OFFLINECLASS: (id = ":id") => `/student/class/${id}/offline`,
+    CLASS_JOIN: (id = ":id") => `/student/class/${id}`,
     CLASS_DETAIL: (id = ":id") => `/student/class/${id}/detail`,
   },
 
   TEACHER: {
     MYPAGE: "/teacher/mypage",
-    ONLINECLASS: (id = ":id") => `/teacher/class/${id}/online`,
-    OFFLINECLASS: (id = ":id") => `/teacher/class/${id}/offline`,
+    CLASS_JOIN: (id = ":id") => `/teacher/class/${id}`,
     CLASS_DETAIL: (id = ":id") => `/teacher/class/${id}/detail`,
   },
 };
