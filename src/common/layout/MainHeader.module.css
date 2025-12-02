@@ -1,19 +1,22 @@
 .header {
   background-color: #2f3136;
   border-bottom: 1px solid #202225;
-  padding: 16px;
+  padding: 16px 0;      /* 좌우 padding 제거 */
+  width: 100%;
   position: sticky;
   top: 0;
   z-index: 50;
 }
 
+/* 헤더 안의 내용 정렬 */
 .headerContainer {
-  max-width: 1400px;
-  margin: 0 auto;
+  padding: 0 16px;           /* 내부 여백 */
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 
 .headerLeft {
   display: flex;

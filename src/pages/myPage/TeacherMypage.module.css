@@ -1,5 +1,15 @@
-export default function TeacherMypage() {
-  return (
-    <div>TeacherMypage</div>
-  );
+/* PAGE WRAPPER */
+.app {
+  background-color: #36393f;
+  min-height: 100vh;
+}
+
+/* PAGE CONTENT AREA */
+.mainContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }

@@ -1,4 +1,4 @@
-import styles from "./Header.module.css";
+import styles from "./MainHeader.module.css";
 import svgPaths from "../../imports/svg-uj7vgedyo3";
 
 export default function Header() {
