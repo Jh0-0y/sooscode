@@ -26,7 +26,7 @@ export const createMessageSlice = (set, get) => ({
 
       // 🔥 서버에서 온 원본 -> 프론트에서 쓰기 좋은 형식으로 변환
       const data = raw.map((m) => ({
-        id: m.chatId,          // chatId → id
+        id: m.chatId,          // chatId → id 
         content: m.content,       // content → text
         createdAt: m.createdAt // 그대로
         // sender 는 아예 없으니까 안 넣거나, 필요하면 '익명' 같은 기본값
