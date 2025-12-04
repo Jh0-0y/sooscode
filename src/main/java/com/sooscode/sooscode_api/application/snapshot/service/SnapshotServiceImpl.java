@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -71,6 +72,17 @@ public class SnapshotServiceImpl implements SnapshotService {
         List<CodeSnapshot> snapshots =
                 codeSnapshotRepository
                         .findByUser_UserIdAndClassRoom_ClassIdAndContentContaining(userId, classId, content);
+
+        return snapshots.stream()
+                .map(SnapShotResponse::from)
+                .toList();
+    }
+    @Override
+    public List<SnapShotResponse> readSnapshotByDate(Long userId, Long classId, LocalDateTime start, LocalDateTime end){
+
+        List<CodeSnapshot> snapshots =
+                codeSnapshotRepository
+                        .findByUser_userIdAndClassRoom_classIdAndCreatedAtBetween(userId, classId , start, end);
 
         return snapshots.stream()
                 .map(SnapShotResponse::from)

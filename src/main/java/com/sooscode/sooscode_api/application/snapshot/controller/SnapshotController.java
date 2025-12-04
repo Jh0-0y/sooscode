@@ -14,6 +14,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @RequestMapping("/api/snapshot")
@@ -71,11 +74,30 @@ public class SnapshotController {
     ){
         Long userId = userDetails.getUser().getUserId();
 
-        List <SnapShotResponse> snapShotResponses =
+        List<SnapShotResponse> snapShotResponses =
                 snapshotService.readSnapshotsByContent(userId, classId, content);
         System.out.println(content);
 
         return ResponseEntity.ok(snapShotResponses);
     }
+    @GetMapping("/read/date")
+    public ResponseEntity<List<SnapShotResponse>> searchByDate(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam Long classId,
+            @RequestParam String day
+    ){
+        Long userId = userDetails.getUser().getUserId();
+
+        LocalDate localDate = LocalDate.parse(day);
+
+        LocalDateTime start = localDate.atStartOfDay();
+        LocalDateTime end = localDate.atTime(LocalTime.MAX);
+
+        List<SnapShotResponse> snapShotResponses =
+                snapshotService.readSnapshotByDate(userId, classId, start, end);
+
+        return ResponseEntity.ok(snapShotResponses);
+    }
+
 
 }

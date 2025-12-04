@@ -18,6 +18,6 @@ public interface CodeSnapshotRepository extends JpaRepository<CodeSnapshot, Long
     //내용별로 조회
     List<CodeSnapshot> findByUser_UserIdAndClassRoom_ClassIdAndContentContaining(Long userId, Long classId, String content);
     //날짜별로 조회
-    //List<CodeSnapshot> findByUser_userIdAndClassRoom_classIdAndCreatedAt(Long userId, Long classId, LocalDateTime start, LocalDateTime end);
+    List<CodeSnapshot> findByUser_userIdAndClassRoom_classIdAndCreatedAtBetween(Long userId, Long classId, LocalDateTime start, LocalDateTime end);
 
 }
