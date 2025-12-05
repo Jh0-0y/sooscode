@@ -16,6 +16,7 @@ public class ClassParticipantResponse {
     private Long userId;
     private String userName;
     private Long classId;
+    private String userEmail;
 
     public static ClassParticipantResponse from(ClassParticipant entity) {
         return ClassParticipantResponse.builder()
@@ -23,6 +24,7 @@ public class ClassParticipantResponse {
                 .userId(entity.getUser().getUserId())
                 .userName(entity.getUser().getName())
                 .classId(entity.getClassRoom().getClassId())
+                .userEmail(entity.getUser().getEmail())
                 .build();
     }
 }

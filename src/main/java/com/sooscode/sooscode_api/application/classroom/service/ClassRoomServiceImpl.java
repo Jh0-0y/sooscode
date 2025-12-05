@@ -18,6 +18,8 @@ import com.sooscode.sooscode_api.global.exception.CustomException;
 import com.sooscode.sooscode_api.global.exception.errorcode.ClassErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +43,7 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     @Override
     public ClassRoomResponse.Detail getClassDetail(Long classId) {
         ClassRoom classRoom = classRoomRepository.findById(classId)
-                .orElseThrow(() -> new CustomException(ClassErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ClassErrorCode.CLASS_NOT_FOUND));
 
         return ClassRoomResponse.Detail.from(classRoom);
     }
@@ -84,45 +86,13 @@ public class ClassRoomServiceImpl implements ClassRoomService {
                 .toList();
     }
 
-//    @Override
-//    public ClassDetailResponse getTeacherClassDetail(Long classId, LocalDate date) {
-//        if(date == null){
-//            date = LocalDate.now();
-//        }
-//
-//        ClassRoom classRoom = classRoomRepository
-//                .findByClassId(classId)
-//                .orElseThrow(() -> new CustomException(ErrorCode.CLASS_NOT_FOUND));
-//
-//        ClassInfoResponse info = ClassInfoResponse.from(classRoom);
-//
-//        List<ClassParticipantResponse> participants =
-//                classParticipantRepository.findByClassRoom_ClassId(classId)
-//                        .stream()
-//                        .map(ClassParticipantResponse::from)
-//                        .toList();
-//
-//        List<SnapshotResponse> snapshots =
-//                codeSnapshotRepository.findByClassIdAndCreatedAtBetween(
-//                        classId,
-//                        date.atStartOfDay(),
-//                        date.atTime(LocalTime.MAX)
-//                ).stream().map(SnapshotResponse::from)
-//                        .toList();
-//
-//        List<FileResponse> fileList =
-//                sooFileRepository.findByClassIdAndCreatedAtBetween(
-//                        classId,
-//                        date.atStartOfDay(),
-//                        date.atTime(LocalTime.MAX)
-//                ).stream().map(FileResponse::from).toList();
-//        return ClassDetailResponse.builder()
-//                .info(info)
-//                .participants(participants)
-//                .snapshots(snapshots)
-//                .fileList(fileList)
-//                .build();
-//    }
+    @Override
+    public Page<MyClassResponse> getMyClasses(Long userId, Pageable pageable) {
+
+        log.info("getMyClasses Service");
+
+        return classParticipantRepository.findMyClasses(userId, pageable);
+    }
 
 
     /**
