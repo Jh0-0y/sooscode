@@ -3,7 +3,6 @@ package com.sooscode.sooscode_api.infra.worker;
 import com.sooscode.sooscode_api.application.compile.dto.CompileResultResponse;
 import com.sooscode.sooscode_api.application.compile.dto.CompileRunResponse;
 import com.sooscode.sooscode_api.global.exception.CustomException;
-import com.sooscode.sooscode_api.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

@@ -3,7 +3,6 @@ package com.sooscode.sooscode_api.application.compile.service;
 import com.sooscode.sooscode_api.application.compile.dto.CompileResultResponse;
 import com.sooscode.sooscode_api.application.compile.dto.CompileRunResponse;
 import com.sooscode.sooscode_api.global.exception.CustomException;
-import com.sooscode.sooscode_api.global.exception.ErrorCode;
 import com.sooscode.sooscode_api.infra.worker.CodeBlacklistFilter;
 import com.sooscode.sooscode_api.infra.worker.CompileWorkerClient;
 import lombok.RequiredArgsConstructor;
