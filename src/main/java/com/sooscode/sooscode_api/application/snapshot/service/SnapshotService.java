@@ -27,5 +27,6 @@ public interface SnapshotService {
     List<SnapShotResponse> readSnapshotByTitleAndDate(Long userId, Long classId, String title,LocalDateTime start, LocalDateTime end);
     // 내용과 날짜별 조회
     List<SnapShotResponse> readSnapshotByContentAndDate(Long userId, Long classId, String content,LocalDateTime start, LocalDateTime end);
+    // 날짜별 조회(제목만 로딩)
 
 }

@@ -1,7 +1,7 @@
 package com.sooscode.sooscode_api.application.chat.service;
 
-import com.sooscode.sooscode_api.application.chat.dto.ChatHistoryResponse;
-import com.sooscode.sooscode_api.application.chat.dto.ChatSaveRequest;
+import com.sooscode.sooscode_api.application.chat.dto.ChatMessageResponse;
+import com.sooscode.sooscode_api.application.chat.dto.ChatMessageRequest;
 import com.sooscode.sooscode_api.domain.chatmessage.entity.ChatMessage;
 import com.sooscode.sooscode_api.domain.classroom.entity.ClassRoom;
 import com.sooscode.sooscode_api.domain.classroom.repository.ClassRoomRepository;
@@ -20,9 +20,9 @@ public class ChatServiceImpl implements ChatService {
     private final SimpMessagingTemplate messagingTemplate;
 
     @Override
-    public void saveAndBroadcast(ChatSaveRequest chatSaveRequest) {
+    public void saveAndBroadcast(ChatMessageRequest chatMessageRequest) {
 
-        Long classId = chatSaveRequest.getClassId();
+        Long classId = chatMessageRequest.getClassId();
 
         // 1) classId → ClassRoom 엔티티(또는 프록시)로 변환
         ClassRoom classRoom = classRoomRepository.getReferenceById(classId);
@@ -32,14 +32,14 @@ public class ChatServiceImpl implements ChatService {
         ChatMessage message = ChatMessage.of(
                 null,                        // User 나중에 로그인 붙일 때 넣자
                 classRoom,
-                chatSaveRequest.getContent()
+                chatMessageRequest.getContent()
         );
 
         // 3) 저장
         ChatMessage saved = chatMessageService.saveMessage(message);
 
         // 4) 응답용 DTO로 변환
-        ChatHistoryResponse response = ChatHistoryResponse.from(saved);
+        ChatMessageResponse response = ChatMessageResponse.from(saved);
 
         // 5) /topic/chat/{classId} 로 브로드캐스트
         String destination = "/topic/chat/" + classId;
@@ -47,11 +47,11 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public List<ChatHistoryResponse> getHistoryByClassRoom_ClassIdOrderByCreatedAtAsc(Long classId) {
+    public List<ChatMessageResponse> getHistoryByClassRoom_ClassIdOrderByCreatedAtAsc(Long classId) {
         return chatMessageService
                 .findAllByClassRoom_ClassIdOrderByCreatedAtAsc(classId)
                 .stream()
-                .map(ChatHistoryResponse::from)
+                .map(ChatMessageResponse::from)
                 .toList();
     }
 }
