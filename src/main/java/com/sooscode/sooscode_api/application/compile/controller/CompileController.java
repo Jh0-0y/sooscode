@@ -21,8 +21,6 @@ public class CompileController {
     @PostMapping("/run")
     public ResponseEntity<CompileResultResponse> run(@Valid @RequestBody CompileRunRequest request) {
         CompileResultResponse result = compileService.runCode(request.getCode());
-
-
         return ResponseEntity.ok(result);
     }
 }

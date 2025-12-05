@@ -29,7 +29,6 @@ public class CompileWorkerClient {
      */
     public CompileRunResponse requestCompile(String code) {
 
-
         String targetUrl = workerUrl + "/api/compile/run";
 
         Map<String, String> requestBody = new HashMap<>();
