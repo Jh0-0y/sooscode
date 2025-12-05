@@ -1,11 +1,11 @@
 package com.sooscode.sooscode_api.application.auth.dto;
 
-import com.sooscode.sooscode_api.application.userprofile.dto.UserInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class LoginResponse {
-    private UserInfo user;
+public class TokenPair {
+    private String accessToken;
+    private String refreshToken;
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class LoginResponse {
+public class LoginResult {
+    private TokenPair tokens;
     private UserInfo user;
 }

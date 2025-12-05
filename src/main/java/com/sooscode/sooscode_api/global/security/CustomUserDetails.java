@@ -18,6 +18,7 @@ public class CustomUserDetails implements UserDetails {
 
     private final User user;
 
+
     /**
      * 일반 로그인/OAuth 공통 생성자
      */

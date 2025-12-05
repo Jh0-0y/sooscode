@@ -40,7 +40,7 @@ public class GoogleAuthService {
      *
      * Google Callback 처리 (AccessToken + RefreshToken 발급)
      */
-    public LoginResponse processGoogleCallback(String code) {
+    public TokenPair processGoogleCallback(String code) {
 
         GoogleOAuthToken tokenResponse = getAccessToken(code);
         GoogleUserInfo userInfo = getUserInfo(tokenResponse.accessToken());
@@ -53,7 +53,7 @@ public class GoogleAuthService {
         String accessToken = jwtUtil.generateAccessToken(user);
         String refreshToken = jwtUtil.generateRefreshToken(user);
 
-        return new LoginResponse(accessToken, refreshToken);
+        return new TokenPair(accessToken, refreshToken);
     }
 
     /**

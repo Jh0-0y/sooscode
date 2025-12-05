@@ -3,9 +3,13 @@ package com.sooscode.sooscode_api.application.auth.controller;
 import com.sooscode.sooscode_api.application.auth.util.CookieUtil;
 import com.sooscode.sooscode_api.application.userprofile.dto.UserInfo;
 import com.sooscode.sooscode_api.domain.user.entity.User;
+import com.sooscode.sooscode_api.global.exception.CustomException;
+import com.sooscode.sooscode_api.global.exception.errorcode.AuthErrorCode;
 import com.sooscode.sooscode_api.global.jwt.JwtUtil;
 import com.sooscode.sooscode_api.global.security.CustomUserDetails;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +29,6 @@ public class AuthController {
 
     private final AuthServiceImpl authService;
     private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
 
     /**
      * 로컬 로그인
@@ -35,17 +38,31 @@ public class AuthController {
             @RequestBody LoginRequest request,
             HttpServletResponse response
     ) {
-        LoginResponse data = authService.authenticateAndGenerateTokens(request, authenticationManager);
-        CookieUtil.addTokenCookies(response, data);
-        return ResponseEntity.ok(new ApiResponse(true, "로그인 성공", data));
+        LoginResult result = authService.authenticateAndGenerateTokens(request, authenticationManager);
+
+        // ✔ 쿠키 저장
+        CookieUtil.addTokenCookies(response, result.getTokens());
+
+        // ✔ 응답 body에는 유저 정보만
+        return ResponseEntity.ok(
+                new ApiResponse(true, "로그인 성공", new LoginResponse(result.getUser()))
+        );
     }
 
     /**
      * 로그아웃
      */
     @PostMapping("/logout")
-    public ResponseEntity<ApiResponse> logout(HttpServletResponse response) {
-       CookieUtil.deleteTokenCookies(response, null);
+    public ResponseEntity<ApiResponse> logout(
+            @AuthenticationPrincipal CustomUserDetails user,
+            HttpServletResponse response
+    ) {
+        if (user != null) {
+            authService.deleteRefreshToken(user.getUser().getUserId());
+        }
+
+        CookieUtil.deleteTokenCookies(response, null);
+
         return ResponseEntity.ok(
                 new ApiResponse(true, "로그아웃 성공", null)
         );
@@ -56,27 +73,23 @@ public class AuthController {
      */
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest request) {
+
+        /**
+         * 이메일 중복 체크
+         */
+        if (authService.isDuplicateEmail(request.getEmail())) {
+            throw new CustomException(AuthErrorCode.DUPLICATE_EMAIL);
+        }
+        /**
+         * 유효성 검사 (서비스에서 호출)
+         */
         validateSignupData(request.getName(), request.getEmail(), request.getPassword(), request.getConfirmPassword());
+
         RegisterResponse data = authService.registerUser(request);
         return ResponseEntity.ok(
                 new ApiResponse(true, "회원가입 성공", data)
         );
     }
-
-    /**
-     * 이메일 중복 검사
-     */
-    @GetMapping("/check-email")
-    public ResponseEntity<ApiResponse> checkEmail(@RequestParam String email) {
-        boolean isDuplicate = authService.isDuplicateEmail(email);
-        if (isDuplicate) {
-            return ResponseEntity.ok(new ApiResponse(false, "이미 사용 중인 이메일입니다.", null));
-        }
-        return ResponseEntity.ok(
-                new ApiResponse(true, "사용 가능한 이메일입니다.", null)
-        );
-    }
-
 
     /**
      * 이메일 인증 코드 요청
@@ -97,7 +110,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse> verifyEmailCode(@RequestBody EmailVerifyRequest request) {
         boolean result = authService.verifyEmailCode(request.getEmail(), request.getCode());
         if (!result) {
-            return ResponseEntity.ok(new ApiResponse(false, "인증 코드가 일치하지 않습니다.", null));
+            throw new CustomException(AuthErrorCode.VERIFICATION_CODE_INVALID);
         }
         return ResponseEntity.ok(
                 new ApiResponse(true, "이메일 인증이 완료되었습니다.", null)
@@ -150,26 +163,40 @@ public class AuthController {
     /**
      * 임시 비밀번호 발급 요청
      */
-    @PostMapping("/password/reset/request")
-    public ResponseEntity<?> requestTempPassword(@RequestBody TempPasswordRequest request) {
-        authService.sendTempPassword(request.getEmail());
-        return ResponseEntity.ok(
-                new ApiResponse(true, "임시 비밀번호가 이메일로 발송되었습니다.", null)
-        );
-    }
+//    @PostMapping("/password/reset/request")
+//    public ResponseEntity<?> requestTempPassword(@RequestBody TempPasswordRequest request) {
+//        authService.sendTempPassword(request.getEmail());
+//        return ResponseEntity.ok(
+//                new ApiResponse(true, "임시 비밀번호가 이메일로 발송되었습니다.", null)
+//        );
+//    }
 
     /**
      * 임시 비밀번호로 로그인
      */
-    @PostMapping("/login/temp")
-    public ResponseEntity<ApiResponse> tempLogin(@RequestBody TempLoginRequest request) {
-        LoginResponse tokens = authService.loginWithTempPassword(
-                request.getEmail(),
-                request.getTempPassword()
-        );
-        return ResponseEntity.ok(
-                new ApiResponse(true, "임시 비밀번호 로그인 성공", tokens)
-        );
-    }
+//    @PostMapping("/login/temp")
+//    public ResponseEntity<ApiResponse> tempLogin(@RequestBody TempLoginRequest request) {
+//        LoginResponse tokens = authService.loginWithTempPassword(
+//                request.getEmail(),
+//                request.getTempPassword()
+//        );
+//        return ResponseEntity.ok(
+//                new ApiResponse(true, "임시 비밀번호 로그인 성공", tokens)
+//        );
+//    }
 
+    /**
+     * RT로 AT재발급
+     */
+    @PostMapping("/token/reissue")
+    public ResponseEntity<ApiResponse> reissueAccessToken(HttpServletRequest request, HttpServletResponse response) {
+
+        String refreshToken = CookieUtil.getRefreshToken(request);
+
+        TokenPair tokens = authService.reissueAccessToken(refreshToken);
+
+        CookieUtil.addTokenCookies(response, tokens);
+
+        return ResponseEntity.ok(new ApiResponse(true, "Access Token 재발급 완료", tokens));
+    }
 }
