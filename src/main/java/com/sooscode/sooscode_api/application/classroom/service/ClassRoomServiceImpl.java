@@ -95,50 +95,6 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     }
 
 
-
-
-
-//    @Override
-//    public ClassDetailResponse getTeacherClassDetail(Long classId, LocalDate date) {
-//        if(date == null){
-//            date = LocalDate.now();
-//        }
-//
-//        ClassRoom classRoom = classRoomRepository
-//                .findByClassId(classId)
-//                .orElseThrow(() -> new CustomException(ErrorCode.CLASS_NOT_FOUND));
-//
-//        ClassInfoResponse info = ClassInfoResponse.from(classRoom);
-//
-//        List<ClassParticipantResponse> participants =
-//                classParticipantRepository.findByClassRoom_ClassId(classId)
-//                        .stream()
-//                        .map(ClassParticipantResponse::from)
-//                        .toList();
-//
-//        List<SnapshotResponse> snapshots =
-//                codeSnapshotRepository.findByClassIdAndCreatedAtBetween(
-//                        classId,
-//                        date.atStartOfDay(),
-//                        date.atTime(LocalTime.MAX)
-//                ).stream().map(SnapshotResponse::from)
-//                        .toList();
-//
-//        List<FileResponse> fileList =
-//                sooFileRepository.findByClassIdAndCreatedAtBetween(
-//                        classId,
-//                        date.atStartOfDay(),
-//                        date.atTime(LocalTime.MAX)
-//                ).stream().map(FileResponse::from).toList();
-//        return ClassDetailResponse.builder()
-//                .info(info)
-//                .participants(participants)
-//                .snapshots(snapshots)
-//                .fileList(fileList)
-//                .build();
-//    }
-
-
     /**
      * 모든 클래스 조회
      */

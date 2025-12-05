@@ -6,7 +6,9 @@ import com.sooscode.sooscode_api.application.classroom.dto.MyClassResponse;
 import com.sooscode.sooscode_api.application.classroom.service.ClassRoomService;
 import com.sooscode.sooscode_api.application.snapshot.service.SnapshotService;
 import com.sooscode.sooscode_api.domain.classroom.entity.ClassRoom;
-import com.sooscode.sooscode_api.global.user.CustomUserDetails;
+import com.sooscode.sooscode_api.domain.file.entity.SooFile;
+import com.sooscode.sooscode_api.global.security.CustomUserDetails;
+import com.sooscode.sooscode_api.infra.file.service.S3FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 @RestController
@@ -25,18 +30,7 @@ import org.springframework.web.bind.annotation.*;
 public class ClassRoomController {
 
     private final ClassRoomService classRoomService;
-    
-    // 추후 Service에 @Service 선언 후 사용 예정
-    // private final SnapshotService snapshotService;
-
-    @GetMapping("/{classId}/detail")
-    public ResponseEntity<?> getClassDetail(@PathVariable Long classId) {
-        log.info("getClassDetail 실행");
-
-        ClassRoomResponse.Detail detail = classRoomService.getClassDetail(classId);
-
-        return ResponseEntity.ok(detail);
-    }
+    private final S3FileService s3FileService;
 
     @PostMapping
     public ResponseEntity<?> createClassRoom(@RequestBody ClassRoomCreateRequest request) {
@@ -75,6 +69,19 @@ public class ClassRoomController {
 
         return ResponseEntity.ok(response);
     }
+
+    // Teacher mypage 당일 파일 업로드 로직
+//    @PostMapping("/upload/multi")
+//    public ResponseEntity<?> uploadFiles(
+//            @AuthenticationPrincipal CustomUserDetails userDetails,
+//            @RequestParam("files") List<MultipartFile> files
+//    ) throws Exception {
+//
+//        List<SooFile> savedFiles = s3FileService.uploadProfileImage(files);
+//
+//        return ResponseEntity.ok(savedFiles);
+//    }
+
 
 
 
