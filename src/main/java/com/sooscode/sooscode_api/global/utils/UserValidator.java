@@ -3,7 +3,6 @@ package com.sooscode.sooscode_api.global.utils;
 import com.sooscode.sooscode_api.global.exception.CustomException;
 import com.sooscode.sooscode_api.global.exception.errorcode.ValidErrorCode;
 
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
