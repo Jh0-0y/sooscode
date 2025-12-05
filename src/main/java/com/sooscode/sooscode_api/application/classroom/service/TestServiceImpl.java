@@ -4,8 +4,6 @@ import com.sooscode.sooscode_api.domain.file.entity.SooFile;
 import com.sooscode.sooscode_api.domain.user.entity.User;
 import com.sooscode.sooscode_api.domain.user.repository.UserRepository;
 import com.sooscode.sooscode_api.global.exception.CustomException;
-import com.sooscode.sooscode_api.global.exception.ErrorCode;
-import com.sooscode.sooscode_api.infra.file.S3FileService;
 import jakarta.persistence.EntityManager;
 
 import lombok.RequiredArgsConstructor;

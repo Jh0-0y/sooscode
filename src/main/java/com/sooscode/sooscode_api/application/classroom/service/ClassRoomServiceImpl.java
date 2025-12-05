@@ -11,21 +11,14 @@ import com.sooscode.sooscode_api.domain.classroom.repository.ClassParticipantRep
 import com.sooscode.sooscode_api.domain.classroom.repository.ClassRoomRepository;
 import com.sooscode.sooscode_api.domain.file.entity.SooFile;
 import com.sooscode.sooscode_api.domain.file.repository.SooFileRepository;
-import com.sooscode.sooscode_api.domain.snapshot.entity.CodeSnapshot;
 import com.sooscode.sooscode_api.domain.snapshot.repository.CodeSnapshotRepository;
 import com.sooscode.sooscode_api.domain.user.entity.User;
 import com.sooscode.sooscode_api.domain.user.repository.UserRepository;
 import com.sooscode.sooscode_api.global.exception.CustomException;
-import com.sooscode.sooscode_api.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
