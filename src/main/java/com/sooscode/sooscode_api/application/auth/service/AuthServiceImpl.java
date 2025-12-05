@@ -10,7 +10,6 @@ import com.sooscode.sooscode_api.domain.user.repository.EmailCodeRepository;
 import com.sooscode.sooscode_api.domain.user.repository.TempCredentialRepository;
 import com.sooscode.sooscode_api.domain.user.repository.UserRepository;
 import com.sooscode.sooscode_api.global.exception.CustomException;
-import com.sooscode.sooscode_api.global.exception.ErrorCode;
 import com.sooscode.sooscode_api.global.jwt.JwtUtil;
 import com.sooscode.sooscode_api.global.user.CustomUserDetails;
 import jakarta.mail.internet.MimeMessage;

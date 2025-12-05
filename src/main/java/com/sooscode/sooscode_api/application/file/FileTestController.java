@@ -1,6 +1,5 @@
 package com.sooscode.sooscode_api.application.file;
 
-import com.sooscode.sooscode_api.infra.file.S3FileService;
 import com.sooscode.sooscode_api.domain.file.entity.SooFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

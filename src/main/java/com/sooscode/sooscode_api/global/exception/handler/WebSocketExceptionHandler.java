@@ -1,7 +1,6 @@
 package com.sooscode.sooscode_api.global.exception.handler;
 
 import com.sooscode.sooscode_api.global.exception.CustomException;
-import com.sooscode.sooscode_api.global.exception.ErrorCode;
 import com.sooscode.sooscode_api.global.exception.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
