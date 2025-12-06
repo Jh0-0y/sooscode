@@ -29,13 +29,12 @@ public class CompileController {
         return resultFuture.thenApply(ResponseEntity::ok);
     }
     /**
-     * [신규] 워커 서버로부터 컴파일 결과를 수신하는 콜백 엔드포인트 (Webhook)
+     *  컴파일 서버로부터 컴파일 결과를 수신하는 콜백
      */
     @PostMapping("/callback/{jobId}")
     public ResponseEntity<Void> receiveCallback(
             @PathVariable String jobId,
             @RequestBody CompileResultResponse result) {
-
         // 워커로부터 결과를 받으면 Future Store의 대기 중인 퓨처를 완료
         compileFutureStore.completeFuture(jobId, result);
 
