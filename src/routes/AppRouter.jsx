@@ -1,45 +1,73 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ROUTES } from "../constants/routes";
-import { getCookie } from "@/utils/cookie";
-import StudentClassDetail from "../pages/classDetail/StudentClassDetail.jsx";
-import TeacherClassDetail from "../pages/classDetail/TeacherClassDetail.jsx";
+// routes/AppRouter.jsx
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import PublicRoute from './PublicRoute';
+import PrivateRoute from './PrivateRoute';
 
-import StudentClassJoin from "../pages/classJoin/StudentClassJoin.jsx";
-import TeacherClassJoin from "../pages/classJoin/TeacherClassJoin.jsx";
+// Public Pages
+import Login from '@/pages/auth/Login';
+import Register from '@/pages/auth/Register';
 
-import AuthPage from "@/pages/auth/AuthPage.jsx";
-import AuthLayout from "@/features/auth/layout/AuthLayout.jsx";
-import {useEffect, useState} from "react";
-import StudentMypage from "../pages/Mypage/StudentMypage.jsx";
-import TeacherMypage from "../pages/Mypage/TeacherMypage.jsx";
+// Private Pages
+import Home from '@/pages/Home';
+import StudentClassroom from '@/pages/classroom/StudentClassroom';
+import InstructorClassroom from '@/pages/classroom/InstructorClassroom';
+//import AdminDashboard from '@/pages/admin/AdminDashboard';
+
+// Error Pages
+import Forbidden from '@/pages/error/Forbidden';
+import NotFound from '@/pages/error/NotFound';
+import ServerError from '@/pages/error/ServerError';
+import ErrorPage from '@/pages/error/ErrorPage';
+
+// Test Pages
+import ToastTest from '@/pages/test/ToastTest';
+import LoadingTest from '@/pages/test/LoadingTest';
+import ColorPalette from '@/pages/test/ColorPalette';
 
 export default function AppRouter() {
-    // 추후 Redis도입 시 삭제 될 코드
-    const [isLogin, setIsLogin] = useState(false);
+    return (
+        <BrowserRouter>
+            <Routes>
+                {/* Public - 비로그인 전용 */}
+                <Route element={<PublicRoute />}>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                </Route>
 
-    useEffect(() => {
-        const accessToken = getCookie("accessToken");
-        setIsLogin(!!accessToken);
-    }, []);
+                {/* Private - 로그인 필수 (공용) */}
+                <Route element={<PrivateRoute />}>
+                    <Route path="/" element={<Home />} />
+                </Route>
 
-  return (
-    <BrowserRouter>
-      <Routes>
-          {/* login & register */}
-          <Route element={<AuthLayout setIsLogin={setIsLogin}/>}>
-              <Route path="/login" element={<AuthPage setIsLogin={setIsLogin} mode="login"/>}/>
-              <Route path="/register" element={<AuthPage mode="register"/>}/>
-          </Route>
-          {/* Student */}
-        <Route path={ROUTES.STUDENT.MYPAGE} element={<StudentMypage />} />
-        <Route path={ROUTES.STUDENT.CLASS_JOIN()} element={<StudentClassJoin />} />
-        <Route path={ROUTES.STUDENT.CLASS_DETAIL()} element={<StudentClassDetail />} />
+                {/* Private - 학생 전용 */}
+                <Route element={<PrivateRoute allowedRoles={['student']} />}>
+                    <Route path="/classroom/student" element={<StudentClassroom />} />
+                </Route>
 
-        {/* Teacher */}
-        <Route path={ROUTES.TEACHER.MYPAGE} element={<TeacherMypage />} />
-        <Route path={ROUTES.TEACHER.CLASS_JOIN()} element={<TeacherClassJoin />} />
-        <Route path={ROUTES.TEACHER.CLASS_DETAIL()} element={<TeacherClassDetail />} />
-      </Routes>
-    </BrowserRouter>
-  );
+                {/* Private - 강사 전용 */}
+                <Route element={<PrivateRoute allowedRoles={['instructor']} />}>
+                    <Route path="/classroom/instructor" element={<InstructorClassroom />} />
+                </Route>
+
+                {/* Private - 관리자 전용 */}
+                {/*<Route element={<PrivateRoute allowedRoles={['admin']} />}>*/}
+                {/*    <Route path="/admin" element={<AdminDashboard />} />*/}
+                {/*</Route>*/}
+
+                {/* Error Pages */}
+                <Route path="/error/403" element={<Forbidden />} />
+                <Route path="/error/404" element={<NotFound />} />
+                <Route path="/error/500" element={<ServerError />} />
+                <Route path="/error" element={<ErrorPage />} />
+
+                {/* Test - 개발용 */}
+                <Route path="/toast" element={<ToastTest />} />
+                <Route path="/loading" element={<LoadingTest />} />
+                <Route path="/color" element={<ColorPalette />} />
+
+                {/* 404 - 매칭 안 되는 모든 경로 */}
+                <Route path="*" element={<NotFound />} />
+            </Routes>
+        </BrowserRouter>
+    );
 }

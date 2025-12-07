@@ -1,0 +1,69 @@
+/* pages/test/ToastTest.module.css */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: var(--spacing-5);
+    background-color: var(--color-bg-secondary);
+}
+
+.title {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--spacing-8);
+    color: var(--color-text-primary);
+}
+
+.buttonGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+    width: 100%;
+    max-width: 300px;
+}
+
+.button {
+    padding: var(--spacing-3) var(--spacing-6);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    border: none;
+    border-radius: var(--radius-base);
+    cursor: pointer;
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+    color: var(--color-text-inverse);
+}
+
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.button:active {
+    transform: translateY(0);
+}
+
+.success {
+    background-color: var(--color-success);
+}
+
+.error {
+    background-color: var(--color-error);
+}
+
+.warning {
+    background-color: var(--color-warning);
+}
+
+.info {
+    background-color: var(--color-info);
+}
+
+.custom {
+    background-color: var(--color-primary-500);
+}
+
+.multiple {
+    background-color: var(--color-primary-600);
+}

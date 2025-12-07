@@ -1,0 +1,65 @@
+/* common/components/classroom/CodeEditor.module.css */
+.container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-2) var(--spacing-4);
+    background-color: var(--color-bg-secondary);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.title {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.runButton {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    padding: var(--spacing-1) var(--spacing-3);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-inverse);
+    background-color: var(--color-success);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.runButton:hover {
+    background-color: #0ea572;
+}
+
+.editorWrapper {
+    flex: 1;
+    overflow: hidden;
+}
+
+.editor {
+    width: 100%;
+    height: 100%;
+    padding: var(--spacing-4);
+    font-family: var(--font-family-code);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-primary);
+    border: none;
+    outline: none;
+    resize: none;
+}
+
+.editor.readOnly {
+    background-color: var(--color-bg-secondary);
+    cursor: default;
+}
