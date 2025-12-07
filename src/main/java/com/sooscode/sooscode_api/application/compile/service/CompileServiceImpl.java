@@ -27,25 +27,32 @@ public class CompileServiceImpl implements CompileService {
     @Override
     public CompletableFuture<CompileResultResponse> runCode(String code) {
         /**
-         * [1] 코드 유효성 검사
-         * - 금지된 패턴/보안 위험 요소 등을 검증한다.
-         * - 유효하지 않으면 예외 발생.
+         *  blacklist 필터
          */
         CodeBlacklistFilter.validate(code);
+        //job Id 생성
         String jobId = UUID.randomUUID().toString();
-        /**
-         * [2] 컴파일 워커 서버에 실행 요청 및 콜백 url 생성
-         * - 비동기 워커 서버에 POST 요청을 보내 jobId 를 획득한다.
-         * - jobId는 이후 결과 조회에 사용된다.
-         */
+
+
         try {
+            /**
+             *  callback URL 구성 및 Future 생성
+             * - createFuture(jobId)는 "비어있는 Future" 만드는 시점
+             * - 실제 thenApply 실행 스레드는 컨트롤러에서 지정해야 한다.
+             */
             String callbackUrl =
                     backendUrl + "/api/compile/callback/" + jobId;
             CompletableFuture<CompileResultResponse> future =
                     compileFutureStore.createFuture(jobId);
-
+            /**
+             *  컴파일 워커 서버로 실행 요청
+             *  이 시점에서  run  메서드 종료,  HTTP 스레드는 반환 준비임
+             * */
             compileWorkerClient.requestCompile(jobId, code, callbackUrl);
 
+            /**
+             *  future 반환하고  callback 에서 result 받아야 완료됨.
+             * */
             return future;
 
         } catch (CustomException e) {
