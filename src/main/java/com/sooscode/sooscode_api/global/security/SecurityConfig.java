@@ -70,11 +70,10 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-//        config.setAllowedOrigins(List.of(
-//                "http://localhost:5173",
-//                "https://main.d2ezaukds7yg62.amplifyapp.com"
-//        ));
-        config.setAllowedOriginPatterns(List.of("*"));
+        config.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "https://main.d2ezaukds7yg62.amplifyapp.com"
+        ));
 
         config.setAllowedMethods(List.of("*"));
         config.setAllowedHeaders(List.of("*"));
