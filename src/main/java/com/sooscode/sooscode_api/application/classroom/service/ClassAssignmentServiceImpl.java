@@ -1,7 +1,5 @@
 package com.sooscode.sooscode_api.application.classroom.service;
 
-import com.sooscode.sooscode_api.application.classroom.dto.assignment.ClassAssignmentRequest;
-import com.sooscode.sooscode_api.application.classroom.dto.assignment.ClassAssignmentResponse;
 import com.sooscode.sooscode_api.application.classroom.dto.classroom.TeacherListItemResponse;
 import com.sooscode.sooscode_api.domain.classroom.entity.ClassAssignment;
 import com.sooscode.sooscode_api.domain.classroom.entity.ClassRoom;
@@ -29,16 +27,6 @@ public class ClassAssignmentServiceImpl implements ClassAssignmentService {
     private final ClassAssignmentRepository classAssignmentRepository;
     private final UserRepository userRepository;
     private final ClassRoomRepository classRoomRepository;
-
-    @Override
-    public ClassAssignmentResponse getClassAssignment(Long classId) {
-        log.info("getClassAssignment Service");
-
-        ClassAssignment assignment = classAssignmentRepository.findByClassRoom_ClassId(classId)
-                .orElseThrow(() -> new CustomException(ClassErrorCode.ASSIGNMENT_NOT_FOUND));
-
-        return ClassAssignmentResponse.from(assignment);
-    }
 
     @Override
     public List<TeacherListItemResponse> getAssignmentTeachers() {
