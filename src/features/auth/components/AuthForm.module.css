@@ -1,30 +1,28 @@
-/* features/auth/components/AuthForm.module.css */
-
 .title {
-    font-size: 2.2rem;
-    font-weight: 700;
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
     color: var(--color-text-primary);
     text-align: center;
 }
 
 .subtitle {
-    font-size: 1.4rem;
-    margin-top: 8px;
-    margin-bottom: 26px;
+    font-size: var(--font-size-base);
+    margin-top: var(--spacing-2);
+    margin-bottom: var(--spacing-6);
     color: var(--color-text-secondary);
     text-align: center;
 }
 
 .form {
     display: flex;
-    gap: 12px;
     flex-direction: column;
+    gap: var(--spacing-3);
     text-align: left;
 }
 
 .label {
     display: block;
-    margin-bottom: 4px;
+    margin-bottom: var(--spacing-1);
     font-size: var(--font-size-sm);
     color: var(--color-text-primary);
 }
@@ -35,16 +33,16 @@
 
 .inputIcon {
     position: absolute;
-    left: 14px;
+    left: var(--spacing-3);
     top: 50%;
     transform: translateY(-50%);
     color: var(--color-text-tertiary);
-    font-size: 18px;
+    font-size: var(--font-size-lg);
 }
 
 .input {
     width: 100%;
-    padding: 13px 15px 13px 42px;
+    padding: var(--spacing-4) var(--spacing-4) var(--spacing-4) calc(var(--spacing-10));
     border-radius: var(--radius-base);
     background: var(--color-bg-secondary);
     color: var(--color-text-primary);
@@ -64,9 +62,13 @@
 
 .primaryButton {
     width: 100%;
-    margin-top: 16px;
-    padding: 14px 0;
-    background: linear-gradient(90deg, var(--color-primary-600), var(--color-primary-500));
+    margin-top: var(--spacing-4);
+    padding: var(--spacing-3) 0;
+    background: linear-gradient(
+            90deg,
+            var(--color-primary-600),
+            var(--color-primary-700)
+    );
     border-radius: var(--radius-base);
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-semibold);
@@ -81,12 +83,12 @@
 }
 
 .primaryButton:disabled {
-    background: var(--color-gray-500);
+    background: var(--color-gray-400);
     cursor: not-allowed;
 }
 
 .dividerArea {
-    margin: 24px 0 20px 0;
+    margin: var(--spacing-6) 0 var(--spacing-5);
     display: flex;
     align-items: center;
 }
@@ -98,16 +100,17 @@
 }
 
 .orText {
-    padding: 0 14px;
+    padding: 0 var(--spacing-3);
     color: var(--color-text-tertiary);
     font-size: var(--font-size-sm);
 }
 
+/* Google Login 버튼 */
 .googleButton {
     width: 100%;
-    padding: 12px 0;
-    background: #ffffff;
-    color: #111111;
+    padding: var(--spacing-3) 0;
+    background: var(--color-gray-50);
+    color: var(--color-text-primary);
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-medium);
     border-radius: var(--radius-base);
@@ -116,23 +119,25 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: var(--spacing-2);
     transition: background-color var(--transition-fast);
+    box-shadow: var(--shadow-xs);
 }
 
 .googleButton:hover {
-    background: #f5f5f5;
+    background: var(--color-gray-100);
 }
 
+/* Footer */
 .footerText {
-    margin-top: 20px;
+    margin-top: var(--spacing-5);
     font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
     text-align: center;
 }
 
 .link {
-    color: var(--color-primary-500);
+    color: var(--color-primary-600);
     font-weight: var(--font-weight-semibold);
     text-decoration: none;
 }
@@ -141,11 +146,12 @@
     text-decoration: underline;
 }
 
+/* Error States */
 .error {
     padding: var(--spacing-3);
     font-size: var(--font-size-sm);
     color: var(--color-error);
-    background-color: rgba(239, 68, 68, 0.1);
+    background-color: rgba(239, 68, 68, 0.08);
     border: 1px solid var(--color-error);
     border-radius: var(--radius-base);
     text-align: center;
@@ -154,23 +160,24 @@
 .fieldError {
     font-size: var(--font-size-xs);
     color: var(--color-error);
-    margin-top: 4px;
+    margin-top: var(--spacing-1);
 }
 
+/* Password Strength */
 .strong {
     font-size: var(--font-size-xs);
     color: var(--color-success);
-    margin-top: 4px;
+    margin-top: var(--spacing-1);
 }
 
 .medium {
     font-size: var(--font-size-xs);
     color: var(--color-warning);
-    margin-top: 4px;
+    margin-top: var(--spacing-1);
 }
 
 .weak {
     font-size: var(--font-size-xs);
     color: var(--color-error);
-    margin-top: 4px;
+    margin-top: var(--spacing-1);
 }

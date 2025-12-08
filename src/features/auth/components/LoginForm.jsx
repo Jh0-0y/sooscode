@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FiMail, FiLock } from 'react-icons/fi';
 import useLogin from '../hooks/useLogin';
 import styles from './AuthForm.module.css';
+import LogoutButton from "@/features/auth/components/base/LogoutButton.jsx";
 
 const LoginForm = () => {
     const {
@@ -17,8 +18,9 @@ const LoginForm = () => {
 
     return (
         <>
+            <LogoutButton />
             <h2 className={styles.title}>로그인</h2>
-            <p className={styles.subtitle}>온라인 클래스에 오신 것을 환영합니다.</p>
+            <p className={styles.subtitle}>SOO'S CODE에 오신 것을 환영합니다.</p>
 
             <form className={styles.form} onSubmit={onSubmit}>
                 {error && <div className={styles.error}>{error}</div>}

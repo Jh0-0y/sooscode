@@ -84,6 +84,7 @@ const useRegister = () => {
                 name: form.name,
                 email: form.email,
                 password: form.password,
+                confirmPassword: form.confirmPassword,
             });
 
             toast.success('회원가입이 완료되었습니다.');
