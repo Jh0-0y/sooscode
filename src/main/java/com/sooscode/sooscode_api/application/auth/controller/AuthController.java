@@ -154,7 +154,6 @@ public class AuthController {
     public ResponseEntity<ApiResponse> me(@AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = userDetails.getUser();
         MeResponse meResponse = new MeResponse(
-                user.getUserId(),
                 user.getEmail(),
                 user.getName(),
                 user.getRole().name(),
