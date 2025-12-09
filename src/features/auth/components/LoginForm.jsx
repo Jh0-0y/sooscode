@@ -10,6 +10,8 @@ const LoginForm = () => {
         email,
         setEmail,
         password,
+        rememberMe,
+        setRememberMe,
         setPassword,
         loading,
         error,
@@ -52,6 +54,21 @@ const LoginForm = () => {
                         />
                     </div>
                 </div>
+
+                <div className={styles.checkboxWrapper}>
+                    <label htmlFor="rememberMe" className={styles.checkboxLabel}>
+                        <input
+                            id="rememberMe"
+                            type="checkbox"
+                            checked={rememberMe}
+                            onChange={(e) => setRememberMe(e.target.checked)}
+                            className={styles.checkbox}
+                        />
+                        <span className={styles.customCheckbox}></span>
+                        자동 로그인
+                    </label>
+                </div>
+
 
                 <button type="submit" className={styles.primaryButton} disabled={loading}>
                     {loading ? "로그인 중..." : "로그인"}

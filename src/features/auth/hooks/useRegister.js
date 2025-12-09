@@ -1,5 +1,5 @@
 // src/features/auth/hooks/useRegister.js
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { api } from "../../../services/api";
 import useTimer from "./useTimer";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,24 @@ export default function useRegister() {
         password: "",
         confirmPassword: "",
     });
+
+
+    useEffect(() => {
+        const handleBeforeUnload = (e) => {
+            // 입력한 값이 하나라도 있으면 경고 실행
+            if (form.name || form.email || form.password || form.confirmPassword) {
+                e.preventDefault();
+                e.returnValue = ""; // Chrome 용
+            }
+        };
+
+        window.addEventListener("beforeunload", handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+        };
+    }, [form]);
+
 
     const [errors, setErrors] = useState({});
     const [verified, setVerified] = useState(false);
@@ -89,13 +107,19 @@ export default function useRegister() {
 
     // 인증 코드 검증
     const verifyCode = async () => {
+
+        if (!code || code.length !== 6) {
+            alert("인증코드는 6자리 숫자입니다.");
+            return;
+        }
+
         try {
             const { data } = await api.post("/api/auth/email/verify", {
                 email: form.email,
                 code,
             });
 
-            if (data.verified) {
+            if (data.success) {
                 alert("인증 성공!");
                 setVerified(true);
                 clear();
@@ -107,6 +131,7 @@ export default function useRegister() {
         }
     };
 
+
     // 회원가입
     const submit = async (e) => {
         e.preventDefault();
@@ -115,8 +140,9 @@ export default function useRegister() {
         try {
             await api.post("/api/auth/register", {
                 email: form.email,
-                password: form.password,
                 name: form.name,
+                password: form.password,
+                confirmPassword: form.confirmPassword
             });
 
             alert("회원가입 성공!");

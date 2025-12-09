@@ -1,6 +1,5 @@
-
-import { Link } from "react-router-dom";
-import { FiMail, FiLock, FiUser } from "react-icons/fi";
+import {Link} from "react-router-dom";
+import {FiMail, FiLock, FiUser} from "react-icons/fi";
 import styles from "./AuthForm.module.css";
 import useRegister from "../hooks/useRegister";
 
@@ -34,7 +33,7 @@ export default function RegisterForm() {
                     <div>
                         <label className={styles.label}>이름</label>
                         <div className={styles.inputWrapper}>
-                            <FiUser className={styles.inputIcon} />
+                            <FiUser className={styles.inputIcon}/>
                             <input
                                 name="name"
                                 value={form.name}
@@ -42,14 +41,14 @@ export default function RegisterForm() {
                                 className={styles.input}
                             />
                         </div>
-                        {errors.name && <p className={styles.error}>{errors.name}</p>}
+                        {errors.name && <p className={styles.fieldError}>{errors.name}</p>}
                     </div>
 
                     {/* 이메일 */}
                     <div>
                         <label className={styles.label}>이메일</label>
                         <div className={styles.inputWrapper}>
-                            <FiMail className={styles.inputIcon} />
+                            <FiMail className={styles.inputIcon}/>
                             <div className={styles.row}>
                                 <input
                                     name="email"
@@ -67,34 +66,38 @@ export default function RegisterForm() {
                                 </button>
                             </div>
                         </div>
-                        {errors.email && <p className={styles.error}>{errors.email}</p>}
+                        {errors.email && <p className={styles.fieldError}>{errors.email}</p>}
                     </div>
 
                     {/* 인증 코드 */}
                     {showCodeInput && (
-                        <div className={styles.row}>
-                            <input
-                                className={`${styles.input} ${styles.nopadding}`}
-                                placeholder="인증코드 입력"
-                                value={code}
-                                onChange={(e) => setCode(e.target.value)}
-                            />
-                            <button
-                                type="button"
-                                className={styles.outlineButton}
-                                onClick={verifyCode}
-                                disabled={time === 0}
-                            >
-                                확인
-                            </button>
+                        <div className={styles.inputWrapper}>
+                            <div className={styles.row}>
+                                    <FiLock className={styles.inputIcon}/>
+                                    <input
+                                        className={styles.input}
+                                        placeholder="인증코드 입력"
+                                        value={code}
+                                        onChange={(e) => setCode(e.target.value)}
+                                    />
+                                <button
+                                    type="button"
+                                    className={styles.outlineButton}
+                                    onClick={verifyCode}
+                                    disabled={time === 0}
+                                >
+                                    확인
+                                </button>
+
+                                {errors.emailVerify && (
+                                    <p className={styles.fieldError}>{errors.emailVerify}</p>
+                                )}
+                            </div>
 
                             {time > 0 && (
                                 <span className={styles.timer}>{format()}</span>
                             )}
 
-                            {errors.emailVerify && (
-                                <p className={styles.error}>{errors.emailVerify}</p>
-                            )}
                         </div>
                     )}
 
@@ -102,7 +105,7 @@ export default function RegisterForm() {
                     <div>
                         <label className={styles.label}>비밀번호</label>
                         <div className={styles.inputWrapper}>
-                            <FiLock className={styles.inputIcon} />
+                            <FiLock className={styles.inputIcon}/>
                             <input
                                 name="password"
                                 type="password"
@@ -113,7 +116,7 @@ export default function RegisterForm() {
                         </div>
 
                         {errors.password && (
-                            <p className={styles.error}>{errors.password}</p>
+                            <p className={styles.fieldError}>{errors.password}</p>
                         )}
 
                         {form.password && (
@@ -135,7 +138,7 @@ export default function RegisterForm() {
                     <div>
                         <label className={styles.label}>비밀번호 확인</label>
                         <div className={styles.inputWrapper}>
-                            <FiLock className={styles.inputIcon} />
+                            <FiLock className={styles.inputIcon}/>
                             <input
                                 name="confirmPassword"
                                 type="password"
@@ -146,7 +149,7 @@ export default function RegisterForm() {
                         </div>
 
                         {errors.confirmPassword && (
-                            <p className={styles.error}>{errors.confirmPassword}</p>
+                            <p className={styles.fieldError}>{errors.confirmPassword}</p>
                         )}
                     </div>
 

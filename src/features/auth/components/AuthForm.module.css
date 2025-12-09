@@ -137,31 +137,36 @@
 }
 
 .link {
+    position: relative;
     color: var(--color-primary-500);
     font-weight: var(--font-weight-semibold);
     text-decoration: none;
 }
 
-.link:hover {
-    text-decoration: underline;
+/* 밑줄 대신 before로 라인 생성 */
+.link::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px; /* 글자와 살짝 떨어지게 */
+    width: 100%;    /* 기본은 0% */
+    height: 1px;
+    background-color: var(--color-primary-500);
+    opacity: 0np;
+    transition: opacity 0.1s ease-in-out; /* 요청한 0.1초 */
 }
 
-/* Error States */
-.error {
-    padding: var(--spacing-3);
-    font-size: var(--font-size-sm);
-    color: var(--color-error);
-    background-color: rgba(239, 68, 68, 0.08);
-    border: 1px solid var(--color-error);
-    border-radius: var(--radius-base);
-    text-align: center;
+/* hover 시 밑줄 생성 */
+.link:hover::before {
+    opacity: 1;
 }
 
 .fieldError {
-    font-size: var(--font-size-xs);
-    color: var(--color-error);
-    margin-top: var(--spacing-1);
-}
+     font-size: var(--font-size-xs);
+     color: var(--color-error);
+     margin-top: var(--spacing-1);
+     line-height: 1.4;
+ }
 
 /* Password Strength */
 .strong {
@@ -180,4 +185,119 @@
     font-size: var(--font-size-xs);
     color: var(--color-error);
     margin-top: var(--spacing-1);
+}
+
+.subButton {
+    width: 70px;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-base);
+    background: var(--color-primary-500);
+    color: var(--color-text-inverse);
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color var(--transition-fast), transform 0.1s ease;
+}
+
+.outlineButton {
+    width: 70px;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-base);
+    background: var(--color-bg-primary);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color var(--transition-fast), transform 0.1s ease;
+    border: 1px solid var(--color-primary-600);
+    color: var(--color-primary-600);
+}
+
+
+.subButton:hover:not(:disabled) {
+    background: var(--color-primary-600);
+    transform: translateY(-1px);
+}
+
+.subButton:disabled {
+    background: var(--color-gray-400);
+    cursor: not-allowed;
+}
+.timer {
+    position: absolute;
+    right: 1px;
+    bottom: -1.5rem;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+}
+
+.row {
+    display: flex;
+    gap: 0.5rem;
+}
+.relative {
+    position: relative;
+}
+
+/* 체크박스 wrapper */
+.checkboxWrapper {
+    display: flex;
+    align-items: center;
+    margin-top: var(--spacing-2);
+}
+
+/* 숨겨진 실제 체크박스 */
+.checkbox {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* 커스텀 체크박스 */
+.customCheckbox {
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--color-border-medium);
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: -1px;
+    margin-right: 8px;
+    transition: all 0.2s ease;
+    background-color: var(--color-bg-secondary);
+    cursor: pointer;
+}
+
+/* 체크 상태일 때 */
+.checkbox:checked + .customCheckbox {
+    background-color: var(--color-primary-500);
+    border-color: var(--color-primary-500);
+}
+
+/* 체크 표시 (체크 아이콘 모양) */
+.checkbox:checked + .customCheckbox::after {
+    content: "";
+    position: relative;
+    display: block;
+    left: 4px;
+    top: 0px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* hover */
+.checkbox:hover + .customCheckbox {
+    border-color: var(--color-primary-500);
+}
+
+/* label 스타일 */
+.checkboxLabel {
+    display: flex;
+    align-items: center;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    cursor: pointer;
 }

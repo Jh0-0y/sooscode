@@ -14,6 +14,7 @@ const useLogin = () => {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [rememberMe, setRememberMe] = useState(false);
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -23,7 +24,7 @@ const useLogin = () => {
         try {
             const { data } = await api.post(
                 "/api/auth/login",
-                { email, password },
+                { email, password, rememberMe },
                 { withCredentials: true }
             );
 
@@ -44,6 +45,8 @@ const useLogin = () => {
         setEmail,
         password,
         setPassword,
+        rememberMe,
+        setRememberMe,
         loading,
         error,
         onSubmit,

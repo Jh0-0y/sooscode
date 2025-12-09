@@ -53,16 +53,49 @@ const userStore = create((set) => ({
 
     clearUser: () => set({ user: null }),
 
+    // fetchUser: async () => {
+    //     try {
+    //         const { data } = await api.get('/api/auth/me');
+    //         console.log(data);
+    //         const user = validateUser(data.user);
+    //         set({ user, loading: false });
+    //     } catch (err) {
+    //         set({ user: null, loading: false });
+    //     }
+    // },
     fetchUser: async () => {
         try {
+            // 1차: AccessToken으로 인증된 사용자 정보 조회
             const { data } = await api.get('/api/auth/me');
-            console.log(data);
             const user = validateUser(data.user);
-            set({ user, loading: false });
+            set({ user });
+            return; // 성공하면 그대로 종료
         } catch (err) {
-            set({ user: null, loading: false });
+            const status = err.response?.status;
+
+            // AccessToken 만료 or 인증 실패
+            if (status === 401 || status === 403) {
+                try {
+                    // 2차: RefreshToken으로 AT 재발급
+                    await api.post('/api/auth/token/reissue');
+
+                    // 재발급 성공했으면 다시 /me 조회
+                    const { data } = await api.get('/api/auth/me');
+                    const user = validateUser(data.user);
+                    set({ user });
+                    return;
+                } catch (err2) {
+                    // RT도 만료 → 로그인 불가능 상태
+                    set({ user: null });
+                    return;
+                }
+            }
+
+            // 기타 오류
+            set({ user: null });
         }
     },
+
 }));
 
 /**
