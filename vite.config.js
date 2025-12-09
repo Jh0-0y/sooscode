@@ -7,6 +7,9 @@ import { fileURLToPath } from "url";
 
 export default defineConfig({
   plugins: [react()],
+    define: {
+        global: 'globalThis',
+    },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),

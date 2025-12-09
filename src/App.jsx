@@ -19,6 +19,6 @@ export default function App() {
     return <>
         <GlobalLoading />
         <Toast />
-        <AppRoute />;
+        <AppRoute />
     </>
 }

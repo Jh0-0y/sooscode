@@ -56,6 +56,7 @@ const userStore = create((set) => ({
     fetchUser: async () => {
         try {
             const { data } = await api.get('/api/auth/me');
+            console.log(data);
             const user = validateUser(data.user);
             set({ user, loading: false });
         } catch (err) {

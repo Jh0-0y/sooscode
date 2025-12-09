@@ -1,5 +1,5 @@
 // common/components/classroom/ClassHeader.jsx
-import { SettingIcon, BroadcastIcon, CameraIcon, UserIcon } from '@/common/components/utils/Icons';
+import { SettingIcon, UserIcon } from '@/common/components/utils/Icons';
 import styles from './ClassHeader.module.css';
 
 const ClassHeader = ({ 
@@ -7,14 +7,12 @@ const ClassHeader = ({
     status = 'live',
     participantCount,
     totalParticipants,
-    isInstructor = false,
-    onBroadcast,
-    onSaveSnapshot,
     onOpenSettings
 }) => {
     return (
-        <header className={styles.container}>
+        <header className={styles.header}>
             <div className={styles.left}>
+                <div className="logo" />
                 <h1 className={styles.className}>{className}</h1>
                 <span className={`${styles.badge} ${styles[status]}`}>
                     {status === 'live' ? '진행중' : '종료'}
@@ -26,18 +24,6 @@ const ClassHeader = ({
                 )}
             </div>
             <div className={styles.right}>
-                {isInstructor && (
-                    <>
-                        <button className={styles.broadcastButton} onClick={onBroadcast}>
-                            <BroadcastIcon />
-                            코드 전송
-                        </button>
-                        <button className={styles.snapshotButton} onClick={onSaveSnapshot}>
-                            <CameraIcon />
-                            스냅샷 저장
-                        </button>
-                    </>
-                )}
                 <button className={styles.settingButton} onClick={onOpenSettings}>
                     <SettingIcon />
                     설정

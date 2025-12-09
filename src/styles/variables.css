@@ -1,4 +1,10 @@
+/** 로고 사용법
+<div className="logo"} />
+*/
+
 :root {
+    /* 로고 이미지 */
+    --logo-img: url('@/assets/images/logo/logo(light).png');
     /* ===== 색상 ===== */
     /* Primary Colors */
     --color-primary-50: #eff6ff;
@@ -124,6 +130,8 @@
 
 /* ===== Dark Mode ===== */
 [data-theme='dark'] {
+    /* 로고 이미지 */
+    --logo-img: url('@/assets/images/logo/logo(dark).png');
     /* Primary Colors - 다크모드에서 약간 밝게 조정 */
     --color-primary-50: #1e3a8a;
     --color-primary-100: #1e40af;

@@ -1,0 +1,139 @@
+/* ===============================
+   사이드바 본체
+   =============================== */
+.sidebar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 300px;
+    height: calc(100vh - 60px);
+
+    background: var(--color-bg-secondary);
+    border-right: 1px solid var(--color-border-dark);
+    color: var(--color-text-primary);
+
+    padding: 0;
+    overflow: hidden;
+
+    z-index: 90;
+    transition: width var(--transition-slow),
+    padding var(--transition-slow);
+}
+
+/* 접힘 상태 */
+.collapsed {
+    width: 0;
+    padding: 0;
+}
+
+/* 내부 컨텐츠 */
+.sidebarContent {
+    white-space: nowrap;
+    opacity: 1;
+    transition: opacity var(--transition-base);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.collapsed .sidebarContent {
+    opacity: 0;
+}
+
+/* ===============================
+   탭 영역
+   =============================== */
+.sidebarTabs {
+    display: flex;
+
+    /* 기존 border-bottom: #444 */
+    border-bottom: 1px solid var(--color-border-dark);
+
+    /* 기존 #25272c */
+    background: var(--color-bg-tertiary);
+}
+
+.tabButton {
+    flex: 1;
+
+    padding: var(--spacing-3) var(--spacing-2); /* 12px 8px */
+
+    background: transparent;
+    border: none;
+
+    /* 기존 #9ca3af → secondary text */
+    color: var(--color-text-secondary);
+
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+
+    transition: background var(--transition-fast),
+    color var(--transition-fast),
+    border-bottom var(--transition-fast);
+
+    border-bottom: 2px solid transparent;
+}
+
+.tabButton:hover {
+    color: var(--color-text-primary);
+
+    /* 기존 hover #2b2d33 */
+    background: var(--color-bg-secondary);
+}
+
+.tabButton.active {
+    color: var(--color-text-primary);
+
+    /* 기존 색 #3b82f6 → primary-500 */
+    border-bottom-color: var(--color-primary-500);
+
+    background: var(--color-bg-secondary);
+}
+
+/* ===============================
+   탭 컨텐츠
+   =============================== */
+.tabContent {
+    flex: 1;
+    padding: var(--spacing-4); /* 16px */
+    overflow-y: auto;
+}
+
+.tabContent h3 {
+    margin: 0 0 var(--spacing-4) 0;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+/* ===============================
+   리스트 공통
+   =============================== */
+.studentItem,
+.fileItem {
+    padding: var(--spacing-3) var(--spacing-3); /* 10px 12px */
+
+    margin-bottom: var(--spacing-2); /* 8px */
+
+    /* 기존 #25272c */
+    background: var(--color-bg-tertiary);
+
+    /* 기존 #444 */
+    border: 1px solid var(--color-border-dark);
+
+    border-radius: var(--radius-base);
+    cursor: pointer;
+
+    transition: background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+/* Hover */
+.studentItem:hover,
+.fileItem:hover {
+    /* 기존 #2c2f36 → 중간 톤 */
+    background: var(--color-bg-secondary);
+
+    /* 기존 #555 → border-medium */
+    border-color: var(--color-border-medium);
+}

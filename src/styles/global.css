@@ -9,26 +9,6 @@ body {
     background-color: var(--color-bg-primary);
 }
 
-
-/* 스크롤바 스타일 */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--color-gray-100);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--color-gray-400);
-    border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--color-gray-500);
-}
-
 /* ===== 포커스 스타일 ===== */
 
 :focus-visible {
@@ -40,4 +20,12 @@ button:focus-visible,
 a:focus-visible {
     outline: 2px solid var(--color-primary-500);
     outline-offset: 2px;
+}
+
+.logo {
+    width: 176px;
+    height: 36px;
+    background-image: var(--logo-img);
+    background-size: contain;
+    background-repeat: no-repeat;
 }

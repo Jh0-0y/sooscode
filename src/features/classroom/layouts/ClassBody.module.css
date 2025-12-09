@@ -1,0 +1,89 @@
+/* ============================================
+   메인 스크롤 영역 – 밝은 톤으로 변경
+   ============================================ */
+.scrollArea {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    bottom: 0;
+
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+
+    /* 기존: gray-900 → 어둠의 끝 */
+    background: var(--color-bg-tertiary);
+
+    transition: left var(--transition-slow);
+}
+
+/* ============================================
+   페이지 단위 (변경 없음)
+   ============================================ */
+.page {
+    height: calc(100vh - 60px);
+    scroll-snap-align: start;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ============================================
+   컨텐츠 카드 – 완전한 라이트톤 기반
+   ============================================ */
+.content {
+    display: flex;
+
+    width: 100%;
+    height: 100%;
+
+    background: var(--color-bg-primary);
+    padding: var(--spacing-6);
+    color: var(--color-text-primary);
+}
+
+.inner {
+    width: 100%;
+    height: 100%;
+}
+
+
+/* 탭 스타일 */
+.tabs {
+    display: flex;
+    border-bottom: 1px solid var(--color-border-light);
+    flex-shrink: 0;
+}
+
+.tab {
+    flex: 1;
+    padding: var(--spacing-3) var(--spacing-4);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.tab:hover {
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-tertiary);
+}
+
+.tab.active {
+    color: var(--color-primary-500);
+    border-bottom-color: var(--color-primary-500);
+}
+
+.tabContent {
+    flex: 1;
+    overflow: hidden;
+}
+
+.panel {
+    height: 100%;
+    padding: var(--spacing-4);
+    overflow-y: auto;
+}
