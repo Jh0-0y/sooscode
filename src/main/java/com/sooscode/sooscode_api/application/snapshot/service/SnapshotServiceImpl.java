@@ -149,4 +149,16 @@ public class SnapshotServiceImpl implements SnapshotService {
                 ))
                 .toList();
     }
+    @Override
+    @Transactional
+    public void deleteSnapshot(Long userId, Long classId, Long snapshotId){
+        long deleted = codeSnapshotRepository
+                .deleteByCodeSnapshotIdAndUser_UserIdAndClassRoom_ClassId(snapshotId, userId, classId);
+
+        if (deleted == 0) {
+            // 니가 쓰는 커스텀 예외 있으면 그걸로 바꿔
+//            throw new IllegalArgumentException("삭제할 수 있는 스냅샷이 없거나 권한이 없습니다.");
+        }
+
+    }
 }
