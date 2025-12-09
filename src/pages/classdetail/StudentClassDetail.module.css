@@ -12,11 +12,12 @@
 .profileSection {
   width:400px;
   min-width: 200px;
-  background-color: var(--color-gray-300);
+  background-color: var(--color-gray-400);
   height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  padding:5px;
 }
 
 
@@ -46,4 +47,72 @@
   .profileSection{
     width:100%;
   }
+}
+
+/* html, body {
+  height: 100%;
+  overflow: hidden;
+} */
+
+/* Navbar 높이에 맞춰 조정! 예시는 60px */
+.wrapper {
+  display: flex;
+  height: calc(100vh - 60px);
+}
+
+.profileSection {
+  width:400px;
+  min-width: 200px;
+  background-color: var(--color-gray-400);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding:5px;
+}
+
+
+
+.lectureSection {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.detailSection {
+  flex: 1;
+  background-color: var(--color-gray-400);
+  height: 100%;
+  overflow-y: auto;
+}
+
+.contentContainer{
+  padding:5px;
+}
+
+@media (max-width:800px) {
+  .wrapper {
+    flex-direction: column;
+    height: auto;   /* column 되면 강제 100vh 쓰면 깨짐 */
+  }
+
+  .profileSection{
+    width:100%;
+  }
+}
+
+.lectureSection::-webkit-scrollbar {
+  width: 8px; /* 원하는 너비 */
+}
+
+.lectureSection::-webkit-scrollbar-track {
+  background: #2e2f33;
+}
+
+.lectureSection::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 10px;
+}
+
+.lectureSection::-webkit-scrollbar-thumb:hover {
+  background: #777;
 }

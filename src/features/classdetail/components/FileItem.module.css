@@ -10,6 +10,7 @@
   display: flex;
   gap: 12px;
   align-items: center;
+  width:100%;
 }
 
 .icon {
@@ -30,4 +31,9 @@
   font-size: 13px;
   color: #a0a0a0;
   margin-top: 3px;
+}
+
+.deleteBtn{
+  display:flex;
+  margin-left: auto;
 }

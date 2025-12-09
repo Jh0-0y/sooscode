@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./ClassDetailTopBar.module.css";
 import { FaCode } from "react-icons/fa";
 
-export default function ClassDetailTopBar({title,online}) {
+export default function ClassDetailTopBar({title,online,classId}) {
   const navigate = useNavigate();
   return (
     <div className={styles.wrapper}>
@@ -26,7 +26,8 @@ export default function ClassDetailTopBar({title,online}) {
       {/* 오른쪽: 시간 + 버튼 */}
       <div className={styles.right}>
         <span className={styles.time}>12:01 AM</span>
-        <button className={styles.enterBtn} onClick={() => navigate('/class/instructor')}>입장하기</button>
+        <button className={styles.enterBtn} onClick={() => navigate('/class')}>입장하기</button>
+        <button className={styles.practiceBtn} onClick={() => navigate(`/classdetail/codepractice/${classId}`)}>코드연습</button>
       </div>
 
     </div>

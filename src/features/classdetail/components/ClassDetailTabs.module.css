@@ -5,6 +5,7 @@
   padding: 0 10px;
   border-bottom: 1px solid #333;
   background-color:#2b2c2f;
+  border-radius : 0 0 10px 10px;
 }
 
 .tab {
