@@ -60,11 +60,11 @@ public class ClassRoom {
     @Column(name = "ended_at", nullable = false)
     private LocalDateTime endedAt;
 
-    @Column(name = "start_time", nullable = true)
-    private LocalTime startTime;
-
-    @Column(name = "end_time", nullable = true)
-    private LocalTime endTime;
+//    @Column(name = "start_time", nullable = true)
+//    private LocalTime startTime;
+//
+//    @Column(name = "end_time", nullable = true)
+//    private LocalTime endTime;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
