@@ -10,13 +10,13 @@ import {useClass} from "@/features/classroom/hooks/useClass.js";
 
 const Classroom = ({/*classId*/}) => {
     const { collapsed, toggle } = useSidebar();
-    const { fetchClassroom } = useClass();
+    // const { fetchClassroom } = useClass();
     const classId = 1;
     const socket = useSocket(classId);
 
-    useEffect(() => {
-        fetchClassroom(classId);
-    }, [classId]);
+    // useEffect(() => {
+    //     fetchClassroom(classId);
+    // }, [classId]);
 
 
     useEffect(() => {
