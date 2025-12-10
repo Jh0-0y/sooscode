@@ -49,7 +49,7 @@ export default function AppRoute() {
                 <Route path="/logout" element={<LogoutButton />} />
 
                 <Route path="/admin" element={<AdminPage />} />
-
+                <Route path="/" element={<Home />} />
 
                 {/* Public - 비로그인 전용 */}
                 <Route element={<PublicRoute />}>
@@ -58,9 +58,9 @@ export default function AppRoute() {
                 </Route>
 
                 {/* Private - 로그인 필수 (공용) */}
-                <Route element={<PrivateRoute />}>
-                    <Route path="/" element={<Home />} />
-                </Route>
+                {/*<Route element={<PrivateRoute />}>*/}
+
+                {/*</Route>*/}
 
                 {/* Private - 학생 전용 */}
                 {/*<Route element={<PrivateRoute allowedRoles={['STUDENT']} />}>*/}

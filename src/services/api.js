@@ -7,7 +7,7 @@ export const api = axios.create({
 
 // Response 인터셉터 - 응답 후 처리
 api.interceptors.response.use(
-    (response) => response,  // 성공하면 그냥 통과
+    (response) => response.data,  // 성공하면 그냥 통과
     async (error) => {
         const originalRequest = error.config;
 
@@ -24,7 +24,7 @@ api.interceptors.response.use(
             }
         }
 
-        return Promise.reject(error);
+        return Promise.reject(error.response?.data || error);
     }
 );
 

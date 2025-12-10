@@ -1,6 +1,7 @@
 // hooks/useUser.js (또는 stores/useUser.js)
 import { create } from "zustand";
 import {api} from "@/services/api.js";
+import {useLoading} from "@/hooks/useLoading.js";
 
 /**
  * 사용자 권한 ENUM
@@ -16,7 +17,6 @@ export const USER_ROLES = {
  */
 const validateUser = (data) => {
     if (!data) return null;
-
     const { email, name, role, profileImage } = data;
 
     if (!email || !name || !role) {
@@ -55,11 +55,13 @@ const userStore = create((set) => ({
 
     fetchUser: async () => {
         try {
-            const { data } = await api.get('/api/auth/me');
-            console.log(data);
-            const user = validateUser(data.user);
+            const result = await api.get('/api/auth/me');
+            const user = validateUser(result.data);
+
+            console.log(user);
             set({ user, loading: false });
-        } catch (err) {
+        } catch (error) {
+            console.error(error.message);
             set({ user: null, loading: false });
         }
     },

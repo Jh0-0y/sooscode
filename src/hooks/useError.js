@@ -1,10 +1,10 @@
 // hooks/useError.js
 import { useNavigate } from 'react-router-dom';
-import { useUserStore } from '@/store/user/userStore';
+import {useUser} from "@/hooks/useUser.js";
 
 export const useError = () => {
     const navigate = useNavigate();
-    const clearUser = useUserStore((state) => state.clearUser);
+    const { clearUser } = useUser();
 
     const handleError = (error) => {
         const status = error.response?.status;

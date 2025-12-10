@@ -21,17 +21,17 @@ const useLogin = () => {
         setLoading(true);
 
         try {
-            const { data } = await api.post(
+            const result = await api.post(
                 "/api/auth/login",
                 { email, password, rememberMe },
                 { withCredentials: true }
             );
 
-            setUser(data.user);
-            toast.success("로그인 성공!");
+            setUser(result.data);
+            toast.success(result.message);
             navigate("/");
         } catch (err) {
-            const message = err.response?.data?.message || "로그인 실패";
+            const message = err.message || "로그인 실패";
             setError(message);
             toast.error(message);
         } finally {
