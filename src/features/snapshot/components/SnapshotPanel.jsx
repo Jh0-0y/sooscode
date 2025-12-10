@@ -1,78 +1,72 @@
 import { useState } from "react";
-import styles from "../styles/SnapshotPanel.module.css";
-import { useSnapshot } from "@/features/snapshot/hooks/useSnapshot";
 import SnapshotModal from "./SnapshotModal";
-import { useToast } from "@/hooks/useToast";
+import SnapshotList from "./SnapshotList";
+import { useSnapshot } from "@/features/snapshot/hooks/useSnapshot.js";
+import styles from "../styles/SnapshotPanel.module.css";
 
-// [Props 설명]
-// currentCode: 현재 에디터에 적힌 코드 (저장할 때 사용)
-// onRestore: 리스트에서 '불러오기' 눌렀을 때 실행할 함수 (부모의 코드를 바꿈)
-export default function SnapshotPanel({ currentCode, onRestore }) {
 
-    // 훅 기능 사용 (목록 조회, 저장 함수, 로딩 상태)
-    const { snapshots, createSnapshot, isLoading } = useSnapshot();
-    const toast = useToast();
+const SnapshotPanel =() =>{
+    //data
+    const {
+        snapshots,
+        loading,
+        handleSaveSnapshot,
+        handleRestoreSnapshot
+    }= useSnapshot();
 
-    // 모달 상태 (패널 내부에서 관리)
-    const [isModalOpen, setModalOpen] = useState(false);
+    //상태관리 변수
+    const [selectedId, setSelectedId] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // [버튼 클릭] 저장하기
-    const handleSaveClick = () => {
-        if (!currentCode || !currentCode.trim()) {
-            toast.warning("저장할 코드가 없습니다.");
-            return;
+    //이벤트 핸들러
+    const onSaveClick =()=>{
+        setIsModalOpen(true);
+    }
+    //모달
+    const onModalConfirm = async (title) =>{
+        const success = await handleSaveSnapshot(title);
+        if (success){
+            setIsModalOpen(false);
         }
-        setModalOpen(true);
-    };
+    }
 
-    // [모달] 저장 확정
-    const handleModalConfirm = async (title) => {
-        const success = await createSnapshot(title, currentCode);
-        if (success) {
-            setModalOpen(false);
-        }
+    //리스트 아이템 선택
+    const handleSelect = (snapshot) =>{
+        setSelectedId(snapshot.snapshotId);
     };
 
     return (
         <div className={styles.container}>
-            {/* 1. 상단: 저장 버튼 */}
+            {/* 상단 액션 영역 (저장 버튼) */}
             <div className={styles.header}>
                 <button
                     className={styles.saveButton}
-                    onClick={handleSaveClick}
-                    disabled={isLoading}
+                    onClick={onSaveClick}
+                    disabled={loading}
                 >
-                    {isLoading ? "저장 중..." : "+ 현재 코드 스냅샷 저장"}
+                    {loading ? '저장 중...' : '+ 현재 코드 스냅샷 저장'}
                 </button>
             </div>
 
-            {/* 2. 하단: 스냅샷 리스트 */}
+            {/* 하단 리스트 영역 (SnapshotList 컴포넌트 사용) */}
             {(!snapshots || snapshots.length === 0) ? (
                 <div className={styles.empty}>저장된 스냅샷이 없습니다.</div>
             ) : (
-                snapshots.map((snapshot) => (
-                    <div key={snapshot.id} className={styles.item}>
-                        <div className={styles.info}>
-                            <span className={styles.name}>{snapshot.name}</span>
-                            <span className={styles.time}>{snapshot.createdAt}</span>
-                        </div>
-                        <button
-                            className={styles.restoreButton}
-                            onClick={() => onRestore(snapshot)}
-                        >
-                            불러오기
-                        </button>
-                    </div>
-                ))
+                <SnapshotList
+                    snapshots={snapshots}
+                    selectedId={selectedId}
+                    onSelect={handleSelect}
+                    onRestore={handleRestoreSnapshot}
+                    showRestoreButton={true}
+                />
             )}
-
-            {/* 3. 모달 (패널 내장) */}
+            {/* 제목 입력 모달 */}
             <SnapshotModal
                 isOpen={isModalOpen}
-                onClose={() => setModalOpen(false)}
-                onConfirm={handleModalConfirm}
-                isLoading={isLoading}
+                onClose={() => setIsModalOpen(false)}
+                onConfirm={onModalConfirm}
             />
         </div>
     );
-}
+};
+export default SnapshotPanel;

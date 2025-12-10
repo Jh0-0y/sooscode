@@ -1,5 +1,5 @@
 // common/components/classroom/SnapshotList.jsx
-import styles from './SnapshotList.module.css';
+import styles from '../styles/SnapshotList.module.css';
 
 const SnapshotList = ({ 
     snapshots, 

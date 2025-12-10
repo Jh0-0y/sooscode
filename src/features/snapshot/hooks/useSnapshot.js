@@ -1,86 +1,103 @@
-import { create } from "zustand";
-import { useEffect, useCallback } from "react";
-import { useParams } from "react-router-dom"; // [TEST] 테스트용
-import { snapshotService } from "../service/snapshotService";
-import { useToast } from "@/hooks/useToast";
-// import { useClass } from "@/features/classroom/hooks/useClass"; // 기존 훅 (나중에 복구용)
+import {create} from "zustand";
+import {useParams} from "react-router-dom";
+import {useCode} from "@/features/code/hooks/useCode.js";
+import {useToast} from "@/hooks/useToast.js";
+import {useCallback, useEffect} from "react";
+import {snapshotService} from "@/features/snapshot/service/snapshotService.js";
+import { useError } from "@/hooks/useError";
+
+// push 할때 임시 useCode 삭제하고 푸시하는데 올릴때 안터지는용도로
+// const useCode =() => ({
+//     code:'',
+//     setCode: ()=> console.warn('useCode 엄서'),
+// });
 
 
-export const useSnapshotStore = create((set) => ({
+// zustand 내부 스토어
+const snapshotStore = create((set) => ({
     snapshots: [],
-    setSnapshots: (list) => set({ snapshots: list }),
+    loading: false,
+    setSnapshots: (snapshots) => set({ snapshots }),
+    setLoading: (loading) => set({ loading }),
 }));
 
-export function useSnapshot() {
-    // [ORIGINAL] 기존 로직 (나중에 실제 연동 시 주석 해제)
-    // const { classroom } = useClass();
-    // const classId = classroom?.classId;
+export const useSnapshot = () => {
+    const { classId: paramClassId } = useParams();
+    const classId = Number(paramClassId);
 
-
-
-    // [TEST] 테스트용 로직 (현재 활성화: URL 파라미터 사용)
-    const { classId: paramId } = useParams();
-    const classId = Number(paramId);
-    // ---------------------------------------------------------
-
-
-    const snapshots = useSnapshotStore((s) => s.snapshots);
-    const setSnapshots = useSnapshotStore((s) => s.setSnapshots);
-
+    const { code, setCode } = useCode();
+    const { handleError } = useError();
     const toast = useToast();
 
-    // 스냅샷 목록 조회 (useCallback 최적화 적용)
-    const fetchSnapshots = useCallback(async () => {
-        if (!classId || Number.isNaN(classId)) return;
+    const snapshots = snapshotStore((state) => state.snapshots);
+    const loading = snapshotStore((state) => state.loading);
+    const setSnapshots = snapshotStore((state) => state.setSnapshots);
+    const setLoading = snapshotStore((state)=> state.setLoading);
 
-        try {
-            const res = await snapshotService.getAll(classId);
-            // API 응답 구조에 따라 content 추출 (안전하게 처리)
-            const content = res.content || res.data?.content || [];
-
-            const list = content.map((item) => ({
-                id: item.snapshotId,
-                name: item.title,
-                code: item.content,
-                createdAt: new Date(item.createdAt).toLocaleString(),
-            }));
-
-            setSnapshots(list);
-        } catch (err) {
-            console.error(err);
-            //toast.error("스냅샷 목록을 불러올 수 없습니다."); // 일단 테스트
+    const fetchSnapshots = useCallback(async ()=>{
+        if (!classId) return;
+        try{
+            const response = await snapshotService.getAll(classId);
+            setSnapshots(response.content || []);
+        }catch (error){
+            console.error(error);
+            handleError(error);
         }
-    }, [classId, setSnapshots]);
+     }, [classId, setSnapshots, handleError]);
 
-    // 스냅샷 생성
-    const createSnapshot = useCallback(async (title, code) => {
-        if (!classId) {
-            toast.error("클래스 정보가 없습니다.");
-            return false;
-        }
-
-        try {
-            await snapshotService.create({ classId, title, content: code });
-            toast.success("스냅샷이 저장되었습니다.");
-            await fetchSnapshots();
-            return true;
-        } catch (err) {
-            console.error(err);
-            toast.error("저장 실패");
-            return false;
-        }
-    }, [classId, fetchSnapshots, toast]);
-
-    // classId 변경 시 자동 조회
     useEffect(() => {
-        if (classId && !Number.isNaN(classId)) {
-            fetchSnapshots();
-        }
-    }, [fetchSnapshots, classId]);
+        fetchSnapshots();
+    }, [fetchSnapshots]);
 
-    return {
-        snapshots,
-        createSnapshot,
-        refresh: fetchSnapshots,
+    const handleSaveSnapshot = async (title) =>{
+        if (!classId){
+            toast.error('클래스 정보가 없습니다');
+            return false;
+        }
+        if (!title.trim()){
+            toast.warning('제목을 입력해주세요');
+            return false;
+        }
+        if (!code || !code.trim()){
+            toast.warning('저장할 코드가 없습니다');
+            return false;
+        }
+
+        setLoading(true);
+            try {
+                await snapshotService.create({
+                    classId,
+                    title,
+                    content: code
+                });
+                toast.success('스냅샷이 저장되었습니다.');
+                await fetchSnapshots();
+                return true;
+            }catch (error){
+                console.error(error);
+                if (error.response){
+                    handleError(error);
+                }else {
+                    toast.error('스냅샷 저장에 실패하였습니다')
+                }
+                return false;
+            }finally{
+                setLoading(false);
+            }
     };
-}
+    const handleRestoreSnapshot = (snapshot) =>{
+        if(!snapshot.content){
+            toast.error('불러올 코드 내용이 없습니다.');
+            return;
+        }
+        if (window.confirm(`'${snapshot.title}' 스냅샷을 불러오시겠습니까? 현재 작성 중인 코드가 덮어씌워집니다`)){
+            setCode(snapshot.content);
+        }
+    };
+    return{
+        snapshots,
+        loading,
+        handleSaveSnapshot,
+        handleRestoreSnapshot
+    };
+};
