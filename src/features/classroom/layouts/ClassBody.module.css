@@ -87,3 +87,52 @@
     /*padding: var(--spacing-4);*/
     overflow-y: auto;
 }
+
+.left {
+    width: 50%;
+    min-width: 300px;
+    height: 100%;
+}
+.right {
+    min-width: 300px;
+    flex: 1;
+    height: 100%;
+}
+
+/**
+ * 미디어쿼리 변수 안되는거 같음
+ */
+@media screen and (max-width: 768px) {
+    .left,
+    .right {
+        min-width: auto;
+    }
+}
+
+
+
+.resizer {
+    width: 6px;
+    background: transparent;
+    cursor: col-resize;
+    position: relative;
+    right: 2px;
+    transition: 0.3s;
+}
+
+.resizer:hover {
+    background: var(--color-bg-tertiary);
+}
+.dotWrap {
+    position: absolute;
+    top: 50%;
+    right: 3px;
+}
+.dot {
+    display: block;
+    width: 3px;
+    height: 3px;
+    border-radius: 0;
+    background: var(--color-gray-300);
+    margin-bottom: 3px;
+}

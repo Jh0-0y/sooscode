@@ -14,7 +14,7 @@ const useTimer = () => {
                     clear();
                     return 0;
                 }
-                return prev -1;
+                return prev - 1;
             });
 
         }, 1000);
@@ -36,7 +36,7 @@ const useTimer = () => {
 
     useEffect(() => clear, []);
 
-    return { time, start, clear, format };
+    return {time, start, clear, format};
 }
 
 export default useTimer

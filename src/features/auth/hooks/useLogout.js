@@ -1,16 +1,16 @@
-import { useNavigate } from "react-router-dom";
-import { api } from "@/services/api";
-import { useUser } from "@/hooks/useUser";
-import { useToast } from "@/hooks/useToast";
+import {useNavigate} from "react-router-dom";
+import {api} from "@/services/api";
+import {useUser} from "@/hooks/useUser";
+import {useToast} from "@/hooks/useToast";
 
 const useLogout = () => {
-    const { clearUser } = useUser();
+    const {clearUser} = useUser();
     const navigate = useNavigate();
     const toast = useToast();
 
     const logout = async () => {
         try {
-            await api.post("/api/auth/logout", {}, { withCredentials: true });
+            await api.post("/api/auth/logout", {}, {withCredentials: true});
         } catch (err) {
             console.log(err)
         }
@@ -20,7 +20,7 @@ const useLogout = () => {
         navigate("/login");
     };
 
-    return { logout };
+    return {logout};
 };
 
 export default useLogout;

@@ -1,12 +1,12 @@
-import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { api } from "@/services/api";
-import { useUser } from "@/hooks/useUser";
-import { useToast } from "@/hooks/useToast";
-import { handleAuthError} from "@/features/auth/hooks/useEmail.js";
+import {useState, useRef} from "react";
+import {useNavigate} from "react-router-dom";
+import {api} from "@/services/api";
+import {useUser} from "@/hooks/useUser";
+import {useToast} from "@/hooks/useToast";
+import {handleAuthError} from "@/features/auth/hooks/useEmail.js";
 
 const useLogin = () => {
-    const { setUser } = useUser();
+    const {setUser} = useUser();
     const navigate = useNavigate();
     const toast = useToast();
 
@@ -26,16 +26,16 @@ const useLogin = () => {
         try {
             const response = await api.post(
                 "/api/auth/login",
-                { email, password },
-                { withCredentials: true }
+                {email, password},
+                {withCredentials: true}
             );
 
             setUser(response.data);
             toast.success(response.data.message);
             navigate("/");
-        }
-        catch (err) {
-            const errorCode = err.response?.data?.code;
+        } catch (err) {
+            console.log("🔥 raw error:", err);
+            const errorCode = err.code;
 
             const msg = handleAuthError(errorCode, {
                 emailRef,
@@ -47,13 +47,8 @@ const useLogin = () => {
                 toast.error(msg);
                 return;
             }
-
-            console.log(msg)
-            setError("로그인에 실패했습니다.");
             toast.error("로그인에 실패했습니다.");
-        }
-
-        finally {
+        } finally {
             setLoading(false);
         }
     };

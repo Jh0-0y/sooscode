@@ -1,13 +1,47 @@
 // features/classroom/layouts/ClassBody.jsx
-import { useState } from 'react';
+import {useRef, useState} from 'react';
 import styles from './ClassBody.module.css';
 import { useSidebar } from "@/features/classroom/hooks/useSidebar.js";
 import SnapshotPanel from "@/features/snapshot/components/SnapshotPanel.jsx";
 import CodePanel from "@/features/code/CodePanel.jsx";
+import {useCode} from "@/features/code/hooks/useCode.js";
+import CodeSharePanel from "@/features/code/CodeSharePanel.jsx";
+
+function CodeShare() {
+    return null;
+}
 
 const ClassBody = ({ isInstructor = false }) => {
     const { collapsed } = useSidebar();
+    const { editorInstance } = useCode();
     const [activeTab, setActiveTab] = useState('snapshot');
+
+    /**
+     * 영역 조정
+     */
+    const leftRef = useRef();
+
+    const startResize = (e) => {
+        e.preventDefault();
+        document.addEventListener("mousemove", handleResize);
+        document.addEventListener("mouseup", stopResize);
+    };
+
+    const handleResize = (e) => {
+        const containerLeft = leftRef.current.parentElement.getBoundingClientRect().left;
+
+        const newWidth = e.clientX - containerLeft; // 마우스 x기준으로 사이즈 조절
+        leftRef.current.style.width = `${newWidth}px`;
+
+        // 에디터 다시 레이아웃
+        if (editorInstance) editorInstance.layout();
+    };
+
+    const stopResize = () => {
+        document.removeEventListener("mousemove", handleResize);
+        document.removeEventListener("mouseup", stopResize);
+    };
+
 
     return (
         <div
@@ -28,12 +62,21 @@ const ClassBody = ({ isInstructor = false }) => {
             <div className={styles.page}>
                 <div className={styles.content}>
                     {/* 내 코드 */}
-                    <div className={styles.inner}>
+                    <div className={`${styles.inner} ${styles.left}`} ref={leftRef}>
                         <CodePanel />
                     </div>
 
+                    {/* 리사이즈 바 */}
+                    <div className={styles.resizer} onMouseDown={startResize} >
+                        <div className={styles.dotWrap}>
+                            <span className={styles.dot}></span>
+                            <span className={styles.dot}></span>
+                            <span className={styles.dot}></span>
+                        </div>
+                    </div>
+
                     {/* 스냅샷 / 코드쉐어 탭 */}
-                    <div className={styles.inner}>
+                    <div className={`${styles.inner} ${styles.right}`}>
                         <div className={styles.tabs}>
                             <button
                                 className={`${styles.tab} ${activeTab === 'snapshot' ? styles.active : ''}`}
@@ -58,7 +101,7 @@ const ClassBody = ({ isInstructor = false }) => {
                             {activeTab === 'code' && (
                                 <div className={styles.panel}>
                                     코드 쉐어 패널
-                                    {/*<CodeSharePanel />*/}
+                                    <CodeSharePanel />
                                 </div>
                             )}
                         </div>

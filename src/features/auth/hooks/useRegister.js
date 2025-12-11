@@ -1,12 +1,12 @@
 import {useEffect, useRef, useState} from "react";
-import { api } from "@/services/api";
+import {api} from "@/services/api";
 import useTimer from "./useTimer";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {handleAuthError} from "@/features/auth/hooks/useEmail.js";
 
 const useRegister = () => {
     const navigate = useNavigate();
-    const { time, start, clear, format } = useTimer();
+    const {time, start, clear, format} = useTimer();
 
     const [form, setForm] = useState({
         name: "",
@@ -44,8 +44,8 @@ const useRegister = () => {
 
     // 값 변경
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setForm((prev) => ({ ...prev, [name]: value }));
+        const {name, value} = e.target;
+        setForm((prev) => ({...prev, [name]: value}));
         if (name === "password") checkPasswordStrength(value);
     };
 
@@ -100,7 +100,7 @@ const useRegister = () => {
             start(300); // 5분 타이머
 
         } catch (err) {
-            const msg = handleAuthError(err.response?.data?.code, { emailRef });
+            const msg = handleAuthError(err.response?.data?.code, {emailRef});
             alert(msg || "전송 실패");
         } finally {
             setLoadingSend(false);
@@ -115,7 +115,7 @@ const useRegister = () => {
         }
 
         try {
-            const data  = await api.post("/api/auth/email/verify", {
+            const data = await api.post("/api/auth/email/verify", {
                 email: form.email,
                 code,
             });
