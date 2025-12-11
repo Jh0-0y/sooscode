@@ -1,5 +1,5 @@
 import {create} from "zustand";
-import {useParams} from "react-router-dom";
+// import {useParams} from "react-router-dom";
 import {useCode} from "@/features/code/hooks/useCode.js";
 import {useToast} from "@/hooks/useToast.js";
 import {useCallback, useEffect} from "react";
@@ -22,8 +22,10 @@ const snapshotStore = create((set) => ({
 }));
 
 export const useSnapshot = () => {
-    const { classId: paramClassId } = useParams();
-    const classId = Number(paramClassId);
+    // const { classId: paramClassId } = useParams();
+    // const classId = Number(paramClassId);
+
+    const classId = 1;
 
     const { code, setCode } = useCode();
     const { handleError } = useError();
@@ -43,7 +45,7 @@ export const useSnapshot = () => {
             console.error(error);
             handleError(error);
         }
-     }, [classId, setSnapshots, handleError]);
+     }, [classId]);
 
     useEffect(() => {
         fetchSnapshots();
