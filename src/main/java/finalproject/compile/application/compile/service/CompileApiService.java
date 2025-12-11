@@ -26,14 +26,16 @@ public class CompileApiService {
      */
     public CompileResponse runCode(CompileRequest request){
 
-        // 요청마다 jobId 생성 UUID 파싱
-        String jobId = UUID.randomUUID().toString();
-
+        String jobId = request.getJobId();
         //  Job 엔티티 생성
         //    - 상태 WAITING
         //    - 요청받은 Java 코드 저장
         //    - InMemory 레포 에 저장
-        CompileJob job = jobService.createJob(jobId, request.getCode());
+        CompileJob job = jobService.createJob(
+                jobId,
+                request.getCode(),
+                request.getCallbackUrl()
+                );
 
         //  컴파일 작업 큐에 job push
         //    - WorkerListener 백그라운드 스레드가 pop() 해서 실제 컴파일 실행

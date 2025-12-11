@@ -58,28 +58,25 @@ public class CmdUtils {
                         -1
                 );
             }
-            // 출력 스트림 읽기 (버퍼 방식 - 글자 수 제한)
-            String charsetName = isWindows ? "MS949" : "UTF-8";
+
+            //  출력 스트림 읽기 (UTF-8 안전 처리)
+            String charsetName = "UTF-8";
 
             try (BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(process.getInputStream(), Charset.forName(charsetName)))) {
+                    new InputStreamReader(process.getInputStream(), Charset.forName(charsetName)))
+            ) {
 
-                char[] buffer = new char[1024]; // 1KB 버퍼
-                int readCount;
+                String line;
                 int totalChars = 0;
 
-                // read(buffer)는 읽은 글자 수를 반환함 (-1이면 끝)
-                while ((readCount = reader.read(buffer)) != -1) {
+                while ((line = reader.readLine()) != null) {
+                    totalChars += line.length();
 
-                    // 읽은 만큼 StringBuilder에 추가
-                    output.append(buffer, 0, readCount);
-                    totalChars += readCount;
+                    output.append(line).append("\n");
 
-                    //  글자 수 제한 초과 시 강제 중단
                     if (totalChars > MAX_OUTPUT_CHARS) {
                         output.append("\n... (출력 용량이 너무 커서 중단되었습니다) ...");
 
-                        // 프로세스가 아직 살아있다면 확실히 종료
                         if (process.isAlive()) process.destroyForcibly();
                         break;
                     }
