@@ -2,19 +2,22 @@ import { useState, useEffect } from 'react';
 import Editor from "@monaco-editor/react";
 import styles from './CodePracticePanel.module.css';
 import { useDarkMode } from "@/hooks/useDarkMode";
+import CodePracticeHeader from './CodePracticeHeader';
+import CodePracticeCompileContainer from './CodePracticeCompileContainer';
+import { usePracticeStore } from '../store/usePracticeStore';
 
 export default function CodePracticePanel() {
   const { darkMode } = useDarkMode();
   const [editorInstance, setEditorInstance] = useState(null);
   const [monacoInstance, setMonacoInstance] = useState(null);
 
-  const [code, setCode] = useState(
-`public class HelloWorld {
-    public static void main(String[] args) {
-        System.out.println("Hello World!");
-    }
-}`
-  );
+  const code = usePracticeStore((s) => s.code);
+  const setCode = usePracticeStore((s) => s.setCode);
+  const language = usePracticeStore((s) => s.language);
+  const setLanguage = usePracticeStore((s) => s.setLanguage);
+
+
+  const title="code practice"
 
   // 테마 생성 함수 (라이트/다크 자동 적용)
   const applyTheme = (monaco) => {
@@ -54,13 +57,16 @@ export default function CodePracticePanel() {
 
   return (
     <div className={styles.practicePanel}>
-      <div className={styles.header}>codePracticeHeader</div>
+      <CodePracticeHeader 
+          title={title}
+          onChangeLang={setLanguage}
+      />
 
       <div className={styles.codeContainer}>
         <Editor
           height="100%"
           width="100%"
-          defaultLanguage="java"
+          language={language}     // ← 여기!
           value={code}
           onChange={(v) => setCode(v)}
           onMount={handleEditorMount}
@@ -76,9 +82,10 @@ export default function CodePracticePanel() {
             renderLineHighlight: "none",
           }}
         />
+
       </div>
 
-      <div className={styles.compileContainer}>ddd</div>
+      <CodePracticeCompileContainer/>
     </div>
   );
 }

@@ -8,10 +8,6 @@
   margin-left:0px;
   background-color:var(--color-bg-primary);
 }
-.header{
-  border:2px solid white;
-
-}
 
 .codeContainer {
   flex: 8;
