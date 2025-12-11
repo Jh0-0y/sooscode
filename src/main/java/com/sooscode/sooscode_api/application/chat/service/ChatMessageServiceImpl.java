@@ -37,11 +37,24 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         ClassRoom classRoom = classRoomRepository.findById(request.getClassId())
                 .orElseThrow(() -> new CustomException(ClassStatus.CLASS_NOT_FOUND));
 
-        ChatMessage entity = ChatMessage.builder()
-                .user(user)
-                .classRoom(classRoom)
-                .content(request.getContent())
-                .build();
+        ChatMessage reply = null;
+
+        if (request.getReplyToChatId() != null) {
+            reply = chatMessageRepository.findById(request.getReplyToChatId())
+                    .orElseThrow(() -> new CustomException(ChatStatus.NOT_FOUND));
+
+            // ️ 다른 클래스 메시지에 답장 못 하게 막기
+            if (!reply.getClassRoom().getClassId().equals(request.getClassId())) {
+                throw new CustomException(ChatStatus.ACCESS_DENIED);
+            }
+        }
+
+        ChatMessage entity = ChatMessage.of(
+                user,
+                classRoom,
+                request.getContent(),
+                reply
+        );
 
         ChatMessage saved = chatMessageRepository.save(entity);
 
