@@ -2,9 +2,8 @@ package finalproject.compile.infra.file;
 
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 컴파일 작업에 필요한 파일 처리 유틸 클래스
@@ -14,9 +13,21 @@ import java.io.IOException;
  */
 @Component
 public class FileUtil {
+    /**
+     *  window , linux 둘다 돌아가야함 로컬테스트랑 ec2 배포생각
+     * */
+    private static final String BASE_PATH;
+    static {
+        boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
 
-    private static final  String BASE_PATH = "/tmp/compiler"; // 모든 컴파일 작업의 루트 디렉토리
-
+        if (isWindows) {
+            // Windows용 로컬 테스트 경로
+            BASE_PATH = System.getProperty("user.dir") + "\\compiler_jobs";
+        } else {
+            // Linux(EC2/Docker)용 배포 경로
+            BASE_PATH = "/tmp/compiler";
+        }
+    }
     public String getBasePath() {
         return BASE_PATH;
     }
@@ -27,7 +38,7 @@ public class FileUtil {
      * 2) 해당 디렉토리에 fileName(Main.java) 생성
      * 3) 사용자가 제출한 code 내용을 파일에 기록
      */
-    public void createaJavaFile(String jobId, String fileName, String code) throws IOException {
+    public void createJavaFile(String jobId, String fileName, String code) throws IOException {
 
         // jobId 전용 디렉토리 경로 생성
         File dir = new File(BASE_PATH + "/" + jobId);
@@ -41,9 +52,13 @@ public class FileUtil {
         File file = new File(dir, fileName);
 
         // 파일에 코드 내용 기록
-        try(FileWriter fw = new FileWriter(file)){
-            fw.write(code); // 사용자가 요청에서 전달한 코드 그대로 기록
+        try (OutputStreamWriter writer = new OutputStreamWriter(
+                new FileOutputStream(file), StandardCharsets.UTF_8)) {
+
+            writer.write(code);
         }
+
+        // 사용자가 요청에서 전달한 코드 그대로 기록
     }
 
     /**

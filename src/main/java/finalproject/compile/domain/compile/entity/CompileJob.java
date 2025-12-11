@@ -16,12 +16,14 @@ public class CompileJob {
 
     private final String jobId;
     private final String code;
+    private final String callbackUrl;
     private CompileJobStatus status;
     private String output;
 
-    public CompileJob(String jobId, String code) {
+    public CompileJob(String jobId, String code , String callbackUrl) {
         this.jobId = jobId;
         this.code = code;
+        this.callbackUrl = callbackUrl;
         this.status = CompileJobStatus.PENDING;
     }
 

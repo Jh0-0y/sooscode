@@ -16,8 +16,8 @@ public class CompileJobService {
     private final CompileJobRepository jobRepository;
 
     /** Job 생성 */
-    public CompileJob createJob(String jobId, String code) {
-        CompileJob job = new CompileJob(jobId, code);
+    public CompileJob createJob(String jobId, String code, String callbackUrl) {
+        CompileJob job = new CompileJob(jobId, code,  callbackUrl);
         jobRepository.save(job);
         return job;
     }
