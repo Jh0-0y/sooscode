@@ -157,6 +157,20 @@ public class AuthController {
                 .build();
     }
 
+    /**
+     * RT로 AT재발급
+     */
+    @PostMapping("/refresh")
+    public ResponseEntity<ApiResponse<Void>> reissueAccessToken(HttpServletRequest request, HttpServletResponse response) {
+
+        String refreshToken = CookieUtil.getRefreshToken(request);
+
+        TokenResponse tokens = authService.reissueAccessToken(refreshToken);
+
+        CookieUtil.addTokenCookies(response, tokens);
+
+        return ApiResponse.ok(GlobalStatus.OK);
+    }
 
     /**
      * 임시 비밀번호 발급 요청

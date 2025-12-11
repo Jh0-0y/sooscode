@@ -25,21 +25,6 @@ public class MeController  {
     private final AuthServiceImpl authService;
 
     /**
-     * RT로 AT재발급
-     */
-    @PostMapping("/refresh")
-    public ResponseEntity<ApiResponse<Void>> reissueAccessToken(HttpServletRequest request, HttpServletResponse response) {
-
-        String refreshToken = CookieUtil.getRefreshToken(request);
-
-        TokenResponse tokens = authService.reissueAccessToken(refreshToken);
-
-        CookieUtil.addTokenCookies(response, tokens);
-
-        return ApiResponse.ok(GlobalStatus.OK);
-    }
-
-    /**
      * 현재 로그인 된 유저 정보
      * SecurityContext에 있는 CustomUserDetails 추출됨
      */
