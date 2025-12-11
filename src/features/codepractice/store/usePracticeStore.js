@@ -1,42 +1,82 @@
 import { create } from "zustand";
 import { loadPyodideInstance } from "../utils/PyodideLoader";
+import { runJavaCode } from "../services/compile/compile.api";
+
+function encodeBase64(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
 
 export const usePracticeStore = create((set, get) => ({
-  code: "",
+  code: `print("Hello Python!")`,
   language: "python",
   output: "",
 
   setCode: (val) => set({ code: val }),
   setLanguage: (lang) => set({ language: lang }),
   setOutput: (data) => set({ output: data }),
+  resetCode: () => set({ code: "" }),
 
   run: async () => {
-  const { code, language } = get();
+    const { code, language } = get();
 
-  if (language === "python") {
-    try {
-      const pyodide = await loadPyodideInstance();
+    // =======================================
+    // Python 실행
+    // =======================================
+    if (language === "python") {
+      try {
+        console.log("python compile 실행");
+        const pyodide = await loadPyodideInstance();
 
-      // 출력 캡처
-      let outputText = "";
-      pyodide.setStdout({
-        batched: (text) => { outputText += text; }
-      });
-      pyodide.setStderr({
-        batched: (text) => { outputText += text; }
-      });
+        let outputText = "";
 
-      // 코드 실행
-      await pyodide.runPythonAsync(code);
+        pyodide.globals.set("print", (...args) => {
+          outputText += args.join(" ") + "\n";
+        });
 
-      // 최종 출력 상태 저장
-      set({ output: outputText });
+        pyodide.globals.set("print_err", (...args) => {
+          outputText += args.join(" ") + "\n";
+        });
 
-    } catch (err) {
-      set({ output: String(err) });
+        await pyodide.runPythonAsync(code);
+
+        set({ output: outputText });
+      } catch (err) {
+        set({ output: String(err) });
+      }
+      return;
     }
-    return;
+
+    // =======================================
+    // Java 실행
+    // =======================================
+    if (language === "java") {
+  try {
+    console.log("java 컴파일러 실행");
+
+    const encoded = encodeBase64(code);
+
+    // ★ 이제 result = output 텍스트 그 자체
+    const output = await runJavaCode({ code: encoded });
+
+    set({ output });
+
+  } catch (err) {
+    set({
+      output:
+        err.response?.data?.message ||
+        err.response?.data ||
+        String(err)
+    });
   }
+
+  return;
 }
 
+
+
+
+
+
+
+  },
 }));

@@ -6,22 +6,26 @@ import {
 
 import { usePracticeUIStore } from "@/features/codepractice/store/usePracticeUIStore";
 import { usePracticeStore } from "@/features/codepractice/store/usePracticeStore";
-import styles from "./CodePracticeHeader.module.css";
+import styles from "./CodePracticeHeaderLayout.module.css";
 import { useNavigate } from "react-router-dom";
 import { useDarkMode } from "@/hooks/useDarkMode";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { DEFAULT_SNIPPETS } from "../constants/defaultSnippets";
 
 export default function CodePracticeHeaderLayout({
   classTitle = "코드 연습",
   onSave,
-  onRun,
+  //onRun,
   onChangeLang,
   defaultLang = "python"
 }) {
+
+  // navigate , darkmode , run , sidebar 상태관리 
   const navigate = useNavigate();
   const { darkMode, toggleDarkMode } = useDarkMode();
   const run = usePracticeStore((s) => s.run);
-
+  const resetCode = usePracticeStore((s) => s.resetCode);
+  const setCode = usePracticeStore((s) => s.setCode);
   const {
     isSidebarOpen,
     toggleSidebar,
@@ -29,13 +33,36 @@ export default function CodePracticeHeaderLayout({
     toggleSnapshot
   } = usePracticeUIStore();
 
+  // default code language
   const [selectedLang, setSelectedLang] = useState(defaultLang);
+  const setLanguage = usePracticeStore((s) => s.setLanguage);
 
+  // Language 선택 후 default Code 변경 logic
   const handleLangToggle = () => {
     const next = selectedLang === "java" ? "python" : "java";
     setSelectedLang(next);
+    setLanguage(next);
+
+    const defaultCode = DEFAULT_SNIPPETS[next];
+    if (defaultCode) setCode(defaultCode);
     onChangeLang && onChangeLang(next);
+
+    console.log("selected Lang:", next);
   };
+  
+  // Ctrl + 3 입력시 컴파일 기능
+  useEffect(() => {
+    const hadleKeydown = (e) => {
+      if(e.ctrlKey && e.key === "3"){
+        e.preventDefault();
+        run();
+      }
+    }
+    // window 전체에 addEventListener 선언
+    window.addEventListener("keydown", hadleKeydown);
+    // 컴포넌트가 사라질때 이벤트 리스너 제거 ( 반복 렌더링 예방 )
+    return () => window.removeEventListener("keydown", hadleKeydown);
+  }, [run]);
 
 
   return (
@@ -62,10 +89,13 @@ export default function CodePracticeHeaderLayout({
         <button className={`${styles.actionBtn} ${styles.runBtn}`} onClick={run}>
           실행
         </button>
+        <button className={`${styles.actionBtn} ${styles.runBtn}`} onClick={resetCode}>
+          초기화
+        </button>
         <button className={styles.actionBtn} onClick={handleLangToggle}>
           {selectedLang.toUpperCase()}
         </button>
-        <button onClick={toggleDarkMode}>
+        <button onClick={toggleDarkMode} className={styles.actionBtn}>
             {darkMode ? "🌙 다크모드" : "☀️ 라이트모드"}
         </button>
       </div>

@@ -67,6 +67,10 @@
 
   cursor: pointer;
   transition: var(--transition-fast);
+
+  display: flex;            /* 아이콘 + 텍스트 정렬 */
+  align-items: center;      /* 수직 중앙 */
+  gap: 6px; 
 }
 
 .actionBtn:hover {

@@ -14,3 +14,31 @@
   overflow: hidden;
   background-color:var(--color-bg-primary);
 }
+
+
+/* Custum Scroll Bar */
+/* ------------------------------------------------------
+    코드 연습 페이지 전용 커스텀 스크롤바
+-------------------------------------------------------*/
+
+/* 스크롤바 전체 */
+.PageWrapper::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* 스크롤바 배경 */
+.PageWrapper::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary, #1e1e1e); /* 필요시 바꿔 */
+  border-radius: 8px;
+}
+
+/* 스크롤바 손잡이 */
+.PageWrapper::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #4a9fff, #0066ff);
+  border-radius: 10px;
+}
+
+/* 스크롤바 Hover */
+.PageWrapper::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #6bb3ff, #1e7aff);
+}

@@ -1,8 +1,13 @@
-.sidebarContainer {
+.sidebarWrapper {
   display: flex;
+  flex-direction:column;
   width: 20%;
   margin: var(--spacing-1);
   border-radius: var(--radius-base);
   border: 2px solid var(--color-border-light);
   background: var(--color-bg-primary);
+}
+
+.contentContainer{
+  padding:5px;
 }

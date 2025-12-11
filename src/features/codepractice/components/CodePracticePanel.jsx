@@ -5,6 +5,7 @@ import { useDarkMode } from "@/hooks/useDarkMode";
 import CodePracticeHeader from './CodePracticeHeader';
 import CodePracticeCompileContainer from './CodePracticeCompileContainer';
 import { usePracticeStore } from '../store/usePracticeStore';
+import CodePracticeOutputContainer from './CodePracticeCompileContainer';
 
 export default function CodePracticePanel() {
   const { darkMode } = useDarkMode();
@@ -15,6 +16,8 @@ export default function CodePracticePanel() {
   const setCode = usePracticeStore((s) => s.setCode);
   const language = usePracticeStore((s) => s.language);
   const setLanguage = usePracticeStore((s) => s.setLanguage);
+  const storeOutput = usePracticeStore((s) => s.output);
+
 
 
   const title="code practice"
@@ -85,7 +88,10 @@ export default function CodePracticePanel() {
 
       </div>
 
-      <CodePracticeCompileContainer/>
+      <CodePracticeCompileContainer
+      title={"코드 실행 결과"}
+      output={storeOutput}
+    />
     </div>
   );
 }

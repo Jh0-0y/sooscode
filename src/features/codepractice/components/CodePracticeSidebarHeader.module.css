@@ -1,0 +1,30 @@
+.sidebarHeader {
+  display: flex;
+  background: var(--bg-dark-2);
+  border-bottom: 1px solid #2f3542;
+  padding: 0;
+  height: 44px;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  color: #bfc7d5;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 10px 0;
+  transition: all 0.15s;
+}
+
+.tab:hover {
+  color: #ffffff;
+}
+
+.active {
+  color: white;
+  border-bottom: 2px solid #4da3ff;  /* 파란 underline */
+  background: rgba(255,255,255,0.03);
+}
