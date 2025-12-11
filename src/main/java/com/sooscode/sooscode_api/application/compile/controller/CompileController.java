@@ -43,13 +43,13 @@ public class CompileController {
          * - 현재 HTTP 스레드에서는 SecurityContext가 존재함 (인증된 상태).
          */
         try {
-            String code = new  String(
+            String decode = new  String(
                     Base64.getDecoder().decode(request.getCode()),
                     StandardCharsets.UTF_8
             );
 
             CompletableFuture<CompileResultResponse> resultFuture =
-                    compileService.runCode(code);
+                    compileService.runCode(decode);
             log.info("===> Future 생성 완료");
 
             /**
