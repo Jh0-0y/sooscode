@@ -63,7 +63,7 @@ const userStore = create((set) => ({
             set({ user });
         } catch (error) {
             try {
-                await api.post("/api/me/refresh");
+                await api.post("/api/auth/refresh");
                 const result = await api.get("/api/me");
                 const user = validateUser(result.data);
                 set({ user });
