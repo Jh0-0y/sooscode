@@ -52,7 +52,13 @@ const useSocket = (classroomId) => {
             },
 
             // 연결 끊김 시 재연결 시도
-            onWebSocketClose: () => {
+            onWebSocketClose: (event) => {
+                // 강제 종료 감지 (정상 종료가 아닌 경우)
+                if (event.code !== 1000) {
+                    // 1000 = 정상 종료, 그 외 = 비정상
+                    alert('다른 기기에서 접속하여 연결이 종료되었습니다.');
+                }
+
                 if (reconnectAttempts.current < maxReconnectAttempts) {
                     reconnectAttempts.current += 1;
                     console.log(`[WebSocket] 재연결 시도 ${reconnectAttempts.current}/${maxReconnectAttempts}`);
