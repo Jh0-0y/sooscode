@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import { DEFAULT_SNIPPETS } from "../constants/defaultSnippets";
 
 export default function CodePracticeHeaderLayout({
-  classTitle = "코드 연습",
+  classTitle = "Java Fullstack 12기",
   onSave,
   //onRun,
   onChangeLang,
@@ -39,7 +39,14 @@ export default function CodePracticeHeaderLayout({
 
   // Language 선택 후 default Code 변경 logic
   const handleLangToggle = () => {
-    const next = selectedLang === "java" ? "python" : "java";
+    //const next = selectedLang === "java" ? "python" : "java";
+    
+    let next;  // ← const 말고 let로 선언해야 함
+
+    if (selectedLang === "python") next = "java";
+    else if (selectedLang === "java") next = "hcj";
+    else next = "python";
+    
     setSelectedLang(next);
     setLanguage(next);
 
@@ -71,8 +78,15 @@ export default function CodePracticeHeaderLayout({
         <button className={styles.backBtn} onClick={() => navigate(-1)}>
           <ChevronLeft size={20} />
         </button>
-        <span className={styles.title}>{classTitle}</span>
+        <span className={styles.title}>
+          코드 연습
+        </span>
+        <div className={styles.classTitle}>
+          {classTitle}
+        </div>
       </div>
+
+      
 
       <div className={styles.right}>
         <button className={styles.actionBtn} onClick={toggleSidebar}>

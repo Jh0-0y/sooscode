@@ -89,3 +89,7 @@
 .runBtn:hover {
   background: var(--color-primary-700);
 }
+
+.classTitle{
+  margin-left:5px;
+}

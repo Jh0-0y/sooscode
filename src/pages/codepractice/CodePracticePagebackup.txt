@@ -59,3 +59,17 @@ export default function CodePracticePage() {
     </div>
   );
 }
+
+
+              <Panel defaultSize={33.33} minSize={10}>
+                <div className={styles.panelContent}>
+                  <HCJCodePanelHeader HCJtitle={"CSS"}/>
+                  <div className={styles.codeContainer}>
+                    <HCJCodePanelContentCSS
+                      code={CSSCode}
+                      onChange={onCSSChange}
+                    />
+                  </div>
+                </div>
+              </Panel>
+              <PanelResizeHandle className={styles.innerHandle} />

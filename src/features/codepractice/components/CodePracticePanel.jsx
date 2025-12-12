@@ -5,7 +5,6 @@ import { useDarkMode } from "@/hooks/useDarkMode";
 import CodePracticeHeader from './CodePracticeHeader';
 import CodePracticeCompileContainer from './CodePracticeCompileContainer';
 import { usePracticeStore } from '../store/usePracticeStore';
-import CodePracticeOutputContainer from './CodePracticeCompileContainer';
 
 export default function CodePracticePanel() {
   const { darkMode } = useDarkMode();

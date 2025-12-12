@@ -47,11 +47,6 @@ export const usePracticeStore = create((set, get) => ({
   setOutput: (data) => set({ output: data }),
   resetCode: () => set({ code: "" }),
 
-  consoleOutput: "",
-  setConsoleOutput: (v) => set({ consoleOutput: v }),
-  clearConsole: () => set({ consoleOutput: "" }),
-  renderHTML: "",
-  setRenderHTML: (v) => set({ renderHTML: v }),
   //HCJ set 등록
   setHTML: (v) => set({ htmlCode: v }),
   setCSS: (v) => set({ cssCode: v }),
@@ -61,7 +56,6 @@ export const usePracticeStore = create((set, get) => ({
     cssCode: "",
     jsCode: "",
   }),
-  
 
   run: async () => {
     const { code, language ,htmlCode, cssCode, jsCode} = get();
@@ -124,47 +118,36 @@ export const usePracticeStore = create((set, get) => ({
     // ================================
     if (language === "hcj") {
       console.log("HCJ render 실행");
-      const safeJS = JSON.stringify(jsCode);
 
       // iframe으로 렌더링 → 코드 프리뷰 영역에서 subscribe 해서 보기
       
       console.log("=== RUN 실행 ===");
       console.log("HCJ render 실행");
       console.log("language:", language);
-      //console.log("[HTML]:", htmlCode);
-      //console.log("[CSS]:", cssCode);
-      //console.log("[JS]:", jsCode);
+      console.log("[HTML]:", htmlCode);
+      console.log("[CSS]:", cssCode);
+      console.log("[JS]:", jsCode);
 
       const fullHTML = `
-<html>
-  <head>
-    <style>${cssCode}</style>
-  </head>
-  <body>
-    ${htmlCode}
-    <script>
-try {
-    const realLog = console.log;
-    console.log = function(...args) {
-        parent.postMessage({ type: "HCJ_LOG", message: args.join(" ") }, "*");
-        realLog.apply(console, args);
-    };
+        <html>
+          <head>
+            <style>${cssCode}</style>
+          </head>
+          <body>
+            ${htmlCode}
+            <script>
+              try {
+                ${jsCode}
+              } catch(e) {
+                parent.postMessage({ type: "HCJ_ERROR", message: e.message }, "*");
+              }
+            </script>
+          </body>
+        </html>
+      `;
 
-    eval(${safeJS});
-
-} catch(e) {
-    parent.postMessage({ type: "HCJ_ERROR", message: e.message }, "*");
-}
-</script>
-  </body>
-</html>
-`;
-
-
-      set({ renderHTML: fullHTML }); 
-      set({ consoleOutput: "" });   // 콘솔 초기화 (이게 진짜 콘솔)
-
-      //console.log(fullHTML);
+      set({ output: fullHTML });
+      console.log(fullHTML);
       return;
     }
   },
