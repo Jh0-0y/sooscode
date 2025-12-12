@@ -1,5 +1,5 @@
 import React from "react";
-
+import ReactionCheckbox from "@/features/chat/components/ui/ReactionCheckbox.jsx";
 export default function ChatMessageItem({
                                             msg,
                                             myEmail,
@@ -18,7 +18,25 @@ export default function ChatMessageItem({
     const mine = msg.email === myEmail;          // 내 메시지인지
     const isDeleted = msg.deleted === true;      // 삭제 여부 (boolean)
 
-    // ---------------- 시스템 메시지 (입장 / 퇴장) ----------------
+    // 메세지 복사
+    const handleCopy = () => {
+        if(!msg.content) return;
+
+        navigator.clipboard
+            .writeText(msg.content)
+            .then(() =>{
+                
+                console.log("복사완료");
+            })
+            .catch((err)=>{
+                console.error("복사실패", err);
+            })
+            .finally(() => {
+                setActiveMenuId(null)
+            })
+    }
+
+    //  시스템 메시지 (입장 / 퇴장)
     if (isSystem) {
         const isEnter = msg.type === "ENTER";
 
@@ -36,7 +54,7 @@ export default function ChatMessageItem({
         );
     }
 
-    // ---------------- 일반 메시지 (채팅) ----------------
+    //  일반 메시지 (채팅)
     return (
         <div
             ref={(el) => {
@@ -118,6 +136,13 @@ export default function ChatMessageItem({
                         {/* 세 점 메뉴 내용 */}
                         {activeMenuId === msg.chatId && (
                             <div className="chat-more-menu">
+                                <button
+                                    type="button"
+                                    onClick={handleCopy}
+                                >
+                                    복사
+                                </button>
+
                                 {mine ? (
                                     // 내가 쓴 메시지 → 삭제만 가능
                                     <button

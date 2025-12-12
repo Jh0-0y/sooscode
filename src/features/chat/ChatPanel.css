@@ -1,5 +1,5 @@
 /**************************************
- * CHAT PANEL — GLOBAL CSS 기반 리팩토링 버전
+ * CHAT PANEL — GLOBAL CSS 기반 리팩토링 버전 (정리본)
  **************************************/
 
 /* ========== 전체 패널 ========== */
@@ -56,7 +56,7 @@
     line-height: var(--line-height-normal);
     gap: var(--spacing-1);
     position: relative;
-    word-break: break-word; /* ← 자동 줄바꿈 핵심 */
+    word-break: break-word; /* 자동 줄바꿈 */
 }
 
 /* 내가 보낸 메시지 */
@@ -118,6 +118,7 @@
     font-size: var(--font-size-xs);
     color: var(--color-text-secondary);
     max-width: 100%;
+    cursor: pointer; /* 클릭 가능 느낌 */
 }
 
 .chat-reply-preview-name {
@@ -129,6 +130,10 @@
     white-space: normal;
     word-break: break-word;
     opacity: 0.9;
+}
+
+.chat-reply-preview:hover {
+    background: var(--color-bg-secondary);
 }
 
 /* ========== 공감 + 메뉴 영역 ========== */
@@ -156,7 +161,7 @@
     color: var(--color-text-tertiary);
 }
 
-/* ... 메뉴 */
+/* ... 메뉴 트리거 */
 .chat-actions-more {
     position: relative;
 }
@@ -172,10 +177,9 @@
     color: var(--color-text-primary);
 }
 
-/* 드롭다운 */
+/* 드롭다운 공통 */
 .chat-more-menu {
     position: absolute;
-    right: 0;
     top: 100%;
     margin-top: 4px;
     background: var(--color-bg-primary);
@@ -183,7 +187,20 @@
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-base);
     z-index: 10;
+    min-width: 90px;
+    overflow: hidden;
 }
+
+/* 내가 보낸 메시지: 오른쪽 정렬 */
+.chat-bubble.mine .chat-more-menu {
+    right: 0;
+}
+
+/* 상대 메시지: 왼쪽 정렬 */
+.chat-bubble.other .chat-more-menu {
+    left: 0;
+}
+
 .chat-more-menu button {
     padding: 6px 10px;
     background: transparent;
@@ -191,6 +208,7 @@
     cursor: pointer;
     font-size: var(--font-size-xs);
     text-align: left;
+    color: var(--color-text-primary);
 }
 .chat-more-menu button:hover {
     background: var(--color-bg-secondary);
@@ -257,17 +275,4 @@
 }
 .chat-sidebar__input button:hover {
     background: var(--color-primary-600);
-}
-.chat-reply-preview {
-    cursor: pointer; /* 클릭 가능 느낌 */
-}
-
-.chat-reply-preview:hover {
-    background: var(--color-bg-secondary);
-}
-
-/* 하이라이트 효과 (스크롤 후 잠깐 강조용) */
-.chat-bubble--highlight .chat-content {
-    box-shadow: 0 0 0 2px var(--color-primary-300);
-    transition: box-shadow 150ms ease-in-out;
 }

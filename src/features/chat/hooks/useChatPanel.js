@@ -126,8 +126,9 @@ export const useChatPanel = (classId = 1) => {
             const api = body.body ?? body; // ApiResponse 껍데기 벗기기
             const msg = api.data ?? api;   // data 안에 진짜 메시지 있음
 
-            // 1) 공감 브로드캐스트 (chatId + reactionCount 만 넘어오는 경우)
-            if (msg.chatId && typeof msg.reactionCount === "number") {
+
+
+            if (msg.type === "REACTION") {
                 setMessages((prev) =>
                     prev.map((m) =>
                         m.chatId === msg.chatId
