@@ -39,8 +39,8 @@ public class AdminClassRequest {
         private String description;
         private Long instructorId;
         private Boolean isOnline;
-        private LocalDate startedAt;
-        private LocalDate endedAt;
+        private LocalDate startDate;
+        private LocalDate endDate;
         private LocalTime startTime;
         private LocalTime endTime;
     }

@@ -10,7 +10,7 @@ import com.sooscode.sooscode_api.domain.snapshot.repository.CodeSnapshotReposito
 import com.sooscode.sooscode_api.domain.user.entity.User;
 import com.sooscode.sooscode_api.domain.user.repository.UserRepository;
 import com.sooscode.sooscode_api.global.api.exception.CustomException;
-import com.sooscode.sooscode_api.global.api.status.ClassStatus;
+import com.sooscode.sooscode_api.global.api.status.ClassRoomStatus;
 import com.sooscode.sooscode_api.global.api.status.SnapshotStatus;
 import com.sooscode.sooscode_api.global.api.status.UserStatus;
 import jakarta.transaction.Transactional;
@@ -37,7 +37,7 @@ public class SnapshotServiceImpl implements SnapshotService {
                 .orElseThrow(() -> new CustomException(UserStatus.NOT_FOUND));
 
         ClassRoom classRoom = classRoomRepository.findById(rq.getClassId())
-                .orElseThrow(() -> new CustomException(ClassStatus.CLASS_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ClassRoomStatus.CLASS_NOT_FOUND));
 
         CodeSnapshot codeSnapshot = CodeSnapshot.builder()
                 .user(user)

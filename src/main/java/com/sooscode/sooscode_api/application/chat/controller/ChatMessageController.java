@@ -3,17 +3,14 @@ package com.sooscode.sooscode_api.application.chat.controller;
 import com.sooscode.sooscode_api.application.chat.dto.*;
 import com.sooscode.sooscode_api.application.chat.service.ChatMessageService;
 import com.sooscode.sooscode_api.application.chat.service.ChatPresenceService;
-import com.sooscode.sooscode_api.domain.chatmessage.entity.ChatMessage;
 import com.sooscode.sooscode_api.global.api.exception.CustomException;
 import com.sooscode.sooscode_api.global.api.response.ApiResponse;
 import com.sooscode.sooscode_api.global.api.status.ChatStatus;
-import com.sooscode.sooscode_api.global.api.status.ClassStatus;
-import com.sooscode.sooscode_api.global.api.status.SnapshotStatus;
+import com.sooscode.sooscode_api.global.api.status.ClassRoomStatus;
 import com.sooscode.sooscode_api.global.api.status.UserStatus;
 import com.sooscode.sooscode_api.global.websocket.WebSocketSessionRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -21,7 +18,6 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -156,7 +152,7 @@ public class ChatMessageController {
 
     private void classEffectiveness(Long classId){
         if (classId == null) {
-            throw new CustomException(ClassStatus.CLASS_NOT_FOUND);
+            throw new CustomException(ClassRoomStatus.CLASS_NOT_FOUND);
         }
     }
 

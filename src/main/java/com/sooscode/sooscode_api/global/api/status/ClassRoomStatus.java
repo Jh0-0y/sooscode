@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum ClassStatus implements StatusCode {
+public enum ClassRoomStatus implements StatusCode {
 
     // =========================
     // CLASS 관련
@@ -37,6 +37,8 @@ public enum ClassStatus implements StatusCode {
     INVALID_CLASS_ID(HttpStatus.BAD_REQUEST, "COMMON_004", "유효하지 않은 클래스 ID입니다"),
     INVALID_USER_ID(HttpStatus.BAD_REQUEST, "COMMON_005", "유효하지 않은 사용자 ID입니다"),
 
+
+    CLASS_STATUS_INVALID(HttpStatus.BAD_REQUEST, "CLASS_003", "진행중인 클래스는 삭제가 불가능합니다"),
     // =========================
     // 응답 성공 반환
     // =========================

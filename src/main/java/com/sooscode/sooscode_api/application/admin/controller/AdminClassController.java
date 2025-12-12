@@ -62,6 +62,16 @@ public class AdminClassController {
             @PathVariable Long classId,
             @RequestBody AdminClassRequest.Update request
     ) {
+        validateCreate(
+                request.getTitle(),
+                request.getDescription(),
+                request.getIsOnline(),
+                request.getStartDate(),
+                request.getEndDate(),
+                request.getStartTime(),
+                request.getEndTime()
+        );
+        validateInstructorId(request.getInstructorId());
         log.info("관리자 클래스 수정 요청: classId={}", classId);
         AdminClassResponse.ClassItem response = adminClassService.updateClass(classId, request);
         return ResponseEntity.ok(response);

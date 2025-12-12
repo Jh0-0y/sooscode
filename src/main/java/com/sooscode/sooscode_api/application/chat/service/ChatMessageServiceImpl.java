@@ -11,7 +11,7 @@ import com.sooscode.sooscode_api.domain.user.entity.User;
 import com.sooscode.sooscode_api.domain.user.repository.UserRepository;
 import com.sooscode.sooscode_api.global.api.exception.CustomException;
 import com.sooscode.sooscode_api.global.api.status.ChatStatus;
-import com.sooscode.sooscode_api.global.api.status.ClassStatus;
+import com.sooscode.sooscode_api.global.api.status.ClassRoomStatus;
 import com.sooscode.sooscode_api.global.api.status.UserStatus;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                 .orElseThrow(() -> new CustomException(UserStatus.NOT_FOUND));
 
         ClassRoom classRoom = classRoomRepository.findById(request.getClassId())
-                .orElseThrow(() -> new CustomException(ClassStatus.CLASS_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ClassRoomStatus.CLASS_NOT_FOUND));
 
         ChatMessage reply = null;
 

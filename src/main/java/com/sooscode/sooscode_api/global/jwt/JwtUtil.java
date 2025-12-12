@@ -5,10 +5,14 @@ import com.sooscode.sooscode_api.global.api.exception.CustomException;
 import com.sooscode.sooscode_api.global.api.status.AuthStatus;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 
 /**
@@ -18,12 +22,27 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    // TOKEN SETTINGS
-    private static final long ACCESS_TOKEN_EXPIRE = 30 * 60 * 1000L;        // 30분
-    private static final long REFRESH_TOKEN_EXPIRE = 7 * 24 * 60 * 60 * 1000L; // 7일
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
-    private final Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    @Value("${jwt.access-token-expire}")
+    private long accessTokenExpire;
 
+    @Value("${jwt.refresh-token-expire}")
+    private long refreshTokenExpire;
+
+    private Key secretKey;
+
+    /**
+     * 의존성 주입 완료 후 secretKey 초기화
+     * application.properties의 jwt.secret 값을 사용하여 Key 객체 생성
+     */
+    @PostConstruct
+    private void init() {
+        this.secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+        log.info("JwtUtil 초기화 완료 - Access Token: {}ms, Refresh Token: {}ms",
+                accessTokenExpire, refreshTokenExpire);
+    }
 
     /**
      * Access Token 생성
@@ -34,7 +53,7 @@ public class JwtUtil {
                 .claim("email", user.getEmail())
                 .claim("role", user.getRole().name())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRE))
+                .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpire))
                 .signWith(secretKey)
                 .compact();
     }
@@ -46,7 +65,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setSubject(String.valueOf(user.getUserId()))
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRE))
+                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpire))
                 .signWith(secretKey)
                 .compact();
     }

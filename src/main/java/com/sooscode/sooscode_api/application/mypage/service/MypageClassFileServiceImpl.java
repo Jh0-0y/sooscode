@@ -18,7 +18,7 @@ import com.sooscode.sooscode_api.domain.user.entity.User;
 import com.sooscode.sooscode_api.domain.user.repository.UserRepository;
 
 import com.sooscode.sooscode_api.global.api.exception.CustomException;
-import com.sooscode.sooscode_api.global.api.status.ClassStatus;
+import com.sooscode.sooscode_api.global.api.status.ClassRoomStatus;
 import com.sooscode.sooscode_api.global.api.status.FileStatus;
 import com.sooscode.sooscode_api.global.api.status.UserStatus;
 
@@ -68,7 +68,7 @@ public class MypageClassFileServiceImpl implements MypageClassFileService {
 
         // 클래스가 존재하는지 검증
         ClassRoom classRoom = classRoomRepository.findById(classId)
-                .orElseThrow(() -> new CustomException(ClassStatus.CLASS_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ClassRoomStatus.CLASS_NOT_FOUND));
 
         // 유저가 존재하는지 검증
         User teacher = userRepository.findById(teacherId)

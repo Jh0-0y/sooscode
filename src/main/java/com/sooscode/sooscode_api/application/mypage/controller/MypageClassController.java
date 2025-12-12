@@ -7,7 +7,6 @@ import com.sooscode.sooscode_api.domain.user.entity.User;
 import com.sooscode.sooscode_api.domain.user.enums.UserRole;
 import com.sooscode.sooscode_api.global.api.exception.CustomException;
 import com.sooscode.sooscode_api.global.api.response.ApiResponse;
-import com.sooscode.sooscode_api.global.api.status.ClassStatus;
 import com.sooscode.sooscode_api.global.api.status.GlobalStatus;
 import com.sooscode.sooscode_api.global.api.status.UserStatus;
 import com.sooscode.sooscode_api.global.security.CustomUserDetails;
@@ -19,8 +18,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static com.sooscode.sooscode_api.global.api.status.GlobalStatus.BAD_REQUEST;
 
 @RestController
 @RequestMapping("/api/mypage")

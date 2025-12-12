@@ -16,7 +16,8 @@ public enum AdminStatus implements StatusCode {
     CLASS_CREATE_SUCCESS(HttpStatus.OK, "ADMIN_CLASS_200", "클래스 생성에 성공하였습니다"),
 
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "ADMIN_USER_010", "유저가 존재하지 않습니다"),
-    CLASS_INSTRUCTOR_INVALID(HttpStatus.BAD_REQUEST, "ADMIN_CLS_003", "이 유저는 강사가 아닙니다"),
+    CLASS_INSTRUCTOR_INVALID(HttpStatus.BAD_REQUEST, "ADMIN_CLS_003", "강사가 아닌 사용자를 등록할 수 없습니다"),
+    CLASS_INSTRUCTOR_DUPLICATED(HttpStatus.BAD_REQUEST, "ADMIN_CLS_004", "이미 등록되어 있는 강사입니다"),
 
     // ===== 강제 종료, 유저 관리 =====
     CLASS_FORCE_CLOSE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "ADMIN_010", "클래스를 강제로 종료할 수 없습니다"),
