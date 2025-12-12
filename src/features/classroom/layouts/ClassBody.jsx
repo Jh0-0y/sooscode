@@ -11,7 +11,7 @@ function CodeShare() {
     return null;
 }
 
-const ClassBody = ({isInstructor = false, classId}) => {
+const ClassBody = ({isInstructor = false, classId, socket}) => {
     const {collapsed} = useSidebar();
     const {editorInstance} = useCode();
     const [activeTab, setActiveTab] = useState('snapshot');
@@ -65,7 +65,7 @@ const ClassBody = ({isInstructor = false, classId}) => {
                     {/* 왼쪽 패널 */}
                     <div className={`${styles.inner} ${styles.left}`} ref={leftRef}>
                         <button className={styles.tab}> 내 코드</button>
-                        <CodePanel classId={classId}/>
+                        <CodePanel  socket={socket} classId={classId} />
                     </div>
 
 
@@ -95,14 +95,14 @@ const ClassBody = ({isInstructor = false, classId}) => {
                             className={styles.panel}
                             style={{display: activeTab === 'snapshot' ? 'block' : 'none'}}
                         >
-                            <SnapshotPanel/>
+                            <SnapshotPanel />
                         </div>
 
                         <div
-                            className={styles.panel2}
+                            className={styles.panel}
                             style={{display: activeTab === 'code' ? 'block' : 'none'}}
                         >
-                            <CodeSharePanel classId={classId}/>
+                            <CodeSharePanel socket={socket} classId={classId}/>
                         </div>
 
 

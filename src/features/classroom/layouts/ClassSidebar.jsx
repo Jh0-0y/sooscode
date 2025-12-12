@@ -49,9 +49,7 @@ const ClassSidebar = () => {
                             </div>
                         )}
                         {activeTab === 'chat' && (
-                            <div className={styles.chatArea}>
                                 <ChatPanel/>
-                            </div>
                         )}
                         {activeTab === 'files' && (
                             <div className={styles.fileList}>

@@ -95,8 +95,9 @@
    =============================== */
 .tabContent {
     flex: 1;
+    height: 100%;
     padding: var(--spacing-4); /* 16px */
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 .tabContent h3 {

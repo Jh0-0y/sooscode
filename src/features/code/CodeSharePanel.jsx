@@ -3,82 +3,72 @@ import {useEffect, useRef, useState} from "react";
 import {useDarkMode} from "@/hooks/useDarkMode.js";
 import styles from './CodePanel.module.css';
 import {api} from "@/services/api";
-import {useParams} from "react-router-dom";
-import SockJS from "sockjs-client";
-import { Stomp } from '@stomp/stompjs';
 
 
-const CodeSharePanel = ({classId}) => {
+const CodeSharePanel = ({socket, classId}) => {
     const {darkMode} = useDarkMode();
 
-    // useCode() 대신 로컬 상태 사용 (독립적인 코드 관리)
+    // 로컬 상태 사용 (독립적인 코드 관리)
     const [sharedCode, setSharedCode] = useState("// 공유된 코드가 여기에 표시됩니다...");
     const [editorInstance, setEditorInstance] = useState(null);
     const [monacoInstance, setMonacoInstance] = useState(null);
     const [output, setOutput] = useState("");
-    const [stompClient, setStompClient] = useState(null);
-    const [isConnected, setIsConnected] = useState(false);
-
-    const finalClassId = classId || 1;
 
     /**
-     * 웹소켓 연결 및 구독
+     * 웹소켓 구독
      */
     useEffect(() => {
-        const socket = new SockJS('http://localhost:8080/ws');
-        const client = Stomp.over(socket);
+        if (!socket || !classId) {
+            console.warn('[CodeSharePanel] Socket or classId not available');
+            return;
+        }
 
-        const headers = {
-            // Authorization: `Bearer ${token}`
-        };
+        if (!socket.connected) {
+            console.warn('[CodeSharePanel] Socket not connected yet');
+            return;
+        }
 
-        client.connect(
-            headers,
-            () => {
-                setIsConnected(true);
+        console.log('[CodeSharePanel] Subscribing to: /topic/code/' + classId);
 
-                // 특정 classId의 코드 공유 구독
-                client.subscribe(`/topic/code/${finalClassId}`, (message) => {
-                    try {
-                        const dto = JSON.parse(message.body);
-                        handleReceivedCode(dto);
-                    } catch (error) {
-                    }
-                });
+        const subscription = socket.subscribe(
+            `/topic/code/${classId}`,
+            (data) => {
+                handleReceivedCode(data);
 
-                setStompClient(client);
-            },
-            (error) => {
-                setIsConnected(false);
+                console.log('======받는 데이터======', data);
             }
         );
 
+
         return () => {
-            if (client && client.connected) {
-                client.disconnect();
+            if (subscription) {
+                console.log('[CodeSharePanel] Unsubscribing...');
+                subscription.unsubscribe();
             }
         };
-    }, [finalClassId]);
+    }, [socket, socket?.connected, classId]);
 
     /**
      * 받은 코드 처리
      */
     const handleReceivedCode = (dto) => {
-        // 공유받은 코드를 로컬 상태에만 반영
+
+        console.log("[업데이트] code:", dto.code);
+        console.log("[업데이트] output:", dto.output);
+
+        // 코드 업데이트
         if (dto.code !== undefined) {
             setSharedCode(dto.code);
-            if(editorInstance) {
-                const position = editorInstance.getPosition();
+
+            if (editorInstance) {
+                const pos = editorInstance.getPosition();
                 editorInstance.setValue(dto.code);
-                if (position) {
-                    editorInstance.setPosition(position);
-                }
+                if (pos) editorInstance.setPosition(pos);
             }
         }
 
-        if (dto.output !== undefined) {
-            setOutput(dto.output);
-        }
+        // output 업데이트
+        setOutput(dto.output || "");
     };
 
     /**
@@ -156,32 +146,8 @@ const CodeSharePanel = ({classId}) => {
     };
 
     /**
-     * 컴파일 실행 (공유받은 코드 실행)
+     * 복사 기능
      */
-    const run = async () => {
-        try {
-            const encoded = btoa(unescape(encodeURIComponent(sharedCode)));
-
-            const response = await api.post("/api/compile/run", {
-                code: encoded,
-            });
-
-            const result = response.data;
-            setOutput(result.output || "결과가 없습니다.");
-
-        } catch(err) {
-            if (err.response)
-                setOutput("백엔드 오류:\n" + JSON.stringify(err.response.data, null, 2));
-            else
-                setOutput("네트워크 오류:\n" + err.message);
-        }
-    }
-
-    const reset = () => {
-        setSharedCode("// 공유된 코드가 여기에 표시됩니다...");
-        if (editorInstance) editorInstance.setValue("// 공유된 코드가 여기에 표시됩니다...");
-    };
-
     const copy = () => {
         navigator.clipboard.writeText(sharedCode);
         alert("Copied!");
@@ -205,31 +171,16 @@ const CodeSharePanel = ({classId}) => {
             verticalScrollbarSize: 4,
             verticalSliderSize: 4,
         },
-        readOnly: true, // 읽기 전용 - 중요!
+        readOnly: true, // 읽기 전용
     };
 
     return (
         <>
             <div className={`${styles.relative} ${styles.editorWrapper} ${styles.editorWrapperRight}`}>
-                {/* 연결 상태 표시 */}
-                <div style={{
-                    position: 'absolute',
-                    top: '8px',
-                    right: '8px',
-                    padding: '4px 8px',
-                    borderRadius: '4px',
-                    fontSize: '12px',
-                    backgroundColor: isConnected ? '#10b981' : '#ef4444',
-                    color: 'white',
-                    zIndex: 10
-                }}>
-                    {isConnected ? '🟢 연결됨' : '🔴 연결 끊김'}
-                </div>
-
                 <Editor
                     language="javascript"
                     value={sharedCode}
-                    onChange={(value) => setSharedCode(value)} // readOnly이므로 실제로는 호출 안됨
+                    onChange={(value) => setSharedCode(value)}
                     options={options}
                     onMount={handleEditorMount}
                     theme="customTheme"
@@ -238,7 +189,6 @@ const CodeSharePanel = ({classId}) => {
 
                 {/* 하단 결과창 */}
                 <div className={`${styles.bottomPane} ${styles.bottomPaneRight}`} ref={bottomRef}>
-
                     {/* 리사이즈 바 */}
                     <div className={styles.resizer} onMouseDown={startResize}>
                         <div className={styles.dotWrap}/>
@@ -247,32 +197,11 @@ const CodeSharePanel = ({classId}) => {
                     {/* 컴파일 창*/}
                     <div className={styles.resultHeader}>
                         <div className={styles.flex}>
-                            <button onClick={run} className={styles.runButton}>
+                            <button onClick={copy} className={styles.copyButton} title="복사">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                      fill="none"
                                      stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                                     strokeLinejoin="round"
-                                     className="lucide lucide-play-icon lucide-play">
-                                    <path
-                                        d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"/>
-                                </svg>
-                            </button>
-                            <button onClick={reset} className={styles.resetButton}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                     fill="none"
-                                     stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                                     strokeLinejoin="round"
-                                     className="lucide lucide-rotate-ccw-icon lucide-rotate-ccw">
-                                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                                    <path d="M3 3v5h5"/>
-                                </svg>
-                            </button>
-                            <button onClick={copy} className={styles.copyButton}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                     fill="none"
-                                     stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                                     strokeLinejoin="round"
-                                     className="lucide lucide-copy-icon lucide-copy">
+                                     strokeLinejoin="round">
                                     <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
                                     <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
                                 </svg>

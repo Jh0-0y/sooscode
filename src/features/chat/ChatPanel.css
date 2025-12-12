@@ -5,7 +5,7 @@
 /* ========== 전체 패널 ========== */
 .chat-sidebar {
     width: 16.75rem;
-    height: 52.75rem;
+    height: 100%;
     background: var(--color-bg-primary);
     display: flex;
     flex-direction: column;

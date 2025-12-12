@@ -49,7 +49,7 @@ const Classroom = ({/*classId*/}) => {
             <ClassSidebar />
 
             {/* 스크롤 영역 */}
-            <ClassBody />
+            <ClassBody socket={socket} classId={classId} />
         </div>
     );
 };
