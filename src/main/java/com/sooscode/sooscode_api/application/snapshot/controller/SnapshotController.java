@@ -1,6 +1,7 @@
 package com.sooscode.sooscode_api.application.snapshot.controller;
 
 import com.sooscode.sooscode_api.application.snapshot.dto.SnapShotResponse;
+import com.sooscode.sooscode_api.application.snapshot.dto.SnapshotLanguage;
 import com.sooscode.sooscode_api.application.snapshot.dto.SnapshotRequest;
 import com.sooscode.sooscode_api.application.snapshot.dto.SnapshotTitleResponse;
 import com.sooscode.sooscode_api.application.snapshot.service.SnapshotService;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -57,6 +59,17 @@ public class SnapshotController {
 
 
 
+    }
+    @GetMapping("/read/each")
+    public ResponseEntity<ApiResponse<SnapShotResponse>> readEach(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam Long classId,
+            @RequestParam Long  snapshotId
+    ){
+        Long userId = userDetails.getUser().getUserId();
+
+        SnapShotResponse  snapShotResponse =  snapshotService.readSnapshot(userId, classId, snapshotId);
+        return ApiResponse.ok(SnapshotStatus.READ_OK, snapShotResponse);
     }
     @GetMapping("/read")
     public ResponseEntity<ApiResponse<Page<SnapShotResponse>>> read(
@@ -108,15 +121,25 @@ public class SnapshotController {
     public ResponseEntity<ApiResponse<List<SnapShotResponse>>> searchByDate(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam Long classId,
-            @RequestParam String day
+            @RequestParam(required = false) String day,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate
     ){
         Long userId = userDetails.getUser().getUserId();
 
-        LocalDate localDate = LocalDate.parse(day);
-
-        LocalDateTime start = localDate.atStartOfDay();
-        LocalDateTime end = localDate.atTime(LocalTime.MAX);
-
+        LocalDateTime start;
+        LocalDateTime end;
+        if(day != null) {
+            LocalDate localDate = LocalDate.parse(day);
+            start = localDate.atStartOfDay();
+            end = localDate.atTime(LocalTime.MAX);
+        }else{
+            if (startDate == null || endDate == null) {
+                throw new CustomException(SnapshotStatus.DATE_EMPTY);
+            }
+            start = LocalDate.parse(startDate).atStartOfDay();
+            end = LocalDate.parse(endDate).atTime(LocalTime.MAX);
+        }
         List<SnapShotResponse> snapShotResponses =
                 snapshotService.readSnapshotByDate(userId, classId, start, end);
 
@@ -126,17 +149,28 @@ public class SnapshotController {
     }
     @GetMapping("read/title/date")
     public ResponseEntity<ApiResponse<List<SnapShotResponse>>> searchByTitleAndDate(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam Long classId,
             @RequestParam String title,
-            @RequestParam String day
+            @RequestParam(required = false) String day,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate
     ){
-        Long userId = customUserDetails.getUser().getUserId();
+        Long userId = userDetails.getUser().getUserId();
 
-        LocalDate localDate = LocalDate.parse(day);
-
-        LocalDateTime start = localDate.atStartOfDay();
-        LocalDateTime end = localDate.atTime(LocalTime.MAX);
+        LocalDateTime start;
+        LocalDateTime end;
+        if(day != null) {
+            LocalDate localDate = LocalDate.parse(day);
+            start = localDate.atStartOfDay();
+            end = localDate.atTime(LocalTime.MAX);
+        }else{
+            if (startDate == null || endDate == null) {
+                throw new CustomException(SnapshotStatus.DATE_EMPTY);
+            }
+            start = LocalDate.parse(startDate).atStartOfDay();
+            end = LocalDate.parse(endDate).atTime(LocalTime.MAX);
+        }
 
         List<SnapShotResponse> snapShotResponses =
                 snapshotService.readSnapshotByTitleAndDate(userId, classId, title, start, end);
@@ -148,17 +182,28 @@ public class SnapshotController {
     }
     @GetMapping("/read/content/date")
     public ResponseEntity<ApiResponse<List<SnapShotResponse>>> searchByContentAndDate(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam Long classId,
             @RequestParam String content,
-            @RequestParam String day
+            @RequestParam(required = false) String day, // 당일조회용
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate
     ){
-        Long userId = customUserDetails.getUser().getUserId();
+        Long userId = userDetails.getUser().getUserId();
 
-        LocalDate localDate = LocalDate.parse(day);
-
-        LocalDateTime start = localDate.atStartOfDay();
-        LocalDateTime end = localDate.atTime(LocalTime.MAX);
+        LocalDateTime start;
+        LocalDateTime end;
+        if(day != null) {
+            LocalDate localDate = LocalDate.parse(day);
+            start = localDate.atStartOfDay();
+            end = localDate.atTime(LocalTime.MAX);
+        }else{
+            if (startDate == null || endDate == null) {
+                throw new CustomException(SnapshotStatus.DATE_EMPTY);
+            }
+            start = LocalDate.parse(startDate).atStartOfDay();
+            end = LocalDate.parse(endDate).atTime(LocalTime.MAX);
+        }
 
         List<SnapShotResponse> snapShotResponses =
                 snapshotService.readSnapshotByContentAndDate(userId, classId, content, start, end);
@@ -169,23 +214,72 @@ public class SnapshotController {
     }
     @GetMapping("/read/onlytitle/date")
     public ResponseEntity<ApiResponse<List<SnapshotTitleResponse>>> searchOnlyTitleByDate(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @RequestParam String day,
-            @RequestParam Long classId
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam Long classId,
+            @RequestParam(required = false) String day,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate
     ){
-        Long userId = customUserDetails.getUser().getUserId();
+        Long userId = userDetails.getUser().getUserId();
 
-        LocalDate localDate = LocalDate.parse(day);
-
-        LocalDateTime start = localDate.atStartOfDay();
-        LocalDateTime end = localDate.atTime(LocalTime.MAX);
+        LocalDateTime start;
+        LocalDateTime end;
+        if(day != null) {
+            LocalDate localDate = LocalDate.parse(day);
+            start = localDate.atStartOfDay();
+            end = localDate.atTime(LocalTime.MAX);
+        }else{
+            if (startDate == null || endDate == null) {
+                throw new CustomException(SnapshotStatus.DATE_EMPTY);
+            }
+            start = LocalDate.parse(startDate).atStartOfDay();
+            end = LocalDate.parse(endDate).atTime(LocalTime.MAX);
+        }
 
         List<SnapshotTitleResponse> snapshotTitleResponses =
-                snapshotService.readContentByDate(userId, classId, start, end);
+                snapshotService.readTitleByDate(userId, classId, start, end);
 
         listReadEffectiveness(snapshotTitleResponses);
 
         return ApiResponse.ok(SnapshotStatus.READ_OK,snapshotTitleResponses);
+    }
+    @GetMapping("/read/language/date")
+    public ResponseEntity<ApiResponse<Page<SnapShotResponse>>> searchByLanguageAndDate(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam String language,
+            @RequestParam Long classId,
+            @RequestParam(required = false) String day,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+    ){
+        SnapshotLanguage snapshotLanguage;
+        try {
+            snapshotLanguage = SnapshotLanguage.valueOf(language.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new CustomException(SnapshotStatus.LANGUAGE_EMPTY);
+        }
+        Long userId = userDetails.getUser().getUserId();
+
+        LocalDateTime start;
+        LocalDateTime end;
+        if(day != null) {
+            LocalDate localDate = LocalDate.parse(day);
+            start = localDate.atStartOfDay();
+            end = localDate.atTime(LocalTime.MAX);
+        }else{
+            if (startDate == null || endDate == null) {
+                throw new CustomException(SnapshotStatus.DATE_EMPTY);
+            }
+            start = LocalDate.parse(startDate).atStartOfDay();
+            end = LocalDate.parse(endDate).atTime(LocalTime.MAX);
+        }
+        Page<SnapShotResponse> responses =
+                snapshotService.readSnapshotByLanguageAndDate(
+                        userId, classId, snapshotLanguage, start, end, pageable
+                );
+
+        return ApiResponse.ok(SnapshotStatus.READ_OK, responses);
     }
     @PostMapping("/delete")
     public ResponseEntity<ApiResponse<Void>> deleteSnapshot(
@@ -197,6 +291,7 @@ public class SnapshotController {
         snapshotService.deleteSnapshot(userId, classId, snapshotId);
         return ApiResponse.ok(SnapshotStatus.DELETE_OK);
     }
+
 
 
     private void writeEffectiveness(String title,String content) {
