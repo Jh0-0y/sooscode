@@ -35,6 +35,6 @@ public interface SnapshotService {
     // 특정 스냅샷 삭제
     void deleteSnapshot(Long userId, Long classId, Long snapshotId);
     // 언어 + 날짜별 조회
-    List<SnapShotResponse> readSnapshotByLanguageAndDate(Long userId, Long classId, SnapshotLanguage language, LocalDateTime start, LocalDateTime end);
+    Page<SnapShotResponse> readSnapshotByLanguageAndDate(Long userId, Long classId, SnapshotLanguage language, LocalDateTime start, LocalDateTime end, Pageable pageable);
 
 }

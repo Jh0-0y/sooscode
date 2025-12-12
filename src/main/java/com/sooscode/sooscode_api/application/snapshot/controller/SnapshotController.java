@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -243,13 +244,14 @@ public class SnapshotController {
         return ApiResponse.ok(SnapshotStatus.READ_OK,snapshotTitleResponses);
     }
     @GetMapping("/read/language/date")
-    public ResponseEntity<ApiResponse<List<SnapShotResponse>>> searchByLanguageAndDate(
+    public ResponseEntity<ApiResponse<Page<SnapShotResponse>>> searchByLanguageAndDate(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam String language,
             @RequestParam Long classId,
             @RequestParam(required = false) String day,
             @RequestParam(required = false) String startDate,
-            @RequestParam(required = false) String endDate
+            @RequestParam(required = false) String endDate,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ){
         SnapshotLanguage snapshotLanguage;
         try {
@@ -272,11 +274,10 @@ public class SnapshotController {
             start = LocalDate.parse(startDate).atStartOfDay();
             end = LocalDate.parse(endDate).atTime(LocalTime.MAX);
         }
-        List<SnapShotResponse> responses =
+        Page<SnapShotResponse> responses =
                 snapshotService.readSnapshotByLanguageAndDate(
-                        userId, classId, snapshotLanguage, start, end
+                        userId, classId, snapshotLanguage, start, end, pageable
                 );
-        listReadEffectiveness(responses);
 
         return ApiResponse.ok(SnapshotStatus.READ_OK, responses);
     }

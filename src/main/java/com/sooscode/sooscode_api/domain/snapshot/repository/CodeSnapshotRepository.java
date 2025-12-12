@@ -31,7 +31,7 @@ public interface CodeSnapshotRepository extends JpaRepository<CodeSnapshot, Long
     // 특정 스냅샷 삭제
     long deleteByCodeSnapshotIdAndUser_UserIdAndClassRoom_ClassId(Long codeSnapshotId, Long userId, Long classId);
     //  언어 + classId + 시작/끝 날짜
-    List<CodeSnapshot> findByUser_UserIdAndClassRoom_ClassIdAndLanguageAndCreatedAtBetween(Long userId, Long classId, SnapshotLanguage language, LocalDateTime start, LocalDateTime end);
+    Page<CodeSnapshot> findByUser_UserIdAndClassRoom_ClassIdAndLanguageAndCreatedAtBetween(Long userId, Long classId, SnapshotLanguage language, LocalDateTime start, LocalDateTime end, Pageable pageable);
     // codeSnapshotId로 조회
     Optional<CodeSnapshot> findByCodeSnapshotIdAndUser_UserIdAndClassRoom_ClassId(Long codeSnapshotId, Long userUserId, Long classRoomClassId);
 }

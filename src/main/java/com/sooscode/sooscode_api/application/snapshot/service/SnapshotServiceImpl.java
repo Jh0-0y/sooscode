@@ -16,6 +16,7 @@ import com.sooscode.sooscode_api.global.api.status.SnapshotStatus;
 import com.sooscode.sooscode_api.global.api.status.UserStatus;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.apache.bcel.classfile.Code;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -173,13 +174,13 @@ public class SnapshotServiceImpl implements SnapshotService {
 
     }
     @Override
-    public  List<SnapShotResponse> readSnapshotByLanguageAndDate(Long userId, Long classId, SnapshotLanguage language, LocalDateTime start, LocalDateTime end){
-        return codeSnapshotRepository
+    public  Page<SnapShotResponse> readSnapshotByLanguageAndDate(Long userId, Long classId, SnapshotLanguage language, LocalDateTime start, LocalDateTime end, Pageable pageable){
+        Page<CodeSnapshot> page = codeSnapshotRepository
                 .findByUser_UserIdAndClassRoom_ClassIdAndLanguageAndCreatedAtBetween(
-                        userId, classId, language, start, end
-                )
-                .stream()
-                .map(SnapShotResponse::from)
-                .toList();
+                        userId, classId, language, start, end, pageable
+                );
+
+        return page.map(SnapShotResponse::from);
+
     }
 }
