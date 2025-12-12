@@ -1,7 +1,7 @@
 // features/classroom/layouts/ClassBody.jsx
 import {useRef, useState} from 'react';
 import styles from './ClassBody.module.css';
-import { useSidebar } from "@/features/classroom/hooks/useSidebar.js";
+import {useSidebar} from "@/features/classroom/hooks/useSidebar.js";
 import SnapshotPanel from "@/features/snapshot/components/SnapshotPanel.jsx";
 import CodePanel from "@/features/code/CodePanel.jsx";
 import {useCode} from "@/features/code/hooks/useCode.js";
@@ -11,9 +11,9 @@ function CodeShare() {
     return null;
 }
 
-const ClassBody = ({ isInstructor = false }) => {
-    const { collapsed } = useSidebar();
-    const { editorInstance } = useCode();
+const ClassBody = ({isInstructor = false, classId}) => {
+    const {collapsed} = useSidebar();
+    const {editorInstance} = useCode();
     const [activeTab, setActiveTab] = useState('snapshot');
 
     /**
@@ -46,7 +46,7 @@ const ClassBody = ({ isInstructor = false }) => {
     return (
         <div
             className={styles.scrollArea}
-            style={{ left: collapsed ? "0px" : "300px" }}
+            style={{left: collapsed ? "0px" : "300px"}}
         >
             {/* 라이브킷 영역 */}
             <div className={styles.page}>
@@ -61,21 +61,20 @@ const ClassBody = ({ isInstructor = false }) => {
             {/* 코드 영역 */}
             <div className={styles.page}>
                 <div className={styles.content}>
-                    {/* 내 코드 */}
+
+                    {/* 왼쪽 패널 */}
                     <div className={`${styles.inner} ${styles.left}`} ref={leftRef}>
-                        <CodePanel />
+                        <button className={styles.tab}> 내 코드</button>
+                        <CodePanel classId={classId}/>
                     </div>
+
 
                     {/* 리사이즈 바 */}
-                    <div className={styles.resizer} onMouseDown={startResize} >
-                        <div className={styles.dotWrap}>
-                            <span className={styles.dot}></span>
-                            <span className={styles.dot}></span>
-                            <span className={styles.dot}></span>
-                        </div>
+                    <div className={styles.resizer} onMouseDown={startResize}>
+                        <div className={styles.dotWrap}/>
                     </div>
 
-                    {/* 스냅샷 / 코드쉐어 탭 */}
+                    {/* 오른쪽 패널 */}
                     <div className={`${styles.inner} ${styles.right}`}>
                         <div className={styles.tabs}>
                             <button
@@ -92,20 +91,23 @@ const ClassBody = ({ isInstructor = false }) => {
                             </button>
                         </div>
 
-                        <div className={styles.tabContent}>
-                            {activeTab === 'snapshot' && (
-                                <div className={styles.panel}>
-                                    {<SnapshotPanel/>}
-                                </div>
-                            )}
-                            {activeTab === 'code' && (
-                                <div className={styles.panel}>
-                                    코드 쉐어 패널
-                                    <CodeSharePanel />
-                                </div>
-                            )}
+                        <div
+                            className={styles.panel}
+                            style={{display: activeTab === 'snapshot' ? 'block' : 'none'}}
+                        >
+                            <SnapshotPanel/>
                         </div>
+
+                        <div
+                            className={styles.panel2}
+                            style={{display: activeTab === 'code' ? 'block' : 'none'}}
+                        >
+                            <CodeSharePanel classId={classId}/>
+                        </div>
+
+
                     </div>
+
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 // common/components/classroom/CodeEditor.jsx
 import { PlayIcon } from '@/common/components/utils/Icons';
-import styles from './CodeEditor.module.css';
+import styles from './CodePanel.module.css';
 
 const CodeEditor = ({ 
     title, 

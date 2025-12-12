@@ -1,4 +1,4 @@
-/* common/components/classroom/CodeEditor.module.css */
+/* common/components/classroom/CodePanel.module.css */
 .container {
     display: flex;
     flex-direction: column;
@@ -21,28 +21,15 @@
     color: var(--color-text-primary);
 }
 
-.runButton {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-1);
-    padding: var(--spacing-1) var(--spacing-3);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text-inverse);
-    background-color: var(--color-success);
-    border: none;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-}
-
-.runButton:hover {
-    background-color: #0ea572;
-}
-
 .editorWrapper {
     flex: 1;
-    overflow: hidden;
+    /*overflow: hidden;*/
+    padding: var(--spacing-6)  0  var(--spacing-6)  var(--spacing-6);
+    box-sizing: border-box;
+}
+
+.editorWrapperRight {
+    width: calc(100% + 6px);
 }
 
 .editor {
@@ -53,12 +40,34 @@
     line-height: var(--line-height-relaxed);
     color: var(--color-text-primary);
     background-color: var(--color-bg-primary);
-    border-right: 1px solid var(--color-border-medium);
     resize: none;
 }
+
 .editor.readOnly {
     background-color: var(--color-bg-secondary);
     cursor: default;
+}
+
+.bottomPane {
+    width: 100%;
+    height: 300px;
+    padding: var(--spacing-3) var(--spacing-6);
+    box-sizing: border-box;
+    background: var(--color-bg-secondary);
+    border-top: 1px solid var(--color-border-medium);
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    bottom: 0;
+    gap: var(--spacing-6);
+    z-index: 100;
+    left: 0;
+    transform: none;
+}
+
+.bottomPaneRight {
+    width: calc(100% + 6px);
+    bottom: -2px !important;
 }
 
 .bottomPane button {
@@ -76,6 +85,7 @@
     transition: var(--transition-base);
     box-shadow: var(--shadow-sm);
 }
+
 .bottomPane button:hover {
     transform: translateY(-2px);
     background-color:var(--color-gray-300);
@@ -85,11 +95,13 @@
 .bottomPane button svg {
     width: 55%;
 }
-.btnRun {
+
+.runButton {
     background: var(--color-warning) !important;
     color: var(--color-text-inverse) !important;
 }
-.btnRun:hover {
+
+.runButton:hover {
     background: var(--color-warning) !important;
     background-color:var(--color-gray-300);
 }
@@ -98,7 +110,6 @@
     position: relative;
     height: 100%;
 }
-
 
 .resizer {
     width: 100%;
@@ -115,50 +126,31 @@
     background: var(--color-bg-tertiary);
 }
 
-/* 하단 결과창 */
-.bottomPane {
-    width: calc(100% + var(--spacing-6));
-    height: 200px; /* 기본 높이 */
-    right: 0;
-    background: var(--color-bg-secondary);
-    border-top: 1px solid var(--color-border-medium);
-    border-right: 1px solid var(--color-border-medium);
-    border-bottom: 1px solid var(--color-border-medium);
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    bottom: 0;
-    z-index: 1;
-}
 
 .resultHeader {
-    padding: var(--spacing-3) var(--spacing-6);
-    border-bottom: 1px solid var(--color-border-light);
+    position: relative;
+}
+
+.resultHeader:after {
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: var(--color-border-medium);
+    content: "";
+    position: absolute;
+    bottom: -14px;
+    left: 0;
 }
 
 .resultOutput {
     flex: 1;
-    padding: var(--spacing-3) var(--spacing-6);
     overflow: auto;
     white-space: pre-wrap;
     font-family: var(--font-family-code);
     font-size: 13px;
 }
+
 .flex {
     display: flex;
     gap: var(--spacing-3);
-}
-.dotWrap {
-    display: flex;
-    position: absolute;
-    left: 50%;
-    top: 3px;
-    gap: 3px;
-}
-.dot {
-    display: block;
-    width: 3px;
-    height: 3px;
-    border-radius: 0;
-    background: var(--color-gray-300);
 }
