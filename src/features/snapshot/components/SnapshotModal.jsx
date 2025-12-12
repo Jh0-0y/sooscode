@@ -11,12 +11,11 @@ const SnapshotModal = ({ isOpen, onClose, onConfirm }) => {
 
     const handleSubmit = () => {
         if (!title.trim()) {
-            alert('제목을 입력해주세요.'); // 필요 시 Toast로 교체 가능
+            alert('제목을 입력해주세요.');
             return;
         }
         onConfirm(title);
-        setTitle(''); // 입력 초기화
-        onClose(); // 저장 후 닫기
+        setTitle('');
     };
 
     return (

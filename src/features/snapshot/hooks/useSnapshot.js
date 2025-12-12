@@ -1,151 +1,160 @@
-import {create} from "zustand";
-// import {useParams} from "react-router-dom";
-import {useCode} from "@/features/code/hooks/useCode.js";
-import {useToast} from "@/hooks/useToast.js";
-import {useCallback, useEffect} from "react";
-import {snapshotService} from "@/features/snapshot/service/snapshotService.js";
-import { useError } from "@/hooks/useError";
+// features/snapshot/hooks/useSnapshot.js
+import { create } from "zustand";
+import { useCallback } from "react";
+import { snapshotService } from "@/features/snapshot/service/snapshotService";
+import { useCode } from "@/features/code/hooks/useCode";
+import { useToast } from "@/hooks/useToast";
 
-// push 할때 임시 useCode 삭제하고 푸시하는데 올릴때 안터지는용도로
-// const useCode =() => ({
-//     code:'',
-//     setCode: ()=> console.warn('useCode 엄서'),
-// });
-
-
-// zustand 내부 스토어
+/**
+ * Snapshot Store
+ * Hook 파일 내부에 은닉화 (파일 스코프)
+ */
 const snapshotStore = create((set) => ({
     snapshots: [],
-    loading: false,
+    loadingList: false,
+    loadingSave: false,
     page: 0,
     hasMore: true,
 
     setSnapshots: (snapshots) => set({ snapshots }),
-    setLoading: (loading) => set({ loading }),
+    appendSnapshots: (snapshots) =>
+        set((s) => ({ snapshots: [...s.snapshots, ...snapshots] })),
 
-    appendSnapshots: (newSnapshots) => set((state) => ({
-        snapshots: [...state.snapshots, ...newSnapshots]
-})),
+    setLoadingList: (loading) => set({ loadingList: loading }),
+    setLoadingSave: (loading) => set({ loadingSave: loading }),
     setPage: (page) => set({ page }),
     setHasMore: (hasMore) => set({ hasMore }),
-    reset: ()=>set({snapshots: [], page: 0, hasMore: true, loading: false}),
+
+    reset: () =>
+        set({
+            snapshots: [],
+            page: 0,
+            hasMore: true,
+            loadingList: false,
+        }),
 }));
 
 export const useSnapshot = () => {
-    // const { classId: paramClassId } = useParams();
-    // const classId = Number(paramClassId);
-
+    // TODO: classId는 추후 Props나 useParams로 대체
     const classId = 1;
-
     const { code, setCode } = useCode();
-    const { handleError } = useError();
     const toast = useToast();
 
-    const snapshots = snapshotStore((state) => state.snapshots);
-    const loading = snapshotStore((state) => state.loading);
-    const hasMore = snapshotStore((state)=> state.hasMore);
+    // Store State 구조 분해 할당 (스코프 문제 해결)
+    const {
+        snapshots,
+        loadingList,
+        loadingSave,
+        page,
+        hasMore,
+        setSnapshots,
+        appendSnapshots,
+        setLoadingList,
+        setLoadingSave,
+        setPage,
+        setHasMore,
+        reset,
+    } = snapshotStore();
 
-    const setSnapshots = snapshotStore((state) => state.setSnapshots);
-    const setLoading = snapshotStore((state)=> state.setLoading);
-    const appendSnapshots = snapshotStore((state) => state.appendSnapshots);
-    const setPage = snapshotStore((state) => state.setPage);
-    const setHasMore = snapshotStore((state) => state.setHasMore);
-    const reset = snapshotStore((state) => state.reset);
-    const page = snapshotStore((state) => state.page);
-
-    useEffect(() => {
-        reset();
-    }, [classId]);
-
-    const fetchSnapshots = useCallback(async ()=>{
+    /**
+     * 스냅샷 목록 조회
+     */
+    const fetchSnapshots = useCallback(async () => {
         if (!classId) return;
+        // 로딩 중이거나 더 이상 데이터가 없으면 중단
+        if (loadingList || !hasMore) return;
 
-        try{
-            const size =10;
-            const response = await snapshotService.getAll(classId, page, size);
-            const content = response.content || [];
+        setLoadingList(true);
 
-            if(page === 0){
+        try {
+            const size = 10;
+            // Service에서 data.data(Page객체)를 반환하도록 수정됨
+            const pageData = await snapshotService.getAll(classId, page, size);
+
+            // 안전한 데이터 접근
+            const content = pageData?.content || [];
+            const last = pageData?.last ?? true;
+
+            if (page === 0) {
                 setSnapshots(content);
-            } else{
+            } else {
                 appendSnapshots(content);
             }
-            if (response.last || content.length < size){
-                setHasMore(false);
-            }else{
+
+            setHasMore(!last);
+            if (content.length > 0) {
                 setPage(page + 1);
             }
 
-        }catch (error){
-            console.error(error);
-            handleError(error);
-        }finally {
-            setLoading(false);
+        } catch (error) {
+            console.error("스냅샷 조회 실패:", error);
+            // toast.error("목록을 불러오지 못했습니다."); // 필요 시 주석 해제
+        } finally {
+            setLoadingList(false);
         }
-     }, [classId, page, hasMore, loading]);
+    }, [classId, page, hasMore, loadingList, setSnapshots, appendSnapshots, setHasMore, setPage, setLoadingList]);
 
-    useEffect(() => {
-        if (page === 0 && hasMore && !loading && snapshots.length === 0) {
-            fetchSnapshots();
-        }
-    }, [page, hasMore, loading, snapshots.length, fetchSnapshots]);
-
-    const handleSaveSnapshot = async (title) =>{
-        if (!classId){
-            toast.error('클래스 정보가 없습니다');
+    /**
+     * 스냅샷 저장
+     */
+    const handleSaveSnapshot = async (title) => {
+        if (!title?.trim()) {
+            toast.warning("제목을 입력해주세요.");
             return false;
         }
-        if (!title.trim()){
-            toast.warning('제목을 입력해주세요');
-            return false;
-        }
-        if (!code || !code.trim()){
-            toast.warning('저장할 코드가 없습니다');
+        if (!code?.trim()) {
+            toast.warning("저장할 코드가 없습니다.");
             return false;
         }
 
-        setLoading(true);
-            try {
-                await snapshotService.create({
-                    classId,
-                    title,
-                    content: code
-                });
-                toast.success('스냅샷이 저장되었습니다.');
+        setLoadingSave(true);
+        try {
+            await snapshotService.create({
+                classId,
+                title,
+                content: code,
+            });
 
-                reset();
-                const response = await snapshotService.getAll(classId,0,10);
-                setSnapshots(response.content || []);
-                setPage(1);
-                setHasMore(!response.last);
+            toast.success("스냅샷이 저장되었습니다.");
 
-                return true;
-            }catch (error){
-                console.error(error);
-                if (error.response){
-                    handleError(error);
-                }else {
-                    toast.error('스냅샷 저장에 실패하였습니다')
-                }
-                return false;
-            }finally{
-                setLoading(false);
-            }
+            // 저장 성공 시 목록 초기화 후 첫 페이지 로딩
+            reset();
+
+            // 상태 업데이트가 비동기이므로, 즉시 첫 페이지를 수동으로 가져와 반영
+            const firstPageData = await snapshotService.getAll(classId, 0, 10);
+            setSnapshots(firstPageData?.content || []);
+            setHasMore(!firstPageData?.last);
+            setPage(1);
+
+            return true;
+        } catch (error) {
+            console.error("스냅샷 저장 에러:", error);
+            toast.error("저장에 실패했습니다.");
+            return false;
+        } finally {
+            setLoadingSave(false);
+        }
     };
-    const handleRestoreSnapshot = (snapshot) =>{
-        if(!snapshot.content){
-            toast.error('불러올 코드 내용이 없습니다.');
+
+    /**
+     * 스냅샷 복원
+     */
+    const handleRestoreSnapshot = (snapshot) => {
+        if (!snapshot?.content) {
+            toast.error("복원할 코드가 없습니다.");
             return;
         }
         setCode(snapshot.content);
-        toast.success('코드를 불러왔습니다');
+        toast.success("코드가 복원되었습니다.");
     };
-    return{
+
+    return {
         snapshots,
-        loading,
+        loading: loadingList, // 외부에서는 'loading'으로 사용하므로 매핑
+        loadingSave,
         hasMore,
         fetchSnapshots,
         handleSaveSnapshot,
-        handleRestoreSnapshot
+        handleRestoreSnapshot,
     };
 };

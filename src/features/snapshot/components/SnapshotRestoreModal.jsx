@@ -12,7 +12,7 @@ const SnapshotRestoreModal = ({ isOpen, onClose, onConfirm, snapshotTitle }) => 
                 <div style={{ padding: 'var(--spacing-2) 0', color: 'var(--color-text-secondary)', fontSize: 'var(--font-size-sm)' }}>
                     <p><strong>'{snapshotTitle}'</strong> 코드를 불러오시겠습니까?</p>
                     <p style={{ marginTop: 'var(--spacing-2)', color: 'var(--color-danger)' }}>
-                        ⚠️ 현재 작성 중인 코드가 모두 덮어씌워집니다.
+                         현재 작성 중인 코드가 모두 덮어씌워집니다.
                     </p>
                 </div>
 
@@ -20,12 +20,9 @@ const SnapshotRestoreModal = ({ isOpen, onClose, onConfirm, snapshotTitle }) => 
                     <button className={styles.cancelButton} onClick={onClose}>
                         취소
                     </button>
-                    <button
-                        className={styles.saveButton}
-                        onClick={onConfirm}
-                        style={{ backgroundColor: 'var(--color-danger)' }}
-                    >
-                        복원하기
+
+                    <button className={styles.saveButton} onClick={onConfirm}>
+                        확인
                     </button>
                 </div>
             </div>

@@ -1,38 +1,22 @@
-// common/components/classroom/SnapshotList.jsx
-import styles from '../styles/SnapshotList.module.css';
+import styles from "../styles/SnapshotList.module.css";
 
-const SnapshotList = ({ 
-    snapshots, 
-    selectedId, 
-    onSelect, 
-    onRestore,
-    showRestoreButton = true,
-    observerRef
-}) => {
+/**
+ * 스냅샷 리스트
+ */
+const SnapshotList = ({ snapshots, onSelect, listRef, observerRef }) => {
     return (
-        <div className={styles.container}>
+        <div ref={listRef} className={styles.container}>
             {snapshots.map((snapshot) => (
                 <button
-                    key={snapshot.id}
-                    className={`${styles.item} ${selectedId === snapshot.id ? styles.active : ''}`}
+                    key={snapshot.snapshotId}
+                    className={styles.item}
                     onClick={() => onSelect(snapshot)}
                 >
-                    <span className={styles.name}>{snapshot.name}</span>
-                    <span className={styles.time}>{snapshot.createdAt}</span>
-                    {showRestoreButton && (
-                        <button
-                            className={styles.restoreButton}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                onRestore(snapshot);
-                            }}
-                        >
-                            복원
-                        </button>
-                    )}
+                    <span className={styles.title}>{snapshot.title}</span>
                 </button>
             ))}
-            <div ref={observerRef} style={{ height: '20px', flexShrink: 0 }} />
+
+            <div ref={observerRef} style={{ height: 1 }} />
         </div>
     );
 };

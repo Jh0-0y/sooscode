@@ -1,112 +1,89 @@
-import {useEffect, useRef, useState} from "react";
-import SnapshotModal from "./SnapshotModal";
+import { useEffect, useRef, useState } from "react";
 import SnapshotList from "./SnapshotList";
-import { useSnapshot } from "@/features/snapshot/hooks/useSnapshot.js";
-import styles from "../styles/SnapshotPanel.module.css";
+import SnapshotModal from "./SnapshotModal";
 import SnapshotRestoreModal from "./SnapshotRestoreModal";
+import SnapshotSaveButton from "./SnapshotSaveButton";
+import { useSnapshot } from "@/features/snapshot/hooks/useSnapshot";
+import styles from "../styles/SnapshotPanel.module.css";
 
-const SnapshotPanel =() =>{
-    //data
+const SnapshotPanel = () => {
     const {
         snapshots,
         loading,
+        loadingSave,
         hasMore,
         fetchSnapshots,
         handleSaveSnapshot,
-        handleRestoreSnapshot
-    }= useSnapshot();
+        handleRestoreSnapshot,
+    } = useSnapshot();
 
-    //상태관리 변수
-    const [selectedId, setSelectedId] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
+    const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
     const [restoreTarget, setRestoreTarget] = useState(null);
+
     const observerRef = useRef(null);
 
-    //  무한스크롤
+    // 초기 데이터 로딩
     useEffect(() => {
+        fetchSnapshots();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // 무한 스크롤 Observer
+    useEffect(() => {
+        const node = observerRef.current;
+        if (!node) return;
+
         const observer = new IntersectionObserver(
             (entries) => {
-                if (entries[0].isIntersecting && hasMore && !loading) {
+
+                if (entries[0].isIntersecting && !loading && hasMore) {
                     fetchSnapshots();
                 }
             },
-            { threshold: 0.5 } // 50% 로 호출
+            { threshold: 0.1 }
         );
 
-        if (observerRef.current) {
-            observer.observe(observerRef.current);
-        }
+        observer.observe(node);
+        return () => observer.disconnect();
+    }, [loading, hasMore, fetchSnapshots]);
 
-        return () => {
-            if (observerRef.current) observer.unobserve(observerRef.current);
-        };
-    }, [fetchSnapshots, hasMore, loading]);
-
-
-    //이벤트 핸들러
-    const onSaveClick =()=>{
-        setIsModalOpen(true);
-    }
-    //모달
-    const onModalConfirm = async (title) =>{
+    const onSaveConfirm = async (title) => {
         const success = await handleSaveSnapshot(title);
-        if (success){
-            setIsModalOpen(false);
-        }
-    }
-
-    //리스트 아이템 선택
-    const handleSelect = (snapshot) =>{
-        setSelectedId(snapshot.snapshotId);
+        if (success) setIsSaveModalOpen(false);
     };
-    // 복원 확인하는 모달 핸ㄷ들러
-    const onRestoreConfirm = () =>{
-        if(restoreTarget){
-            handleRestoreSnapshot(restoreTarget);
-            setRestoreTarget(null);
-        }
-    }
 
     return (
         <div className={styles.container}>
-            {/* 상단 액션 영역 (저장 버튼) */}
             <div className={styles.header}>
-                <button
-                    className={styles.saveButton}
-                    onClick={onSaveClick}
-                    disabled={loading}
-                >
-                    {loading ? '저장 중...' : '+ 현재 코드 스냅샷 저장'}
-                </button>
+                <SnapshotSaveButton
+                    loading={loadingSave}
+                    onClick={() => setIsSaveModalOpen(true)}
+                />
             </div>
 
-            {/* 하단 리스트 영역 (SnapshotList 컴포넌트 사용) */}
-            {(!snapshots || snapshots.length === 0) ? (
-                <div className={styles.empty}>저장된 스냅샷이 없습니다.</div>
-            ) : (
-                <SnapshotList
-                    snapshots={snapshots}
-                    selectedId={selectedId}
-                    onSelect={handleSelect}
-                    onRestore={(snapshot) => setRestoreTarget(snapshot)}
-                    showRestoreButton={true}
-                />
-            )}
-            {/* 제목 입력 모달 */}
-            <SnapshotModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onConfirm={onModalConfirm}
+            <SnapshotList
+                snapshots={snapshots}
+                onSelect={setRestoreTarget}
+                observerRef={observerRef}
             />
-            {/*  에디터 불러오기 확인 모달 */}
+
+            <SnapshotModal
+                isOpen={isSaveModalOpen}
+                onClose={() => setIsSaveModalOpen(false)}
+                onConfirm={onSaveConfirm}
+            />
+
             <SnapshotRestoreModal
                 isOpen={!!restoreTarget}
+                snapshotTitle={restoreTarget?.title ?? ""}
                 onClose={() => setRestoreTarget(null)}
-                onConfirm={onRestoreConfirm}
-                snapshotTitle={restoreTarget?.title || ''}
+                onConfirm={() => {
+                    handleRestoreSnapshot(restoreTarget);
+                    setRestoreTarget(null);
+                }}
             />
         </div>
     );
 };
+
 export default SnapshotPanel;

@@ -1,0 +1,21 @@
+.saveButton {
+    width: 100%;
+    padding: var(--spacing-2);
+    background-color: var(--color-primary-500);
+    color: var(--color-text-inverse);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.saveButton:hover {
+    background-color: var(--color-primary-600);
+}
+
+.saveButton:disabled {
+    background-color: var(--color-gray-400);
+    cursor: wait;
+}

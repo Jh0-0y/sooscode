@@ -10,7 +10,8 @@
     padding: var(--spacing-2);
     background-color: var(--color-bg-secondary);
     border-bottom: 1px solid var(--color-border-light);
-    overflow: hidden; /* 중요: 이중 스크롤 방지 */
+    overflow: hidden;
+    min-height: 0;
 }
 
 /* 상단 헤더 (저장 버튼 영역) */
