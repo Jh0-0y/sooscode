@@ -6,7 +6,8 @@ const SnapshotList = ({
     selectedId, 
     onSelect, 
     onRestore,
-    showRestoreButton = true 
+    showRestoreButton = true,
+    observerRef
 }) => {
     return (
         <div className={styles.container}>
@@ -31,6 +32,7 @@ const SnapshotList = ({
                     )}
                 </button>
             ))}
+            <div ref={observerRef} style={{ height: '20px', flexShrink: 0 }} />
         </div>
     );
 };

@@ -17,8 +17,18 @@ import { useError } from "@/hooks/useError";
 const snapshotStore = create((set) => ({
     snapshots: [],
     loading: false,
+    page: 0,
+    hasMore: true,
+
     setSnapshots: (snapshots) => set({ snapshots }),
     setLoading: (loading) => set({ loading }),
+
+    appendSnapshots: (newSnapshots) => set((state) => ({
+        snapshots: [...state.snapshots, ...newSnapshots]
+})),
+    setPage: (page) => set({ page }),
+    setHasMore: (hasMore) => set({ hasMore }),
+    reset: ()=>set({snapshots: [], page: 0, hasMore: true, loading: false}),
 }));
 
 export const useSnapshot = () => {
@@ -33,23 +43,52 @@ export const useSnapshot = () => {
 
     const snapshots = snapshotStore((state) => state.snapshots);
     const loading = snapshotStore((state) => state.loading);
+    const hasMore = snapshotStore((state)=> state.hasMore);
+
     const setSnapshots = snapshotStore((state) => state.setSnapshots);
     const setLoading = snapshotStore((state)=> state.setLoading);
+    const appendSnapshots = snapshotStore((state) => state.appendSnapshots);
+    const setPage = snapshotStore((state) => state.setPage);
+    const setHasMore = snapshotStore((state) => state.setHasMore);
+    const reset = snapshotStore((state) => state.reset);
+    const page = snapshotStore((state) => state.page);
+
+    useEffect(() => {
+        reset();
+    }, [classId]);
 
     const fetchSnapshots = useCallback(async ()=>{
         if (!classId) return;
+
         try{
-            const response = await snapshotService.getAll(classId);
-            setSnapshots(response.content || []);
+            const size =10;
+            const response = await snapshotService.getAll(classId, page, size);
+            const content = response.content || [];
+
+            if(page === 0){
+                setSnapshots(content);
+            } else{
+                appendSnapshots(content);
+            }
+            if (response.last || content.length < size){
+                setHasMore(false);
+            }else{
+                setPage(page + 1);
+            }
+
         }catch (error){
             console.error(error);
             handleError(error);
+        }finally {
+            setLoading(false);
         }
-     }, [classId]);
+     }, [classId, page, hasMore, loading]);
 
     useEffect(() => {
-        fetchSnapshots();
-    }, [fetchSnapshots]);
+        if (page === 0 && hasMore && !loading && snapshots.length === 0) {
+            fetchSnapshots();
+        }
+    }, [page, hasMore, loading, snapshots.length, fetchSnapshots]);
 
     const handleSaveSnapshot = async (title) =>{
         if (!classId){
@@ -73,7 +112,13 @@ export const useSnapshot = () => {
                     content: code
                 });
                 toast.success('스냅샷이 저장되었습니다.');
-                await fetchSnapshots();
+
+                reset();
+                const response = await snapshotService.getAll(classId,0,10);
+                setSnapshots(response.content || []);
+                setPage(1);
+                setHasMore(!response.last);
+
                 return true;
             }catch (error){
                 console.error(error);
@@ -92,13 +137,14 @@ export const useSnapshot = () => {
             toast.error('불러올 코드 내용이 없습니다.');
             return;
         }
-        if (window.confirm(`'${snapshot.title}' 스냅샷을 불러오시겠습니까? 현재 작성 중인 코드가 덮어씌워집니다`)){
-            setCode(snapshot.content);
-        }
+        setCode(snapshot.content);
+        toast.success('코드를 불러왔습니다');
     };
     return{
         snapshots,
         loading,
+        hasMore,
+        fetchSnapshots,
         handleSaveSnapshot,
         handleRestoreSnapshot
     };

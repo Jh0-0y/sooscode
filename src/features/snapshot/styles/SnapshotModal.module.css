@@ -1,47 +1,41 @@
-/* 모달 뒤에 깔리는 반투명 배경 (Overlay) */
+/* src/features/snapshot/styles/SnapshotModal.module.css */
+
+/* 화면 전체를 덮는 오버레이 */
 .overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* 투명도 조절을 위해 rgba 사용 (표준) */
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.5); /* 투명도는 예외 허용 또는 변수 확인 */
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000; /* 최상단 노출 */
+    z-index: 1000; /* 최상단 */
+    backdrop-filter: blur(2px); /* 블러 효과 추가 */
 }
 
-/* 모달 본체 */
+/* 모달 박스 */
 .modal {
-    /* variables.css: 배경색 */
-    background-color: var(--color-bg-primary);
-    /* variables.css: 패딩 */
-    padding: var(--spacing-6);
-    /* variables.css: 둥근 모서리 */
-    border-radius: var(--radius-lg);
-    /* variables.css: 그림자 */
-    box-shadow: var(--shadow-lg);
-
     width: 100%;
-    /* variables.css: 컨테이너 최대 너비 (반응형) */
-    max-width: var(--container-sm);
-
+    max-width: var(--container-sm); /* 반응형 최대 너비 */
+    background-color: var(--color-bg-primary);
+    padding: var(--spacing-6);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
     display: flex;
     flex-direction: column;
-    /* variables.css: 내부 요소 간격 */
     gap: var(--spacing-4);
+    animation: fadeIn var(--transition-base);
 }
 
-/* 모달 제목 */
 .title {
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-bold);
     color: var(--color-text-primary);
+    margin: 0;
 }
 
-/* 입력 필드 */
 .input {
     width: 100%;
     padding: var(--spacing-3);
@@ -50,20 +44,20 @@
     border-radius: var(--radius-base);
     color: var(--color-text-primary);
     background-color: var(--color-bg-primary);
+    outline: none;
+    transition: border-color var(--transition-fast);
 }
 
 .input:focus {
-    outline: 2px solid var(--color-primary-500);
+    border-color: var(--color-primary-500);
 }
 
-/* 버튼 그룹 */
 .actions {
     display: flex;
     justify-content: flex-end;
     gap: var(--spacing-2);
 }
 
-/* 취소 버튼 */
 .cancelButton {
     padding: var(--spacing-2) var(--spacing-4);
     font-size: var(--font-size-sm);
@@ -79,7 +73,6 @@
     background-color: var(--color-bg-secondary);
 }
 
-/* 저장 버튼 */
 .saveButton {
     padding: var(--spacing-2) var(--spacing-4);
     font-size: var(--font-size-sm);
@@ -94,4 +87,9 @@
 
 .saveButton:hover {
     background-color: var(--color-primary-600);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }

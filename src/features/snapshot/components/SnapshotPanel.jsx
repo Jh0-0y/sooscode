@@ -1,15 +1,17 @@
-import { useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import SnapshotModal from "./SnapshotModal";
 import SnapshotList from "./SnapshotList";
 import { useSnapshot } from "@/features/snapshot/hooks/useSnapshot.js";
 import styles from "../styles/SnapshotPanel.module.css";
-
+import SnapshotRestoreModal from "./SnapshotRestoreModal";
 
 const SnapshotPanel =() =>{
     //data
     const {
         snapshots,
         loading,
+        hasMore,
+        fetchSnapshots,
         handleSaveSnapshot,
         handleRestoreSnapshot
     }= useSnapshot();
@@ -17,6 +19,30 @@ const SnapshotPanel =() =>{
     //상태관리 변수
     const [selectedId, setSelectedId] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [restoreTarget, setRestoreTarget] = useState(null);
+    const observerRef = useRef(null);
+
+    //  무한스크롤
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && hasMore && !loading) {
+                    fetchSnapshots();
+                }
+            },
+            { threshold: 0.5 } // 50% 로 호출
+        );
+
+        if (observerRef.current) {
+            observer.observe(observerRef.current);
+        }
+
+        return () => {
+            if (observerRef.current) observer.unobserve(observerRef.current);
+        };
+    }, [fetchSnapshots, hasMore, loading]);
+
 
     //이벤트 핸들러
     const onSaveClick =()=>{
@@ -34,6 +60,13 @@ const SnapshotPanel =() =>{
     const handleSelect = (snapshot) =>{
         setSelectedId(snapshot.snapshotId);
     };
+    // 복원 확인하는 모달 핸ㄷ들러
+    const onRestoreConfirm = () =>{
+        if(restoreTarget){
+            handleRestoreSnapshot(restoreTarget);
+            setRestoreTarget(null);
+        }
+    }
 
     return (
         <div className={styles.container}>
@@ -56,7 +89,7 @@ const SnapshotPanel =() =>{
                     snapshots={snapshots}
                     selectedId={selectedId}
                     onSelect={handleSelect}
-                    onRestore={handleRestoreSnapshot}
+                    onRestore={(snapshot) => setRestoreTarget(snapshot)}
                     showRestoreButton={true}
                 />
             )}
@@ -65,6 +98,13 @@ const SnapshotPanel =() =>{
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onConfirm={onModalConfirm}
+            />
+            {/*  에디터 불러오기 확인 모달 */}
+            <SnapshotRestoreModal
+                isOpen={!!restoreTarget}
+                onClose={() => setRestoreTarget(null)}
+                onConfirm={onRestoreConfirm}
+                snapshotTitle={restoreTarget?.title || ''}
             />
         </div>
     );
