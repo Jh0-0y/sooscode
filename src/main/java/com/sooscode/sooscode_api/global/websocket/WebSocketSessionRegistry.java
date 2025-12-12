@@ -3,11 +3,9 @@ package com.sooscode.sooscode_api.global.websocket;
 import com.sooscode.sooscode_api.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
@@ -55,7 +53,6 @@ public class WebSocketSessionRegistry implements ChannelInterceptor {
 
         // 현재 들어온 STOMP 명령 (CONNECT, SUBSCRIBE, SEND, DISCONNECT 등)
         StompCommand command = accessor.getCommand();
-
 
         /*
          * ========== CONNECT ==========

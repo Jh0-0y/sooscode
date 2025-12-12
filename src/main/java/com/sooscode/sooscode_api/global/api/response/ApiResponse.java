@@ -28,7 +28,6 @@ public class ApiResponse<T> {
     private final String code;
     private final String message;
     private final T data;
-    private final LocalDateTime timestamp;
 
     @JsonIgnore  // JSON 응답에서 제외
     private final HttpStatus httpStatus;
@@ -66,7 +65,6 @@ public class ApiResponse<T> {
                 .code(statusCode.getCode())
                 .message(statusCode.getMessage())
                 .data(data)
-                .timestamp(LocalDateTime.now())
                 .httpStatus(statusCode.getHttpStatus())
                 .build();
 
@@ -87,7 +85,6 @@ public class ApiResponse<T> {
                 .code(statusCode.getCode())
                 .message(statusCode.getMessage())
                 .data(null)
-                .timestamp(LocalDateTime.now())
                 .httpStatus(statusCode.getHttpStatus())
                 .build();
 
@@ -106,7 +103,6 @@ public class ApiResponse<T> {
                 .code(statusCode.getCode())
                 .message(statusCode.getMessage() + " - " + detail)
                 .data(null)
-                .timestamp(LocalDateTime.now())
                 .httpStatus(statusCode.getHttpStatus())
                 .build();
 
@@ -127,7 +123,6 @@ public class ApiResponse<T> {
                 .code(statusCode.getCode())
                 .message(statusCode.getMessage())
                 .data(null)
-                .timestamp(LocalDateTime.now())
                 .httpStatus(statusCode.getHttpStatus())
                 .build();
     }

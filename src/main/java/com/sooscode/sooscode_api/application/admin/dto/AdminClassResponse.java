@@ -51,16 +51,26 @@ public class AdminClassResponse {
     }
 
     /**
-     * 페이지네이션 응답
+     * 학생 배정/삭제 결과 (개별)
      */
     @Data
     @Builder
-    public static class ClassListPage {
-        private List<ClassItem> content;
-        private int page;
-        private int size;
-        private long totalElements;
-        private int totalPages;
-        private boolean last;
+    public static class StudentOperationResult {
+        private Long studentId;
+        private String studentName;
+        private boolean success;
+        private String message;  // 성공/실패 사유
+    }
+
+    /**
+     * 학생 일괄 배정/삭제 응답
+     */
+    @Data
+    @Builder
+    public static class StudentOperationResponse {
+        private int totalCount;        // 전체 요청 학생 수
+        private int successCount;      // 성공한 학생 수
+        private int failureCount;      // 실패한 학생 수
+        private List<StudentOperationResult> results;  // 각 학생별 결과
     }
 }

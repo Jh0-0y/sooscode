@@ -55,10 +55,10 @@ public class ClassRoom {
     @Column(name = "mode", nullable = false)
     private ClassMode mode;
 
-    @Column(name = "started_at", nullable = false)
-    private LocalDate startDate; //LocalDate startDate로 변경
+    @Column(name = "start_date", nullable = false)
+    private LocalDate startDate;
 
-    @Column(name = "ended_at", nullable = false)
+    @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
     @Column(name = "start_time", nullable = false)

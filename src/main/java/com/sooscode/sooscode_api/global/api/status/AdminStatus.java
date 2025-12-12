@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum AdminStatus implements StatusCode {
 
     // ===== 관리자 공통 =====
+    OK(HttpStatus.OK, "ADMIN_000", "성공적으로 요청을 처리하였습니다."),
     NOT_FOUND(HttpStatus.NOT_FOUND, "ADMIN_001", "관리자를 찾을 수 없습니다"),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "ADMIN_002", "관리자 권한이 필요합니다"),
     FORBIDDEN(HttpStatus.FORBIDDEN, "ADMIN_003", "해당 기능에 접근할 수 없습니다"),

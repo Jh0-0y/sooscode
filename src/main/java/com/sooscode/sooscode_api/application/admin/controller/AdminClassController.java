@@ -29,9 +29,10 @@ public class AdminClassController {
             @RequestBody AdminClassRequest.Create request
     ) {
         log.info("관리자 클래스 생성 요청: title={}", request.getTitle());
-        validateCreate(
+        validateClass(
                 request.getTitle(),
                 request.getDescription(),
+                request.getInstructorId(),
                 request.getIsOnline(),
                 request.getStartDate(),
                 request.getEndDate(),
@@ -47,10 +48,10 @@ public class AdminClassController {
      * GET /api/admin/classes/{classId}
      */
     @GetMapping("/{classId}")
-    public ResponseEntity<AdminClassResponse.ClassItem> getClassDetail(@PathVariable Long classId) {
+    public ResponseEntity<ApiResponse<AdminClassResponse.ClassItem>> getClassDetail(@PathVariable Long classId) {
         log.info("관리자 클래스 상세 조회: classId={}", classId);
         AdminClassResponse.ClassItem response = adminClassService.getClassDetail(classId);
-        return ResponseEntity.ok(response);
+        return ApiResponse.ok(AdminStatus.OK, response);
     }
 
     /**
@@ -58,13 +59,14 @@ public class AdminClassController {
      * POST /api/admin/classes/{classId}/edit
      */
     @PostMapping("/{classId}/edit")
-    public ResponseEntity<AdminClassResponse.ClassItem> updateClass(
+    public ResponseEntity<ApiResponse<AdminClassResponse.ClassItem>> updateClass(
             @PathVariable Long classId,
             @RequestBody AdminClassRequest.Update request
     ) {
-        validateCreate(
+        validateClass(
                 request.getTitle(),
                 request.getDescription(),
+                request.getInstructorId(),
                 request.getIsOnline(),
                 request.getStartDate(),
                 request.getEndDate(),
@@ -74,7 +76,7 @@ public class AdminClassController {
         validateInstructorId(request.getInstructorId());
         log.info("관리자 클래스 수정 요청: classId={}", classId);
         AdminClassResponse.ClassItem response = adminClassService.updateClass(classId, request);
-        return ResponseEntity.ok(response);
+        return ApiResponse.ok(AdminStatus.OK, response);
     }
 
     /**
@@ -82,41 +84,48 @@ public class AdminClassController {
      * POST /api/admin/classes/{classId}/delete
      */
     @PostMapping("/{classId}/delete")
-    public ResponseEntity<Void> deleteClass(@PathVariable Long classId) {
+    public ResponseEntity<ApiResponse<Void>> deleteClass(@PathVariable Long classId) {
         log.info("관리자 클래스 삭제 요청: classId={}", classId);
         adminClassService.deleteClass(classId);
-        return ResponseEntity.noContent().build();
+        return ApiResponse.ok(AdminStatus.OK);
     }
 
     /**
-     * 담당 강사 수정
-     * POST /api/admin/classes/{classId}/instructor
-     */
-    @PostMapping("/{classId}/instructor")
-    public ResponseEntity<Void> assignInstructor(
-            @PathVariable Long classId,
-            @RequestBody AdminClassRequest.AssignInstructor request
-    ) {
-        log.info("클래스 강사 수정 요청: classId={}, instructorId={}", classId, request.getInstructorId());
-        validateInstructorId(request.getInstructorId());
-        adminClassService.assignInstructor(classId, request);
-        return ResponseEntity.ok().build();
-    }
-
-    /**
-     * 학생 일괄 배정
+     * 학생 배정
      * POST /api/admin/classes/{classId}/students
      */
     @PostMapping("/{classId}/students")
-    public ResponseEntity<Void> assignStudents(
+    public ResponseEntity<ApiResponse<AdminClassResponse.StudentOperationResponse>> assignStudents(
             @PathVariable Long classId,
-            @RequestBody AdminClassRequest.AssignStudents request
+            @RequestBody AdminClassRequest.Students request
     ) {
         log.info("학생 일괄 배정 요청: classId={}, 학생 수={}", classId, request.getStudentIds().size());
         validateStudentIds(request.getStudentIds());
-        adminClassService.assignStudents(classId, request);
-        return ResponseEntity.ok().build();
+        AdminClassResponse.StudentOperationResponse response =
+                adminClassService.assignStudents(classId, request);
+        return ApiResponse.ok(AdminStatus.OK, response);
     }
+
+    /**
+     * 학생 배정 취소
+     *  POST /api/admin/classes/{classId}/student/{studentId}/delete
+     */
+    @PostMapping("/{classId}/students/delete")
+    public ResponseEntity<ApiResponse<AdminClassResponse.StudentOperationResponse>> deleteStudents(
+            @PathVariable Long classId,
+            @RequestBody AdminClassRequest.Students request
+    ) {
+        log.info("학생 일괄 삭제 요청: classId={}, 학생 수={}", classId, request.getStudentIds().size());
+        validateStudentIds(request.getStudentIds());
+        AdminClassResponse.StudentOperationResponse response =
+                adminClassService.deleteStudents(classId, request);
+        return ApiResponse.ok(AdminStatus.OK, response);
+    }
+
+    /**
+     * 학생 일괄 취소
+     * POST /api/admin/classes/{classId}/students/delete
+     */
 
     /**
      * 클래스 목록 조회 (페이지네이션 + 필터링)
