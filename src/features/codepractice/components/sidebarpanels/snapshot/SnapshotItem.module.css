@@ -12,6 +12,8 @@
 }
 
 .title {
+  display:flex;
+  flex-direction:row;
   font-size: 13px;
   font-weight: 600;
   color: var(--color-text-primary);
@@ -21,4 +23,13 @@
   margin-top: 2px;
   font-size: 11px;
   color: var(--color-text-secondary);
+}
+
+.lang {
+  margin-left: auto;
+  border:2px solid white;
+  border-radius:20px;
+  padding:2px;
+  font-size:8px;
+  opacity:60%;
 }

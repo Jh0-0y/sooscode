@@ -15,3 +15,12 @@
   min-height: 0;      /* ★★★ flex shrink 허용 */
   overflow: hidden;   /* ★★★ Monaco 강제 확장 방지 */
 }
+
+.titleInput {
+  background: transparent;
+  border: 1px solid #334155;
+  color: inherit;
+  font-size: 14px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}

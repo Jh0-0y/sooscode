@@ -19,6 +19,45 @@ export const useSnapshots = (classId, page = 0, size = 3) => {
   });
 };
 
+
+// 날짜별 데이터 완성되면 바꿀거
+// export const useSnapshots = ({
+//   classId,
+//   page = 0,
+//   size = 3,
+//   startDate,
+//   endDate,
+//   languages,
+// }) => {
+//   return useQuery({
+//     queryKey: [
+//       "snapshots",
+//       classId,
+//       page,
+//       size,
+//       startDate,
+//       endDate,
+//       languages,
+//     ],
+//     queryFn: () =>
+//       getSnapshots({
+//         classId,
+//         page,
+//         size,
+//         startDate,
+//         endDate,
+//         languages,
+//       }),
+//     enabled: !!classId,
+//     staleTime: 60 * 1000,
+//   });
+// };
+
+
+
+
+
+
 // 제목 검색
 export const useSearchSnapshotByTitle = (classId, title) => {
   return useQuery({

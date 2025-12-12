@@ -10,13 +10,12 @@ export default function CodePracticePanel() {
   const { darkMode } = useDarkMode();
   const [editorInstance, setEditorInstance] = useState(null);
   const [monacoInstance, setMonacoInstance] = useState(null);
-
   const code = usePracticeStore((s) => s.code);
   const setCode = usePracticeStore((s) => s.setCode);
   const language = usePracticeStore((s) => s.language);
   const setLanguage = usePracticeStore((s) => s.setLanguage);
   const storeOutput = usePracticeStore((s) => s.output);
-
+  console.log(editorInstance);
 
 
   const title="code practice"
