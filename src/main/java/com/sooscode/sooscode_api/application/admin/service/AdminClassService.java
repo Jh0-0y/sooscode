@@ -8,8 +8,8 @@ public interface AdminClassService {
 
     /**
      * 클래스 생성
-     * 관리자가 새로운 클래스를 생성합니다.
-     * 시작/종료 시간을 검증하고, 파일이 있다면 연결합니다.
+     * 관리자가 새로운 클래스를 생성
+     * 시작/종료 시간을 검증하고, 파일이 있다면 연결
      *
      * @param request 클래스 생성 요청 DTO
      * @return 생성된 클래스 상세 정보
@@ -20,7 +20,7 @@ public interface AdminClassService {
 
     /**
      * 클래스 수정
-     * 기존 클래스의 제목, 설명, 시작/종료 시간을 수정합니다.
+     * 기존 클래스의 제목, 설명, 강사, 시작/종료 시간을 수정
      *
      * @param classId 수정할 클래스 ID
      * @param request 클래스 수정 요청 DTO
@@ -32,28 +32,13 @@ public interface AdminClassService {
 
     /**
      * 클래스 삭제 (Soft Delete) -> isActive 비활성화
-     * 클래스를 비활성화 처리합니다. 진행 중인 클래스는 삭제할 수 없습니다.
+     * 클래스를 비활성화 처리, 진행 중인 클래스는 삭제할 수 없음
      *
      * @param classId 삭제할 클래스 ID
      * @throws CustomException CLASS_NOT_FOUND - 클래스를 찾을 수 없는 경우
      * @throws CustomException CLASS_STATUS_INVALID - 진행 중인 클래스인 경우
      */
     void deleteClass(Long classId);
-
-    /**
-     * 클래스 목록 조회
-     * 페이지네이션, 필터링, 정렬을 지원하는 클래스 목록을 조회합니다.
-     *
-     * @param filter 검색 필터 (키워드, 상태, 날짜 범위 등)
-     * @param page 페이지 번호 (0부터 시작)
-     * @param size 페이지 크기
-     * @return 페이지네이션된 클래스 목록
-     */
-    AdminClassResponse.ClassListPage getClassList(
-            AdminClassRequest.SearchFilter filter,
-            int page,
-            int size
-    );
 
     /**
      * 클래스 상세 조회
@@ -67,29 +52,30 @@ public interface AdminClassService {
     AdminClassResponse.ClassItem getClassDetail(Long classId);
 
     /**
-     * 강사 배정
-     * 특정 클래스에 강사를 배정합니다.
-     *
-     * @param classId 클래스 ID
-     * @param request 강사 배정 요청 DTO
-     * @throws CustomException CLASS_NOT_FOUND - 클래스를 찾을 수 없는 경우
-     * @throws CustomException USER_NOT_FOUND - 사용자를 찾을 수 없는 경우
-     * @throws CustomException FORBIDDEN - 강사 권한이 없는 경우
-     * @throws CustomException BAD_REQUEST - 이미 배정된 강사인 경우
-     */
-    void assignInstructor(Long classId, AdminClassRequest.AssignInstructor request);
-
-    /**
      * 학생 일괄 배정
-     * 특정 클래스에 여러 학생을 한번에 배정합니다.
+     * 특정 클래스에 여러 학생을 한번에 배정
      *
      * @param classId 클래스 ID
      * @param request 학생 배정 요청 DTO (학생 ID 리스트)
+     * @return 각 학생별 배정 결과
      * @throws CustomException CLASS_NOT_FOUND - 클래스를 찾을 수 없는 경우
      * @throws CustomException USER_NOT_FOUND - 학생을 찾을 수 없는 경우
      * @throws CustomException FORBIDDEN - 학생 권한이 없는 경우
      */
-    void assignStudents(Long classId, AdminClassRequest.AssignStudents request);
+    AdminClassResponse.StudentOperationResponse assignStudents(Long classId, AdminClassRequest.Students request);
+
+    /**
+     * 학생 일괄 삭제
+     * 특정 클래스에 여러 학생을 한번에 삭제
+     *
+     * @param classId 클래스 ID
+     * @param request 학생 배정 삭제 DTO (학생 ID 리스트)
+     * @return 각 학생별 배정 해제 결과
+     * @throws CustomException CLASS_NOT_FOUND - 클래스를 찾을 수 없는 경우
+     * @throws CustomException USER_NOT_FOUND - 학생을 찾을 수 없는 경우
+     * @throws CustomException FORBIDDEN - 학생 권한이 없는 경우
+     */
+    AdminClassResponse.StudentOperationResponse deleteStudents(Long classId, AdminClassRequest.Students request);
 
     /**
      * 참여 학생 목록 조회

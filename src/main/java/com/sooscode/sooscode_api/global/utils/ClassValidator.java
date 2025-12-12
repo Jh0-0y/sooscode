@@ -3,8 +3,8 @@ package com.sooscode.sooscode_api.global.utils;
 import com.sooscode.sooscode_api.global.api.exception.CustomException;
 import com.sooscode.sooscode_api.global.api.status.ValidStatus;
 
+import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -120,16 +120,16 @@ public class ClassValidator {
      * - 최소 30분 이상
      * - 최대 12시간 이하
      *
-     * 예: 매일 14:00 ~ 16:00에 강의 진행
-     *
      * @param startTime 강의 시작 시간
      * @param endTime 강의 종료 시간
      * @throws CustomException 시간 조건 불만족 시
      */
     public static void validateClassTimes(LocalTime startTime, LocalTime endTime) {
+
         if (startTime == null) {
             throw new CustomException(ValidStatus.CLASS_START_TIME_REQUIRED);
         }
+
         if (endTime == null) {
             throw new CustomException(ValidStatus.CLASS_END_TIME_REQUIRED);
         }
@@ -139,13 +139,16 @@ public class ClassValidator {
             throw new CustomException(ValidStatus.CLASS_END_TIME_BEFORE_START);
         }
 
-        // 최소 30분 이상
-        if (endTime.isBefore(startTime.plusMinutes(30))) {
+        // 시간 차이 계산
+        Duration duration = Duration.between(startTime, endTime);
+
+        // 최소 30분
+        if (duration.toMinutes() < 30) {
             throw new CustomException(ValidStatus.CLASS_DURATION_TOO_SHORT);
         }
 
-        // 최대 12시간 이하
-        if (endTime.isAfter(startTime.plusHours(12))) {
+        // 최대 12시간
+        if (duration.toHours() > 12) {
             throw new CustomException(ValidStatus.CLASS_DURATION_TOO_LONG);
         }
     }
@@ -195,7 +198,7 @@ public class ClassValidator {
     // ===== 통합 검증 =====
 
     /**
-     * 클래스 생성 시 전체 검증
+     * 클래스 데이터 생성 및 수정 시 전체 검증
      *
      * @param title 클래스 제목
      * @param description 클래스 설명
@@ -206,9 +209,10 @@ public class ClassValidator {
      * @param endTime 강의 종료 시간
      * @throws CustomException 검증 실패 시
      */
-    public static void validateCreate(
+    public static void validateClass(
             String title,
             String description,
+            Long instructorId,
             Boolean isOnline,
             LocalDate startDate,
             LocalDate endDate,
@@ -217,6 +221,7 @@ public class ClassValidator {
     ) {
         validateTitle(title);
         validateDescription(description);
+        validateInstructorId(instructorId);
         validateIsOnline(isOnline);
         validateClassDates(startDate, endDate);
         validateClassTimes(startTime, endTime);

@@ -1,11 +1,9 @@
 package com.sooscode.sooscode_api.application.admin.dto;
 
 import com.sooscode.sooscode_api.domain.classroom.enums.ClassStatus;
-import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -61,7 +59,7 @@ public class AdminClassRequest {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AssignStudents {
+    public static class Students {
         private List<Long> studentIds;
     }
 

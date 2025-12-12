@@ -15,20 +15,18 @@ import com.sooscode.sooscode_api.global.api.exception.CustomException;
 import com.sooscode.sooscode_api.global.api.status.AdminStatus;
 import com.sooscode.sooscode_api.global.api.status.ClassRoomStatus;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class AdminClassServiceImpl implements AdminClassService {
 
     private final ClassRoomRepository classroomRepository;
@@ -39,13 +37,11 @@ public class AdminClassServiceImpl implements AdminClassService {
     @Transactional
     public AdminClassResponse.ClassItem createClass(AdminClassRequest.Create request) {
         // 강사 검증
-        User instructor = null;
-        if (request.getInstructorId() != null) {
-            instructor = userRepository.findById(request.getInstructorId())
-                    .orElseThrow(() -> new CustomException(AdminStatus.USER_NOT_FOUND));
-            if (!instructor.getRole().equals(UserRole.INSTRUCTOR)) {
-                throw new CustomException(AdminStatus.CLASS_INSTRUCTOR_INVALID);
-            }
+        User instructor = userRepository.findById(request.getInstructorId())
+                .orElseThrow(() -> new CustomException(AdminStatus.USER_NOT_FOUND));
+
+        if (!instructor.getRole().equals(UserRole.INSTRUCTOR)) {
+            throw new CustomException(AdminStatus.CLASS_INSTRUCTOR_INVALID);
         }
 
         // 클래스 생성
@@ -138,77 +134,6 @@ public class AdminClassServiceImpl implements AdminClassService {
     }
 
     @Override
-    public AdminClassResponse.ClassListPage getClassList(AdminClassRequest.SearchFilter filter, int page, int size) {
-        // 정렬 방향 설정
-        Sort.Direction direction = "ASC".equalsIgnoreCase(filter.getSortDirection())
-                ? Sort.Direction.ASC
-                : Sort.Direction.DESC;
-
-        // 정렬 기준 설정
-        Sort sort = Sort.by(direction, filter.getSortBy());
-        Pageable pageable = PageRequest.of(page, size, sort);
-
-        // 전체 클래스 조회 (필터링은 QueryDSL이나 Specification 사용을 권장하지만,
-        // 여기서는 기본 JPA로 구현)
-        Page<ClassRoom> classRoomPage = classroomRepository.findAll(pageable);
-
-        // ClassItem으로 변환
-        List<AdminClassResponse.ClassItem> classItems = classRoomPage.getContent().stream()
-                .filter(classRoom -> {
-                    // 키워드 필터링
-                    if (filter.getKeyword() != null && !filter.getKeyword().isEmpty()) {
-                        String keyword = filter.getKeyword().toLowerCase();
-                        boolean titleMatch = classRoom.getTitle().toLowerCase().contains(keyword);
-                        boolean instructorMatch = classRoom.getUser() != null
-                                && classRoom.getUser().getName().toLowerCase().contains(keyword);
-                        if (!titleMatch && !instructorMatch) {
-                            return false;
-                        }
-                    }
-
-                    // 상태 필터링
-                    if (filter.getStatus() != null && !classRoom.getStatus().equals(filter.getStatus())) {
-                        return false;
-                    }
-
-                    // 날짜 필터링 (시작일)
-                    if (filter.getStartDate() != null && classRoom.getStartDate().isBefore(filter.getStartDate())) {
-                        return false;
-                    }
-
-                    // 날짜 필터링 (종료일)
-                    if (filter.getEndDate() != null && classRoom.getEndDate().isAfter(filter.getEndDate())) {
-                        return false;
-                    }
-
-                    return true;
-                })
-                .map(classRoom -> {
-                    // 학생 수 조회
-                    Integer studentCount = classParticipantRepository.findByClassRoom_ClassId(classRoom.getClassId()).size();
-
-                    // 썸네일 경로
-                    String thumbnail = null;
-
-                    // 강사 이름
-                    String instructorName = classRoom.getUser() != null ? classRoom.getUser().getName() : null;
-
-                    return AdminClassResponse.ClassItem.from(classRoom, thumbnail, instructorName, studentCount);
-                })
-                .collect(Collectors.toList());
-
-        // 페이지네이션 응답 생성
-        return AdminClassResponse.ClassListPage.builder()
-                .content(classItems)
-                .page(classRoomPage.getNumber())
-                .size(classRoomPage.getSize())
-                .totalElements(classRoomPage.getTotalElements())
-                .totalPages(classRoomPage.getTotalPages())
-                .last(classRoomPage.isLast())
-                .build();
-    }
-
-    @Override
     public AdminClassResponse.ClassItem getClassDetail(Long classId) {
         // 클래스 조회
         ClassRoom classRoom = classroomRepository.findById(classId)
@@ -228,67 +153,213 @@ public class AdminClassServiceImpl implements AdminClassService {
 
     @Override
     @Transactional
-    public void assignInstructor(Long classId, AdminClassRequest.AssignInstructor request) {
+    public AdminClassResponse.StudentOperationResponse assignStudents(
+            Long classId,
+            AdminClassRequest.Students request) {
+
         // 클래스 조회
         ClassRoom classRoom = classroomRepository.findById(classId)
                 .orElseThrow(() -> new CustomException(ClassRoomStatus.CLASS_NOT_FOUND));
 
-        // 강사 조회 및 검증
-        User instructor = userRepository.findById(request.getInstructorId())
-                .orElseThrow(() -> new CustomException(AdminStatus.USER_NOT_FOUND));
-
-        // 강사 권한 확인
-        if (!instructor.getRole().equals(UserRole.INSTRUCTOR)) {
-            throw new CustomException(AdminStatus.CLASS_INSTRUCTOR_INVALID);
-        }
-
-        // 이미 배정된 강사인지 확인
-        if (classRoom.getUser() != null && classRoom.getUser().getUserId().equals(request.getInstructorId())) {
-            throw new CustomException(AdminStatus.CLASS_INSTRUCTOR_DUPLICATED);
-        }
-
-        // 강사 배정
-        classRoom.setUser(instructor);
-    }
-
-    @Override
-    @Transactional
-    public void assignStudents(Long classId, AdminClassRequest.AssignStudents request) {
-        // 클래스 조회
-        ClassRoom classRoom = classroomRepository.findById(classId)
-                .orElseThrow(() -> new CustomException(ClassRoomStatus.CLASS_NOT_FOUND));
-
-        // 학생 일괄 배정
         List<ClassParticipant> newParticipants = new ArrayList<>();
+        List<AdminClassResponse.StudentOperationResult> results = new ArrayList<>();
+        int successCount = 0;
+        int failureCount = 0;
 
         for (Long studentId : request.getStudentIds()) {
-            // 학생 조회
-            User student = userRepository.findById(studentId)
-                    .orElseThrow(() -> new CustomException(AdminStatus.USER_NOT_FOUND));
+            AdminClassResponse.StudentOperationResult result;
 
-            // 학생 권한 확인
-            if (!student.getRole().equals(UserRole.STUDENT)) {
-                throw new CustomException(AdminStatus.FORBIDDEN);
-            }
+            try {
+                // 학생 조회
+                User student = userRepository.findById(studentId)
+                        .orElseThrow(() -> new CustomException(AdminStatus.USER_NOT_FOUND));
 
-            // 이미 배정된 학생인지 확인
-            boolean alreadyAssigned = classParticipantRepository
-                    .findByClassRoom_ClassIdAndUser_UserId(classId, studentId)
-                    .isPresent();
+                // 학생 권한 확인
+                if (!student.getRole().equals(UserRole.STUDENT)) {
+                    result = AdminClassResponse.StudentOperationResult.builder()
+                            .studentId(studentId)
+                            .studentName(student.getName())
+                            .success(false)
+                            .message("학생 권한이 아닙니다")
+                            .build();
+                    failureCount++;
+                    results.add(result);
+                    continue;
+                }
 
-            if (!alreadyAssigned) {
+                // 이미 배정된 학생인지 확인
+                Optional<ClassParticipant> existingParticipant = classParticipantRepository
+                        .findByClassRoom_ClassIdAndUser_UserId(classId, studentId);
+
+                if (existingParticipant.isPresent()) {
+                    result = AdminClassResponse.StudentOperationResult.builder()
+                            .studentId(studentId)
+                            .studentName(student.getName())
+                            .success(false)
+                            .message("이미 배정된 학생입니다")
+                            .build();
+                    failureCount++;
+                    results.add(result);
+                    continue;
+                }
+
                 // 새로운 참여자 생성
                 ClassParticipant participant = ClassParticipant.builder()
                         .user(student)
                         .classRoom(classRoom)
                         .build();
                 newParticipants.add(participant);
+
+                result = AdminClassResponse.StudentOperationResult.builder()
+                        .studentId(studentId)
+                        .studentName(student.getName())
+                        .success(true)
+                        .message("배정 성공")
+                        .build();
+                successCount++;
+                results.add(result);
+
+            } catch (CustomException e) {
+                // 사용자를 찾을 수 없는 경우
+                result = AdminClassResponse.StudentOperationResult.builder()
+                        .studentId(studentId)
+                        .studentName(null)
+                        .success(false)
+                        .message("존재하지 않는 사용자입니다")
+                        .build();
+                failureCount++;
+                results.add(result);
+
+            } catch (Exception e) {
+                // 예상치 못한 오류
+                result = AdminClassResponse.StudentOperationResult.builder()
+                        .studentId(studentId)
+                        .studentName(null)
+                        .success(false)
+                        .message("배정 중 오류가 발생했습니다: " + e.getMessage())
+                        .build();
+                failureCount++;
+                results.add(result);
+                log.error("학생 배정 중 오류 발생 - studentId: {}, error: {}", studentId, e.getMessage());
             }
         }
 
         // 일괄 저장
         if (!newParticipants.isEmpty()) {
             classParticipantRepository.saveAll(newParticipants);
+            log.info("학생 일괄 배정 완료 - classId: {}, 성공: {}명, 실패: {}명",
+                    classId, successCount, failureCount);
         }
+
+        return AdminClassResponse.StudentOperationResponse.builder()
+                .totalCount(request.getStudentIds().size())
+                .successCount(successCount)
+                .failureCount(failureCount)
+                .results(results)
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public AdminClassResponse.StudentOperationResponse deleteStudents(
+            Long classId,
+            AdminClassRequest.Students request) {
+
+        // 클래스 조회
+        ClassRoom classRoom = classroomRepository.findById(classId)
+                .orElseThrow(() -> new CustomException(ClassRoomStatus.CLASS_NOT_FOUND));
+
+        List<ClassParticipant> participantsToDelete = new ArrayList<>();
+        List<AdminClassResponse.StudentOperationResult> results = new ArrayList<>();
+        int successCount = 0;
+        int failureCount = 0;
+
+        for (Long studentId : request.getStudentIds()) {
+            AdminClassResponse.StudentOperationResult result;
+
+            try {
+                // 학생 조회
+                User student = userRepository.findById(studentId)
+                        .orElseThrow(() -> new CustomException(AdminStatus.USER_NOT_FOUND));
+
+                // 학생 권한 확인
+                if (!student.getRole().equals(UserRole.STUDENT)) {
+                    result = AdminClassResponse.StudentOperationResult.builder()
+                            .studentId(studentId)
+                            .studentName(student.getName())
+                            .success(false)
+                            .message("학생 권한이 아닙니다")
+                            .build();
+                    failureCount++;
+                    results.add(result);
+                    continue;
+                }
+
+                // 배정된 학생인지 확인
+                Optional<ClassParticipant> existingParticipant = classParticipantRepository
+                        .findByClassRoom_ClassIdAndUser_UserId(classId, studentId);
+
+                if (existingParticipant.isEmpty()) {
+                    result = AdminClassResponse.StudentOperationResult.builder()
+                            .studentId(studentId)
+                            .studentName(student.getName())
+                            .success(false)
+                            .message("배정되지 않은 학생입니다")
+                            .build();
+                    failureCount++;
+                    results.add(result);
+                    continue;
+                }
+
+                // 삭제 목록에 추가
+                participantsToDelete.add(existingParticipant.get());
+
+                result = AdminClassResponse.StudentOperationResult.builder()
+                        .studentId(studentId)
+                        .studentName(student.getName())
+                        .success(true)
+                        .message("배정 해제 성공")
+                        .build();
+                successCount++;
+                results.add(result);
+
+            } catch (CustomException e) {
+                // 사용자를 찾을 수 없는 경우
+                result = AdminClassResponse.StudentOperationResult.builder()
+                        .studentId(studentId)
+                        .studentName(null)
+                        .success(false)
+                        .message("존재하지 않는 사용자입니다")
+                        .build();
+                failureCount++;
+                results.add(result);
+
+            } catch (Exception e) {
+                // 예상치 못한 오류
+                result = AdminClassResponse.StudentOperationResult.builder()
+                        .studentId(studentId)
+                        .studentName(null)
+                        .success(false)
+                        .message("배정 해제 중 오류가 발생했습니다: " + e.getMessage())
+                        .build();
+                failureCount++;
+                results.add(result);
+                log.error("학생 배정 해제 중 오류 발생 - studentId: {}, error: {}", studentId, e.getMessage());
+            }
+        }
+
+        // 일괄 삭제
+        if (!participantsToDelete.isEmpty()) {
+            classParticipantRepository.deleteAll(participantsToDelete);
+            log.info("학생 일괄 배정 해제 완료 - classId: {}, 성공: {}명, 실패: {}명",
+                    classId, successCount, failureCount);
+        }
+
+        return AdminClassResponse.StudentOperationResponse.builder()
+                .totalCount(request.getStudentIds().size())
+                .successCount(successCount)
+                .failureCount(failureCount)
+                .results(results)
+                .build();
     }
 }
