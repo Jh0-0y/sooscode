@@ -244,7 +244,7 @@ public class SnapshotController {
         return ApiResponse.ok(SnapshotStatus.READ_OK,snapshotTitleResponses);
     }
     @GetMapping("/read/language/date")
-    public ResponseEntity<ApiResponse<Page<SnapShotResponse>>> searchByLanguageAndDate(
+    public ResponseEntity<ApiResponse<Page<SnapshotTitleResponse>>> searchByLanguageAndDate(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam String language,
             @RequestParam Long classId,
@@ -274,7 +274,7 @@ public class SnapshotController {
             start = LocalDate.parse(startDate).atStartOfDay();
             end = LocalDate.parse(endDate).atTime(LocalTime.MAX);
         }
-        Page<SnapShotResponse> responses =
+        Page<SnapshotTitleResponse> responses =
                 snapshotService.readSnapshotByLanguageAndDate(
                         userId, classId, snapshotLanguage, start, end, pageable
                 );
