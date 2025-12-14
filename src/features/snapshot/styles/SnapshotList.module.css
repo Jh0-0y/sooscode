@@ -1,75 +1,71 @@
 /* src/features/snapshot/styles/SnapshotList.module.css */
 
-/* 리스트 컨테이너: 남은 공간 100% 차지 및 스크롤 활성화 */
 .container {
     flex: 1;
     min-height: 0;
     overflow-y: auto;
-
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-1);
+    gap: var(--spacing-2);
 }
 
-
-/* 리스트 아이템 (카드) */
 .item {
-    width: 100%; /* 가로 100% */
+    width: 100%;
     display: flex;
-    align-items: center;
-    gap: var(--spacing-2);
-    padding: var(--spacing-2) var(--spacing-3);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-1);
+
+    padding: var(--spacing-3);
     background-color: var(--color-bg-primary);
     border: 1px solid var(--color-border-light);
     border-radius: var(--radius-sm);
     cursor: pointer;
     transition: all var(--transition-fast);
     text-align: left;
-
-    /* button 태그 초기화 */
-    font-family: inherit;
-    font-size: var(--font-size-sm);
-    color: var(--color-text-primary);
 }
 
 .item:hover {
     border-color: var(--color-primary-400);
+    background-color: var(--color-bg-secondary);
 }
 
-.item.active {
-    border-color: var(--color-primary-500);
-    background-color: var(--color-primary-50);
+/* 상단 메타 정보 (뱃지, 날짜) */
+.metaInfo {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.name {
-    flex: 1; /* 남은 공간 차지 */
+/* 언어 뱃지 기본 스타일 */
+.badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* 날짜 스타일 */
+.date {
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+    font-family: var(--font-family-code);
+}
+
+/* 제목 스타일 */
+.title {
+    font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+
+    /* 긴 제목 말줄임 처리 */
+    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-.time {
-    font-size: var(--font-size-xs);
-    color: var(--color-text-tertiary);
-    flex-shrink: 0; /* 줄바꿈 방지 */
-}
-
-/* 복원 버튼 */
-.restoreButton {
-    padding: var(--spacing-1) var(--spacing-2);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-primary-500);
-    background-color: transparent;
-    border: 1px solid var(--color-primary-500);
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    white-space: nowrap;
-}
-
-.restoreButton:hover {
-    background-color: var(--color-primary-500);
-    color: var(--color-text-inverse);
 }

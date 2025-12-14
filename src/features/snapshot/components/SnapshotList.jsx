@@ -1,8 +1,6 @@
 import styles from "../styles/SnapshotList.module.css";
+import { formatDate } from "@/utils/date";
 
-/**
- * 스냅샷 리스트
- */
 const SnapshotList = ({ snapshots, onSelect, listRef, observerRef }) => {
     return (
         <div ref={listRef} className={styles.container}>
@@ -12,6 +10,16 @@ const SnapshotList = ({ snapshots, onSelect, listRef, observerRef }) => {
                     className={styles.item}
                     onClick={() => onSelect(snapshot)}
                 >
+
+                    <div className={styles.metaInfo}>
+
+                        <span className={`${styles.badge} ${styles[snapshot.language?.toLowerCase()] || styles.text}`}>
+                            {snapshot.language || 'TEXT'}
+                        </span>
+                        <span className={styles.date}>
+                            {formatDate(snapshot.createdAt || snapshot.updatedAt)}
+                        </span>
+                    </div>
                     <span className={styles.title}>{snapshot.title}</span>
                 </button>
             ))}

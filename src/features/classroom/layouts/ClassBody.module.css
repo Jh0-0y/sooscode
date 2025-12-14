@@ -90,7 +90,7 @@
 }
 
 .panel {
-    height: 100%;
+    height: calc(100% - 42px);
     /*padding: var(--spacing-4);*/
 }
 

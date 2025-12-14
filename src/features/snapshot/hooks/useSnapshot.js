@@ -1,98 +1,91 @@
-// features/snapshot/hooks/useSnapshot.js
 import { create } from "zustand";
 import { useCallback } from "react";
 import { snapshotService } from "@/features/snapshot/service/snapshotService";
 import { useCode } from "@/features/code/hooks/useCode";
 import { useToast } from "@/hooks/useToast";
 
-/**
- * Snapshot Store
- * Hook 파일 내부에 은닉화 (파일 스코프)
- */
 const snapshotStore = create((set) => ({
     snapshots: [],
     loadingList: false,
     loadingSave: false,
     page: 0,
-    hasMore: true,
+    totalPages: 0,
 
+    // 목록을 더하지 않고 통째로 교체
     setSnapshots: (snapshots) => set({ snapshots }),
-    appendSnapshots: (snapshots) =>
-        set((s) => ({ snapshots: [...s.snapshots, ...snapshots] })),
+    setTotalPages: (total) => set({ totalPages: total }),
+    setPage: (page) => set({ page }),
 
     setLoadingList: (loading) => set({ loadingList: loading }),
     setLoadingSave: (loading) => set({ loadingSave: loading }),
-    setPage: (page) => set({ page }),
-    setHasMore: (hasMore) => set({ hasMore }),
 
     reset: () =>
         set({
             snapshots: [],
             page: 0,
-            hasMore: true,
+            totalPages: 0,
             loadingList: false,
         }),
 }));
 
 export const useSnapshot = () => {
-    // TODO: classId는 추후 Props나 useParams로 대체
+
     const classId = 1;
     const { code, setCode } = useCode();
     const toast = useToast();
 
-    // Store State 구조 분해 할당 (스코프 문제 해결)
     const {
         snapshots,
         loadingList,
         loadingSave,
         page,
-        hasMore,
+        totalPages,
         setSnapshots,
-        appendSnapshots,
+        setTotalPages,
+        setPage,
         setLoadingList,
         setLoadingSave,
-        setPage,
-        setHasMore,
-        reset,
     } = snapshotStore();
 
     /**
-     * 스냅샷 목록 조회
+     * 스냅샷 목록 조회 (페이지 변경 시 호출)
      */
-    const fetchSnapshots = useCallback(async () => {
+    const fetchSnapshots = useCallback(async (targetPage = page) => {
         if (!classId) return;
-        // 로딩 중이거나 더 이상 데이터가 없으면 중단
-        if (loadingList || !hasMore) return;
-
         setLoadingList(true);
 
         try {
             const size = 10;
-            // Service에서 data.data(Page객체)를 반환하도록 수정됨
-            const pageData = await snapshotService.getAll(classId, page, size);
+            // Service 호출
+            const pageData = await snapshotService.getAll(classId, targetPage, size);
 
-            // 안전한 데이터 접근
             const content = pageData?.content || [];
-            const last = pageData?.last ?? true;
+            const total = pageData?.totalPages || 0;
 
-            if (page === 0) {
-                setSnapshots(content);
-            } else {
-                appendSnapshots(content);
-            }
+            // 데이터 교체 및 전체 페이지 수 설정
+            setSnapshots(content);
+            setTotalPages(total);
 
-            setHasMore(!last);
-            if (content.length > 0) {
-                setPage(page + 1);
+            // 페이지 상태 동기화 (혹시 외부에서 호출했을 때 대비)
+            if (targetPage !== page) {
+                setPage(targetPage);
             }
 
         } catch (error) {
             console.error("스냅샷 조회 실패:", error);
-            // toast.error("목록을 불러오지 못했습니다."); // 필요 시 주석 해제
         } finally {
             setLoadingList(false);
         }
-    }, [classId, page, hasMore, loadingList, setSnapshots, appendSnapshots, setHasMore, setPage, setLoadingList]);
+    }, [classId, page, setSnapshots, setTotalPages, setPage, setLoadingList]);
+
+    /**
+     * 페이지 이동 핸들러
+     */
+    const handlePageChange = (newPage) => {
+        if (newPage < 0 || newPage >= totalPages) return;
+        setPage(newPage);
+        fetchSnapshots(newPage); // 상태 업데이트 기다리지 않고 즉시 요청
+    };
 
     /**
      * 스냅샷 저장
@@ -113,18 +106,14 @@ export const useSnapshot = () => {
                 classId,
                 title,
                 content: code,
+                language: "JAVA"
             });
 
             toast.success("스냅샷이 저장되었습니다.");
 
-            // 저장 성공 시 목록 초기화 후 첫 페이지 로딩
-            reset();
-
-            // 상태 업데이트가 비동기이므로, 즉시 첫 페이지를 수동으로 가져와 반영
-            const firstPageData = await snapshotService.getAll(classId, 0, 10);
-            setSnapshots(firstPageData?.content || []);
-            setHasMore(!firstPageData?.last);
-            setPage(1);
+            // 저장 후 첫 페이지로 이동 및 갱신
+            setPage(0);
+            fetchSnapshots(0);
 
             return true;
         } catch (error) {
@@ -136,9 +125,6 @@ export const useSnapshot = () => {
         }
     };
 
-    /**
-     * 스냅샷 복원
-     */
     const handleRestoreSnapshot = (snapshot) => {
         if (!snapshot?.content) {
             toast.error("복원할 코드가 없습니다.");
@@ -150,10 +136,12 @@ export const useSnapshot = () => {
 
     return {
         snapshots,
-        loading: loadingList, // 외부에서는 'loading'으로 사용하므로 매핑
+        loading: loadingList,
         loadingSave,
-        hasMore,
+        page,
+        totalPages,
         fetchSnapshots,
+        handlePageChange,
         handleSaveSnapshot,
         handleRestoreSnapshot,
     };

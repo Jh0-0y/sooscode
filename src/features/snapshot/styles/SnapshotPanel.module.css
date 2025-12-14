@@ -1,57 +1,79 @@
 /* src/features/snapshot/styles/SnapshotPanel.module.css */
 
-/* 패널 전체 컨테이너: 부모 영역을 100% 채우고 스크롤을 막음 */
 .container {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-2);
-    padding: var(--spacing-2);
     background-color: var(--color-bg-secondary);
     border-bottom: 1px solid var(--color-border-light);
     overflow: hidden;
-    min-height: 0;
 }
 
-/* 상단 헤더 (저장 버튼 영역) */
 .header {
     width: 100%;
-    padding-bottom: var(--spacing-2);
-    border-bottom: 1px solid var(--color-border-light);
-    flex-shrink: 0; /* 헤더 높이 고정 */
-}
-
-/* 저장 버튼: 100% 너비 */
-.saveButton {
-    width: 100%;
     padding: var(--spacing-2);
-    background-color: var(--color-primary-500);
-    color: var(--color-text-inverse);
+    border-bottom: 1px solid var(--color-border-light);
+    flex-shrink: 0;
+}
+
+/* 리스트 영역: 남은 공간 차지 */
+.listArea {
+    flex: 1;
+    overflow-y: auto; /* 리스트 내부 스크롤 */
+    padding: var(--spacing-2);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.emptyMessage {
+    text-align: center;
+    color: var(--color-text-tertiary);
     font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    border: none;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: background-color var(--transition-fast);
+    padding: var(--spacing-4) 0;
 }
 
-.saveButton:hover {
-    background-color: var(--color-primary-600);
-}
-
-.saveButton:disabled {
-    background-color: var(--color-gray-400);
-    cursor: wait;
-}
-
-/* 빈 상태 메시지: 중앙 정렬 */
-.empty {
-    width: 100%;
-    height: 100%;
+/* 페이지네이션 하단 바 */
+.pagination {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-text-tertiary);
+    gap: var(--spacing-3);
+    padding: var(--spacing-2);
+    border-top: 1px solid var(--color-border-light);
+    background-color: var(--color-bg-tertiary);
+    flex-shrink: 0;
+}
+
+.pageBtn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pageBtn:hover:not(:disabled) {
+    background-color: var(--color-primary-50);
+    color: var(--color-primary-600);
+    border-color: var(--color-primary-200);
+}
+
+.pageBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: var(--color-bg-secondary);
+}
+
+.pageInfo {
     font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    font-variant-numeric: tabular-nums; /* 숫자 너비 고정 */
 }
