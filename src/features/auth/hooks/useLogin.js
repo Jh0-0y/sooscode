@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {api} from "@/services/api";
 import {useUser} from "@/hooks/useUser";
 import {useToast} from "@/hooks/useToast";
-import {handleAuthError} from "@/features/auth/hooks/useEmail.js";
+import {handleAuthError} from "@/features/auth/hooks/useMessage.js";
 
 const useLogin = () => {
     const {setUser} = useUser();

@@ -11,41 +11,113 @@ const CodePanel = ({socket, classId}) => {
     const {code, setCode, editorInstance, setEditorInstance} = useCode();
     const [monacoInstance, setMonacoInstance] = useState(null);
     const [output, setOutput] = useState("");
+    const [lastSavedTime, setLastSavedTime] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // 디바운싱을 위한 타이머 ref
+    const debounceTimerRef = useRef(null);
+    const isInitialLoadRef = useRef(true);
 
     /**
-     * 코드 전송
+     * 페이지 진입 시 자동 저장된 코드 불러오기
      */
-    const sendCode = () => {
-        if (!socket) {
-            alert('소켓이 초기화되지 않았습니다.');
-            return;
-        }
+    useEffect(() => {
 
-        if (!socket.connected) {
-            alert('웹소켓 연결이 끊어졌습니다.');
-            return;
-        }
+        const loadAutoSaved = async () => {
 
-        if (!socket.publish) {
-            alert('publish 메서드를 찾을 수 없습니다.');
-            console.error('Socket object:', socket);
-            return;
-        }
+            if (!classId) {
+                return;
+            }
 
-        const message = {
-            code: code,
-            language: 'javascript',
-            output: output || null,
+            try {
+                setIsLoading(true);
+                console.log("🔄 자동 저장 코드 불러오는 중...", classId);
+
+                console.log("❌❌❌❌❌");
+
+
+                const response = await api.get(`/api/code/auto-save?classId=${classId}`);
+
+                console.log("📦 API 응답:", response.status, response.data);
+
+                if (response.status === 200 && response.data) {
+                    const autoSaved = response.data;
+
+                    console.log("✅ 자동 저장된 코드 발견:", {
+                        codeLength: autoSaved.code?.length,
+                        savedAt: autoSaved.savedAt
+                    });
+
+                    // Zustand 스토어 업데이트 (가장 중요!)
+                    setCode(autoSaved.code || "// write code");
+                    setOutput(autoSaved.output || "");
+
+                    // 에디터가 이미 마운트되어 있으면 즉시 업데이트
+                    if (editorInstance) {
+                        console.log("📝 에디터에 코드 설정");
+                        editorInstance.setValue(autoSaved.code || "// write code");
+                    }
+
+                    setLastSavedTime(new Date(autoSaved.savedAt));
+                } else {
+                    console.log("ℹ️ 자동 저장 없음 - 기본값 사용");
+                    setCode("// write code");
+                }
+            } catch (error) {
+                // 204 No Content 또는 404는 정상 (자동 저장 없음)
+                if (error.response?.status === 204 || error.response?.status === 404) {
+                    console.log("ℹ️ 자동 저장된 코드 없음 (204/404)");
+                    setCode("// write code");
+                } else {
+                    console.error("❌ 자동 저장 불러오기 실패:", error);
+                    setCode("// write code");
+                }
+            } finally {
+                setIsLoading(false);
+                isInitialLoadRef.current = false;
+            }
         };
 
-        try {
-            socket.publish(`/app/code/${classId}`, message);
-            console.log("======보내는 데이터======", message)
-        } catch (error) {
-            alert('전송 실패: ' + error.message);
-        }
-    };
+        loadAutoSaved();
+    }, [classId, setCode]);
 
+    /**
+     * 코드 자동 전송 (디바운싱 적용)
+     */
+    useEffect(() => {
+        // 초기 로딩 중이거나 첫 로드일 때는 전송 안 함
+        if (isInitialLoadRef.current || isLoading) return;
+
+        if (!socket || !socket.connected || !classId) return;
+
+        // 이전 타이머 취소
+        if (debounceTimerRef.current) {
+            clearTimeout(debounceTimerRef.current);
+        }
+
+        // 300ms 후에 전송 (타이핑이 멈추면 전송)
+        debounceTimerRef.current = setTimeout(() => {
+            const message = {
+                code: code,
+                language: 'javascript',
+                output: output || null,
+            };
+
+            try {
+                socket.publish(`/app/code/${classId}`, message);
+                setLastSavedTime(new Date());
+            } catch (error) {
+                console.error('자동 전송 실패:', error);
+            }
+        }, 300);
+
+        // 클린업
+        return () => {
+            if (debounceTimerRef.current) {
+                clearTimeout(debounceTimerRef.current);
+            }
+        };
+    }, [code, output, socket, classId, isLoading]);
 
     /**
      * 라이트/다크 자동 적용
@@ -84,6 +156,11 @@ const CodePanel = ({socket, classId}) => {
         observer.observe(wrapper);
 
         editor.__observer = observer;
+
+        // 에디터 마운트 후 현재 code 값으로 설정
+        if (code && code !== "// write code") {
+            editor.setValue(code);
+        }
     };
 
     /**
@@ -175,6 +252,24 @@ const CodePanel = ({socket, classId}) => {
 
     return (
         <div className={`${styles.relative} ${styles.editorWrapper}`}>
+            {/* 자동 저장 상태 표시 */}
+            {lastSavedTime && (
+                <div style={{
+                    position: 'absolute',
+                    top: '8px',
+                    right: '8px',
+                    fontSize: '11px',
+                    color: 'var(--color-text-secondary)',
+                    backgroundColor: 'var(--color-bg-secondary)',
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    zIndex: 10,
+                    pointerEvents: 'none'
+                }}>
+                    💾 {lastSavedTime.toLocaleTimeString()}
+                </div>
+            )}
+
             <Editor
                 language="javascript"
                 value={code}
@@ -217,16 +312,6 @@ const CodePanel = ({socket, classId}) => {
                                  stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
                                 <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
-                            </svg>
-                        </button>
-
-                        {/* 코드 전송 버튼 */}
-                        <button onClick={sendCode} className={styles.sendButton} title="코드 공유">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="m22 2-7 20-4-9-9-4Z"/>
-                                <path d="M22 2 11 13"/>
                             </svg>
                         </button>
                     </div>

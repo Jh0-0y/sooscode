@@ -13,36 +13,29 @@ const CodeSharePanel = ({socket, classId}) => {
     const [editorInstance, setEditorInstance] = useState(null);
     const [monacoInstance, setMonacoInstance] = useState(null);
     const [output, setOutput] = useState("");
+    const [lastUpdateTime, setLastUpdateTime] = useState(null);
 
     /**
      * 웹소켓 구독
      */
     useEffect(() => {
         if (!socket || !classId) {
-            console.warn('[CodeSharePanel] Socket or classId not available');
             return;
         }
 
         if (!socket.connected) {
-            console.warn('[CodeSharePanel] Socket not connected yet');
             return;
         }
-
-        console.log('[CodeSharePanel] Subscribing to: /topic/code/' + classId);
 
         const subscription = socket.subscribe(
             `/topic/code/${classId}`,
             (data) => {
                 handleReceivedCode(data);
-
-                console.log('======받는 데이터======', data);
             }
         );
 
-
         return () => {
             if (subscription) {
-                console.log('[CodeSharePanel] Unsubscribing...');
                 subscription.unsubscribe();
             }
         };
@@ -52,23 +45,33 @@ const CodeSharePanel = ({socket, classId}) => {
      * 받은 코드 처리
      */
     const handleReceivedCode = (dto) => {
-
-        console.log("[업데이트] code:", dto.code);
-        console.log("[업데이트] output:", dto.output);
-
         // 코드 업데이트
         if (dto.code !== undefined) {
             setSharedCode(dto.code);
 
             if (editorInstance) {
-                const pos = editorInstance.getPosition();
+                // 현재 커서 위치 저장
+                const currentPosition = editorInstance.getPosition();
+                const currentScrollTop = editorInstance.getScrollTop();
+
+                // 코드 업데이트
                 editorInstance.setValue(dto.code);
-                if (pos) editorInstance.setPosition(pos);
+
+                // 커서와 스크롤 위치 복원 (읽기 전용이지만 사용자 경험 향상)
+                if (currentPosition) {
+                    editorInstance.setPosition(currentPosition);
+                }
+                editorInstance.setScrollTop(currentScrollTop);
             }
+
+            // 마지막 업데이트 시간 기록
+            setLastUpdateTime(new Date().toLocaleTimeString());
         }
 
         // output 업데이트
-        setOutput(dto.output || "");
+        if (dto.output !== undefined) {
+            setOutput(dto.output || "");
+        }
     };
 
     /**
@@ -177,6 +180,20 @@ const CodeSharePanel = ({socket, classId}) => {
     return (
         <>
             <div className={`${styles.relative} ${styles.editorWrapper} ${styles.editorWrapperRight}`}>
+                {/* 실시간 업데이트 인디케이터 */}
+                {lastUpdateTime && (
+                    <div className={styles.updateIndigator}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                             className="lucide lucide-clock-check-icon lucide-clock-check">
+                            <path d="M12 6v6l4 2"/>
+                            <path d="M22 12a10 10 0 1 0-11 9.95"/>
+                            <path d="m22 16-5.5 5.5L14 19"/>
+                        </svg>
+                        마지막 업데이트: {lastUpdateTime}
+                    </div>
+                )}
+
                 <Editor
                     language="javascript"
                     value={sharedCode}

@@ -156,3 +156,21 @@
     display: flex;
     gap: var(--spacing-3);
 }
+
+.updateIndigator {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    background-color: var(--color-bg-secondary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    z-index: 10;
+}
+.updateIndigator svg {
+    width: 16px;
+}
