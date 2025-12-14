@@ -15,9 +15,6 @@ export default function CodePracticePanel() {
   const language = usePracticeStore((s) => s.language);
   const setLanguage = usePracticeStore((s) => s.setLanguage);
   const storeOutput = usePracticeStore((s) => s.output);
-  console.log(editorInstance);
-
-
   const title="code practice"
 
   // 테마 생성 함수 (라이트/다크 자동 적용)
@@ -67,7 +64,7 @@ export default function CodePracticePanel() {
         <Editor
           height="100%"
           width="100%"
-          language={language}     // ← 여기!
+          language={language.toLowerCase()}     // ← 여기!
           value={code}
           onChange={(v) => setCode(v)}
           onMount={handleEditorMount}

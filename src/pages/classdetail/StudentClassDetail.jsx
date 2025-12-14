@@ -12,14 +12,14 @@ import { useMyClasses } from "@/features/mypage/services/mypageService";
 import { useSnapshots } from "@/features/classdetail/services/snapshotService";
 
 import defaultImg from "@/assets/img1.jpg";
-import styles from "./StudentClassDetail.module.css";
+import styles from "./InstructorClassDetail.module.css";
 import { useClassInfo } from "../../features/classdetail/services/classinfoService";
 import SnapshotSection from "@/features/classdetail/components/sections/SnapshotSection";
 import { useNavigate } from "react-router-dom";
 import FileSection from "../../features/classdetail/components/sections/FileSection";
 import NoticeSection from "../../features/classdetail/components/sections/NoticeSection";
 
-export default function StudentClassDetail() {
+export default function InstructorClassDetail() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("snapshot");
 
@@ -40,35 +40,8 @@ export default function StudentClassDetail() {
 
   return (
     <div className={styles.wrapper}>
-      
-      {/* 왼쪽 프로필 + 클래스 리스트 */}
-      <div className={styles.profileSection}>
-        
-        <div className={styles.profileCardWrapper}>
-          <ProfileCard
-            name={user.name}
-            email={user.email}
-            imageUrl={defaultImg}
-          />
-        </div>
-
-        <div className={styles.lectureSection}>
-          {myClasses?.map(item => (
-            <LectureCard
-              key={item.classId}
-              title={item.title}
-              teacher={item.teacherName}
-              imageUrl={item.thumbnailUrl ?? defaultImg}
-              onClick={() => navigate(`/classdetail/student?classId=${item.classId}`)}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* 오른쪽 상세 */}
       <div className={styles.detailSection}>
         <div className={styles.contentContainer}>
-
           <ClassDetailTopBar
             title={Lecutretitle}
             classId={classId}
@@ -77,23 +50,13 @@ export default function StudentClassDetail() {
             activeTab={activeTab}
             onChange={(tab) => setActiveTab(tab)}
           />
-
-          {activeTab === "snapshot" && (
-            <SnapshotSection
-              snapshots={snapshots}
-            />
-          )}
-
-          {/* {activeTab === "notice" && <NoticeSection />} */}
-          {activeTab === "files" && <FileSection
-           classId={classId}
-           />}
-
-          {activeTab === "notice" && <NoticeSection
-
-          />
-          
-          }
+          {activeTab === "snapshot" && (<SnapshotSection snapshots={snapshots}/>)}
+          <div className={styles.fileTabWrapper}>
+            <div className={styles.fileTab}>
+              {activeTab === "files" && <FileSection classId={classId}/>}
+            </div>
+          </div>
+          {activeTab === "notice" && <NoticeSection/>}
         </div>
       </div>
     </div>

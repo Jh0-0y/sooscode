@@ -19,15 +19,10 @@ export default function HCJPracticeSection({
   return (
     <div className={styles.wrapper}>
       <PanelGroup direction="vertical">
-
-        {/* Code 전체 영역 */}
-        <Panel defaultSize={33} minSize={15}>
+        <Panel defaultSize={60} minSize={15}>
           <div className={styles.codeWrapper}>
-
-            {/* ★ Code 내부 3등분 → horizontal !!! */}
             <PanelGroup direction="horizontal">
-
-              <Panel defaultSize={33.33} minSize={10}>
+              <Panel defaultSize={33} minSize={10}>
                 <div className={styles.panelContent}>
                   <HCJCodePanelHeader HCJtitle={"HTML"}/>
                   <div className={styles.codeContainer}>
@@ -39,8 +34,7 @@ export default function HCJPracticeSection({
                 </div>
               </Panel>
               <PanelResizeHandle className={styles.innerHandle} />
-
-              <Panel defaultSize={33.33} minSize={10}>
+              <Panel defaultSize={33} minSize={10}>
                 <div className={styles.panelContent}>
                   <HCJCodePanelHeader HCJtitle={"CSS"}/>
                   <div className={styles.codeContainer}>
@@ -52,8 +46,7 @@ export default function HCJPracticeSection({
                 </div>
               </Panel>
               <PanelResizeHandle className={styles.innerHandle} />
-
-              <Panel defaultSize={33.33} minSize={10}>
+              <Panel defaultSize={34} minSize={10}>
                 <div className={styles.panelContent}>
                   <HCJCodePanelHeader HCJtitle={"JS"}/>
                   <div className={styles.codeContainer}>
@@ -64,22 +57,16 @@ export default function HCJPracticeSection({
                   </div>
                 </div>
               </Panel>
-
             </PanelGroup>
           </div>
         </Panel>
-
         <PanelResizeHandle className={styles.handle} />
-
-        {/* Render */}
-        <Panel defaultSize={33} minSize={10}>
+        <Panel defaultSize={30} minSize={10}>
           <div className={styles.renderContainer}>
             <HCJCodePanelRender/>
           </div>
         </Panel>
-
         <PanelResizeHandle className={styles.handle} />
-        {/* Console */}
         <Panel defaultSize={10} minSize={10}>
           <div className={styles.consoleContainer}>
             <HCJCodePanelCompile/>

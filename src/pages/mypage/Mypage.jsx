@@ -13,15 +13,10 @@ export default function Mypage() {
   const { user} = useUser();
   const { data, isLoading, error } = useMyClasses();
   const navigate = useNavigate();
-  console.log("Mypage API response:", data);
 
   if (isLoading) return <div>로딩중...</div>;
   if (error) return <div>데이터 로딩 실패</div>;
   if (!user) return <div>Loading...</div>;
-
-  console.log(data.content);
-  console.log(data);
-  console.log(user);
 
   return (
     <div>

@@ -1,11 +1,13 @@
 .container {
-  background: #1e1e1e;
-  color: #eaeaea;
+  background: var(--color-gray-50);
+  color: var(--color-text-primary);
   padding: 16px;
   border-radius: 10px;
   width: 100%;
   font-family: "JetBrains Mono", monospace;
+  font-weight:bold;
   margin-top:5px;
+  border:2px solid var(--color-border-light);
 }
 
 .header {
@@ -38,10 +40,12 @@
 }
 
 .codeBlock {
-  background: #1e1e1e;
+  background: var(--color-gray-100);
   padding: 12px;
   border-radius: 6px;
-  white-space: pre-wrap;
-  overflow-x: auto;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
   line-height: 1.4;
+  cursor: pointer;
 }

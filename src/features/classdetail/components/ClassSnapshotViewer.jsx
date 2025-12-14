@@ -34,7 +34,7 @@ export default function ClassSnapshotViewer({ filename = "example.java", code ,o
         </div>
       </div>
 
-      <pre className={styles.codeBlock}>
+      <pre className={styles.codeBlock} onClick={handleExpand}>
         <code>{code}</code>
       </pre>
     </div>

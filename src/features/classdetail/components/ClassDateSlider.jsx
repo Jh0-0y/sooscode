@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./ClassDateSlider.module.css";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import DatePicker from "react-datepicker";
@@ -7,7 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 export default function ClassDateSlider({ dates, selected, onSelect }) {
   const [startIndex, setStartIndex] = useState(0);
   const [openPicker, setOpenPicker] = useState(false);
-
+  
   const visibleDates = dates.slice(startIndex, startIndex + 7);
 
   const goPrev = () => {
@@ -19,7 +19,7 @@ export default function ClassDateSlider({ dates, selected, onSelect }) {
       prev + 7 >= dates.length ? prev : prev + 7
     );
   };
-
+  
   const handleSelectDate = (dateObj) => {
     const raw = dateObj.toISOString().split("T")[0];
     const idx = dates.findIndex((d) => d.raw === raw);
@@ -32,6 +32,20 @@ export default function ClassDateSlider({ dates, selected, onSelect }) {
 
     setOpenPicker(false);
   };
+
+  useEffect(() => {
+    if (!dates.length) return;
+
+    const today = new Date().toISOString().split("T")[0];
+    const idx = dates.findIndex(d => d.raw === today);
+
+    if (idx !== -1) {
+      const pageStart = Math.floor(idx / 7) * 7;
+      setStartIndex(pageStart);
+      onSelect(today);
+    }
+  }, []); // ✅ 처음 마운트 시 1회
+  
 
   return (
   <div className={styles.container}>

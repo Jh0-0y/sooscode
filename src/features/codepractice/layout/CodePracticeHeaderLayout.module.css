@@ -46,6 +46,9 @@
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Right Section -------------------------------- */
@@ -90,6 +93,133 @@
   background: var(--color-primary-700);
 }
 
-.classTitle{
-  margin-left:5px;
+.classTitle {
+  margin-left: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  border: 1px solid var(--color-border-medium);
+  border-radius: 10px;
+  padding: 6px 10px;
+
+  cursor: pointer;
+  background: var(--color-gray-100);
+  transition: var(--transition-fast);
+}
+
+.classTitle:hover {
+  background: var(--color-gray-200);
+}
+@media (max-width: 1000px) {
+  .actionBtn {
+    font-size: 6px;              /* 기존 14 → 12 */
+    padding: 6px 10px;            /* 버튼 작아짐 */
+    min-width: auto;
+    height: 24px;                 /* 터치 가능 높이 유지 */
+    gap: 4px;
+  }
+
+  .runBtn {
+    padding: 6px 12px;            /* 실행 버튼은 살짝 강조 */
+  }
+  .title {
+  font-size: 24px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  }
+  .right {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  }
+  .classTitle {
+    font-size:6px;
+    margin-left: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    border: 1px solid var(--color-border-medium);
+    border-radius: 10px;
+    padding: 6px 10px;
+
+    cursor: pointer;
+    background: var(--color-gray-100);
+    transition: var(--transition-fast);
+  }
+
+  .classTitle:hover {
+    background: var(--color-gray-200);
+  }
+
+
+
+}
+
+
+
+@media (max-width: 768px) {
+  .actionBtn {
+    display:flex;
+    align-item:center;
+    font-size: 6px;              /* 기존 14 → 12 */
+    padding: 6px 10px;            /* 버튼 작아짐 */
+    min-width: auto;
+    height: 24px;                 /* 터치 가능 높이 유지 */
+    gap: 4px;
+    width:40px;
+    justify-content:center;
+  }
+
+  
+
+
+
+  .runBtn {
+    padding: 6px 12px;            /* 실행 버튼은 살짝 강조 */
+  }
+  .title {
+  font-size: 24px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+}
+
+@media (max-width: 430px) {
+  .right {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+
+  /* classTitle → 아이콘 느낌 */
+  .classTitle {
+    max-width: 70px;
+    font-size: 6px;
+  }
+
+  .title {
+    font-size: 10px;
+    max-width: 90px;
+  }
+
+  .runBtn {
+    font-size: 11px;
+    padding: 6px 8px;
+  }
+  .snapshotBtn,
+  .sidebarBtn,
+  .darkmodeBtn,
+  .hcjBtn{
+    display:none;
+  }
 }

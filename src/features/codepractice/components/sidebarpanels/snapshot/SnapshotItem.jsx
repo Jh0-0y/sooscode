@@ -8,9 +8,6 @@ export default function SnapshotItem({ snapshot,onClick ,lang}) {
     <div className={styles.item} onClick={onClick}>
       <div className={styles.title}>
         {snapshot.title}
-        <div className={styles.lang}>
-          JAVA
-        </div>
       </div>
       <div className={styles.meta}>
         {formatDate(snapshot.createdAt)}

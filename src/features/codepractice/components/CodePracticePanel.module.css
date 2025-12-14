@@ -13,7 +13,7 @@
 
 .codeContainer {
   flex: 8;
-  border: 2px solid white;
+  border: 2px solid var(--color-border-light);
   min-height: 0;      /* flex shrink 허용 */
   overflow: hidden;   /* Monaco 강제 확장 방지 */
   
@@ -44,5 +44,5 @@
   display:flex;
   flex:2;
   width:100%;
-  border:2px solid white;
+  border:2px solid var(--color-gray-900);
 }

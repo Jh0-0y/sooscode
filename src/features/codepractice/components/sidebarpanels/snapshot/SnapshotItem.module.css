@@ -12,7 +12,10 @@
 }
 
 .title {
-  display:flex;
+  min-width: 0;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
   flex-direction:row;
   font-size: 13px;
   font-weight: 600;

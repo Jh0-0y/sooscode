@@ -1,0 +1,37 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.sectionContainer {
+  margin-top:20px;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 600px;
+
+  display: flex;
+  flex-direction: column;
+
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-6);
+
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+    
+}
+
+.header {
+  margin-bottom: var(--spacing-6);
+}
+
+.thumbnailWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.thumbnail {
+  width: 80%;
+}

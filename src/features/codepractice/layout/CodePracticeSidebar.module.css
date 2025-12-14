@@ -2,6 +2,7 @@
   display: flex;
   flex-direction:column;
   width:200px;
+  height:99%;
   min-width: 100px;
   max-width: 600px;
   margin: var(--spacing-1);
@@ -9,10 +10,12 @@
   border: 2px solid var(--color-border-light);
   background: var(--color-bg-primary);
   position: relative;
+  overflow-y: scroll !important;
 }
 
 .contentContainer{
   padding:5px;
+  height:100%;
 }
 
 .resizeHandle {
@@ -24,4 +27,57 @@
   height: 100%;
   cursor: col-resize;
   z-index: 9999;
+}
+
+/* Scroll */
+/* ===== Dark Modern Scrollbar ===== */
+
+/* 전체 스크롤바 */
+.sidebarWrapper::-webkit-scrollbar {
+  width: 3px;
+}
+
+.sidebarWrapper::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 6px 0;
+}
+
+.sidebarWrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+
+.sidebarWrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.sidebarWrapper::-webkit-scrollbar-thumb:active {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+
+
+@media (max-width: 768px) {
+  
+  .ContentWrapper {
+    flex-direction: column;
+  }
+  .sidebarWrapper {
+    flex: 1;
+    width:100%;
+    min-width: 100%;
+    max-width: none;
+    min-height: 0;
+    max-height: calc(100vh - 160px);
+
+  }
+  .contentContainer {
+    flex: 1;
+    width:100%;
+    min-width: 100%;
+    max-width: none;
+    min-height: 0;
+  }
+  
 }

@@ -33,9 +33,9 @@ export const getSnapshotsByDate = async ({ classId, day }) => {
 };
 
 // 저장
-export const saveSnapshot = async ({ title, content, classId }) => {
-  const res = await api.post(`/api/snapshot/`, { title, content, classId });
-  return res.data;
+export const saveSnapshot = async ({ title, content, classId ,language}) => {
+  const res = await api.post(`/api/snapshot/`, { title, content, classId, language });
+  return res;
 };
 
 // 수정
@@ -65,3 +65,27 @@ const { refetch, data, isLoading: snapLoading, isError, error } = useSnapshots(c
 
   <button onClick={handleTestSnapshot}>🔍 스냅샷 API 테스트 하기</button>
 */
+
+
+
+/**
+ * 언어 + 날짜 범위로 스냅샷 조회
+ */
+export const getSnapshotsByLanguageAndDate = async ({
+  classId,
+  language,
+  startDate,
+  endDate,
+}) => {
+  const res = await api.get("/api/snapshot/read/language/date", {
+    params: {
+      classId,
+      language,
+      startDate,
+      endDate,
+    },
+  });
+
+  // ⚠️ axios interceptor 때문에 res === response.data
+  return res.data.content;
+};

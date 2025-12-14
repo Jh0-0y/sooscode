@@ -10,7 +10,7 @@ export default function HCJCodePanelRender() {
   const language = usePracticeStore((state) => state.language);
 
   useEffect(() => {
-    if (language !== "hcj") return;
+    if (language !== "CSS_HTML_JS") return;
     if (!iframeRef.current) return;
     if (!renderHTML) return;
 

@@ -9,7 +9,7 @@
 }
 
 .modal {
-  background: var(--color-gray-800);
+  background: var(--color-bg-primary);
   width: 50%;
   min-height:70%;
   max-height: 80vh;
@@ -42,12 +42,35 @@
 }
 
 .codeBlock {
-  background: var(--color-gray-900);
+  background: var(--color-bg-secondary);
   padding: var(--spacing-4);
   border-radius: var(--radius-md);
-  color: var(--color-text-inverse);
+  color: var(--color-text-primary);
   font-size: var(--font-size-sm);
   overflow-y: auto;
   white-space: pre-wrap; /* 줄바꿈 유지 */
   flex-grow: 1;
+}
+
+/* 스크롤바 전체 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* 트랙 */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* 손잡이 */
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+
+/* hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.32);
 }

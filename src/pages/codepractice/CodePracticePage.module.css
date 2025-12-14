@@ -5,6 +5,7 @@
   height: 100vh;
   min-height: 0;
   background-color:var(--color-bg-primary);
+  overflow-x: hidden;
 }
 
 .ContentWrapper {
@@ -41,4 +42,24 @@
 /* 스크롤바 Hover */
 .PageWrapper::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #6bb3ff, #1e7aff);
+}
+
+@media (max-width: 768px) {
+  /* .sidebar {
+    display: none;
+  } */
+   
+  .ContentWrapper {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    order: 2;                 /* ← 무조건 아래 */
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .sidebar{
+    display:none;
+  }
 }

@@ -15,7 +15,7 @@
   width: 100%;
   display: flex;            /* ← 필수 */
   flex-direction: column;   /* ← 필수 */
-  border: 2px solid white;
+  border: 1px solid var(--color-border-light);
   padding: 5px;
   box-sizing: border-box;
   overflow: hidden;         /* ← Monaco를 위해 auto 절대 X */
@@ -36,5 +36,5 @@
 .consoleContainer{
   width:100%;
   hegith:100%;
-  
+  border: 1px solid var(--color-border-light);
 }

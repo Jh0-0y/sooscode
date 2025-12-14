@@ -1,0 +1,35 @@
+.viewer {
+  font-family: var(--font-family-primary);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-text-primary);
+}
+
+/* 문서 느낌 */
+.viewer h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-5);
+}
+
+.viewer h2 {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-4);
+}
+
+.viewer p {
+  margin-bottom: var(--spacing-3);
+  color: var(--color-text-secondary);
+}
+
+.viewer ul {
+  padding-left: 20px;
+  margin-bottom: var(--spacing-4);
+}
+
+.viewer code {
+  background: #1f2937;
+  color: #e5e7eb;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: var(--font-family-code);
+}

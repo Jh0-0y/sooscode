@@ -36,5 +36,6 @@
 @media (max-width: 899px) {
   .gridContainer {
     grid-template-columns: repeat(2, 1fr);
+    margin-left:4%;
   }
 }

@@ -1,0 +1,59 @@
+.wrapper {
+  width: 100%;
+  border: 2px solid #333;
+  border-radius: 10px;
+  padding: 12px;
+
+  cursor: pointer;
+  position: relative;
+  background: #1f1f22;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* hover 효과 (transform 제거) */
+.wrapper:hover {
+  background: #2a2a2f;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+}
+
+.label {
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* 🔥 picker 정확히 중앙 정렬 */
+.picker {
+  position: absolute;
+  top: calc(100% + 8px);
+
+  left: 50%;
+  transform: translateX(-50%);
+
+  z-index: 1000;
+  background: #1f1f22;
+  padding: 12px;
+  border-radius: 12px;
+
+  display: flex;                 /* 🔥 추가 */
+  flex-direction: column;        /* 🔥 */
+  align-items: center;           /* 🔥 달력 가로 중앙 */
+}
+/* 닫기 버튼 */
+.closeBtn {
+  width: 100%;
+  margin-top: 6px;
+  background: #444;
+  border: none;
+  padding: 8px;
+  color: white;
+  cursor: pointer;
+  border-radius: 6px;
+}

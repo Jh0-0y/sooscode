@@ -1,0 +1,150 @@
+.editorWrapper {
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-6);
+  background: var(--color-bg-primary);
+}
+
+/* =========================
+   ProseMirror 기본 설정
+========================= */
+.editorWrapper :global(.ProseMirror) {
+  outline: none;
+  font-family: var(--font-family-primary);
+  line-height: var(--line-height-relaxed);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+}
+
+/* 커서 위치에서도 padding 유지 */
+.editorWrapper :global(.ProseMirror > *:last-child) {
+  margin-bottom: 0;
+}
+
+/* =========================
+   제목
+========================= */
+.editorWrapper h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  margin: var(--spacing-6) 0 var(--spacing-4);
+}
+
+.editorWrapper h2 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  margin: var(--spacing-5) 0 var(--spacing-3);
+}
+
+.editorWrapper h3 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  margin: var(--spacing-4) 0 var(--spacing-2);
+}
+
+/* =========================
+   문단
+========================= */
+.editorWrapper p {
+  margin: 0 0 var(--spacing-3);
+}
+
+/* 빈 문단 높이 유지 (엔터 연타 대응) */
+.editorWrapper p:empty::after {
+  content: "";
+  display: inline-block;
+  height: 1em;
+}
+
+/* =========================
+   리스트
+========================= */
+.editorWrapper ul,
+.editorWrapper ol {
+  padding-left: 24px;
+  margin: 0 0 var(--spacing-3);
+}
+
+.editorWrapper li {
+  margin-bottom: var(--spacing-1);
+}
+
+/* =========================
+   인라인 강조
+========================= */
+.editorWrapper strong {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.editorWrapper em {
+  font-style: italic;
+  color: var(--color-text-secondary);
+}
+
+/* =========================
+   코드
+========================= */
+.editorWrapper code {
+  background: #1f2937;
+  color: #e5e7eb;
+  padding: 3px 6px;
+  border-radius: 6px;
+  font-size: 0.9em;
+}
+
+/* 블록 코드 (StarterKit 기준) */
+.editorWrapper pre {
+  background: #0f172a;
+  color: #e5e7eb;
+  padding: var(--spacing-4);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin: var(--spacing-4) 0;
+}
+
+.editorWrapper pre code {
+  background: none;
+  padding: 0;
+}
+
+/* =========================
+   Placeholder (TipTap)
+========================= */
+.editorWrapper
+  :global(.ProseMirror p.is-editor-empty:first-child::before) {
+  content: attr(data-placeholder);
+  color: var(--color-text-tertiary);
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
+
+/* =========================
+   선택 영역
+========================= */
+.editorWrapper :global(.ProseMirror ::selection) {
+  background: rgba(59, 130, 246, 0.3); /* blue-500 */
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  padding-bottom: var(--spacing-3);
+  margin-bottom: var(--spacing-4);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.toolbar button {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border-light);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.toolbar button:hover {
+  background: var(--color-bg-hover);
+}

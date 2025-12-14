@@ -2,14 +2,22 @@ import { create } from "zustand";
 import { loadPyodideInstance } from "../utils/PyodideLoader";
 import { runJavaCode } from "../services/compile/compile.api";
 
+import { DEFAULT_SNIPPETS } from "@/features/codepractice/constants/defaultSnippets";
+
+let pythonWorker = null;
+
 function encodeBase64(str) {
   return btoa(unescape(encodeURIComponent(str)));
 }
 
 export const usePracticeStore = create((set, get) => ({
-  // default 및 변수 선언  
-  code: `print("Hello Python!")`,
-  language: "python",
+  /* default snippets */ 
+  code: `public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}`,
+  language: "JAVA",
   output: "",
   htmlCode: `<div id="app">
                 <h1>Hello HCJ!</h1>
@@ -36,17 +44,31 @@ export const usePracticeStore = create((set, get) => ({
             border-radius: 5px;
             cursor: pointer;
           }`,
-            jsCode: `document.getElementById("btn").addEventListener("click", () => {
-            console.log("JS is working!");
-            alert("JS 실행됨!");
-          });`,
+  jsCode: `document.getElementById("btn").addEventListener("click", () => {
+  console.log("JS is working!");
+  alert("JS 실행됨!");
+  });`,
+  classId: null,
+  classTitle:"강의가 선택되지 않았습니다.",
+  isRunning: false,
+  
 
-  // zustand set 등록
+  /* Store Sets */
   setCode: (val) => set({ code: val }),
-  setLanguage: (lang) => set({ language: lang }),
+  setLanguage: (lang) => {
+    if (lang === "CSS_HTML_JS") {
+      set({ language: "CSS_HTML_JS" });
+    } else {
+      set({ language: lang });
+    }
+  },
   setOutput: (data) => set({ output: data }),
-  resetCode: () => set({ code: "" }),
-
+  resetCode: () => set({
+     code: "" ,
+     htmlCode: "",
+    cssCode: "",
+    jsCode: "",
+    }),
   consoleOutput: "",
   setConsoleOutput: (v) => set({ consoleOutput: v }),
   clearConsole: () => set({ consoleOutput: "" }),
@@ -61,21 +83,31 @@ export const usePracticeStore = create((set, get) => ({
     cssCode: "",
     jsCode: "",
   }),
+  resetHCJToDefault: () => {
+  const hcj = DEFAULT_SNIPPETS.CSS_HTML_JS;
+  set({
+    htmlCode: hcj.html,
+    cssCode: hcj.css,
+    jsCode: hcj.js,
+  });
+  },
+  setClassId : (v) => set({ classId:v }),
+  setClassTitle : (v) => set({classTitle:v}),
   
 
+  /* Header Action */
   run: async () => {
     const { code, language ,htmlCode, cssCode, jsCode} = get();
+    if (get().isRunning) return;
 
     // =======================================
     // Python 실행
     // =======================================
-    if (language === "python") {
+    /*
+    if (language === "PYTHON") {
       try {
-        console.log("python compile 실행");
         const pyodide = await loadPyodideInstance();
-
         let outputText = "";
-
         pyodide.globals.set("print", (...args) => {
           outputText += args.join(" ") + "\n";
         });
@@ -92,11 +124,38 @@ export const usePracticeStore = create((set, get) => ({
       }
       return;
     }
+      */
+     if (language === "PYTHON") {
+      if (!pythonWorker) {
+        pythonWorker = new Worker(
+          new URL("../worker/pythonWorker.js", import.meta.url)
+        );
+      }
+
+      set({ isRunning: true, output: "실행 중..." });
+
+      pythonWorker.onmessage = (e) => {
+        const { type, output, error } = e.data;
+
+        if (type === "RESULT") {
+          set({ output });
+        }
+
+        if (type === "ERROR") {
+          set({ output: error });
+        }
+
+        set({ isRunning: false });
+      };
+
+      pythonWorker.postMessage({ code });
+      return;
+    }
 
     // =======================================
     // Java 실행
     // =======================================
-    if (language === "java") {
+    if (language === "JAVA") {
   try {
     console.log("java 컴파일러 실행");
 
@@ -122,7 +181,7 @@ export const usePracticeStore = create((set, get) => ({
     // ================================
     // HCJ 실행 = 브라우저 렌더링
     // ================================
-    if (language === "hcj") {
+    if (language === "CSS_HTML_JS") {
       console.log("HCJ render 실행");
       const safeJS = JSON.stringify(jsCode);
 

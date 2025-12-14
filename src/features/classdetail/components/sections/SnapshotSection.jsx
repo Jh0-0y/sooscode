@@ -1,9 +1,10 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import ClassDateSlider from "../ClassDateSlider";
 import ClassSnapshotViewer from "../ClassSnapshotViewer";
 import CodeModal from "../CodeModal";
 import styles from "./SnapshotSection.module.css";
 import { generateDateRange } from "@/features/classdetail/utils/generateDateRange";
+import MobileDatePicker from "../MobileDatePicker";
 
 export default function SnapshotSection({ snapshots }) {
 
@@ -13,6 +14,8 @@ export default function SnapshotSection({ snapshots }) {
       snap.createdAt.split("T")[0]
     ) ?? [];
   }, [snapshots]);
+  const today = new Date().toISOString().split("T")[0];
+  const todayRaw = new Date().toISOString().split("T")[0];
 
   // 2) 수업 기간은 임시로 하드코딩 (나중엔 ClassInfo 데이터로 대체)
   const dates = useMemo(() => {
@@ -24,7 +27,7 @@ export default function SnapshotSection({ snapshots }) {
   }, [snapshotDates]);
 
   // 3) 초기 선택 날짜
-  const [selected, setSelected] = useState(dates[0]?.raw ?? null);
+  const [selected, setSelected] = useState(today);
 
   // 4) 필터링된 스냅샷 목록
   const filteredSnapshots =
@@ -43,12 +46,23 @@ export default function SnapshotSection({ snapshots }) {
   };
 
   return (
-    <div>
-      <ClassDateSlider
+    <div className={styles.detailSnapshotWrapper}>
+      <div className={styles.detailSnapshotSection}>
+        <div className={styles.slider}>
+          <ClassDateSlider
+            dates={dates}
+            selected={selected}
+            onSelect={setSelected}
+          />
+        </div>
+
+      <div className={styles.mobileDatePicker}>
+      <MobileDatePicker
         dates={dates}
         selected={selected}
         onSelect={setSelected}
       />
+      </div>
 
       <div className={styles.snapshotContainer}>
         {filteredSnapshots.length > 0 ? (
@@ -76,6 +90,7 @@ export default function SnapshotSection({ snapshots }) {
         title={selectedSnapshot?.title}
         code={selectedSnapshot?.content}
       />
+      </div>
     </div>
   );
 }

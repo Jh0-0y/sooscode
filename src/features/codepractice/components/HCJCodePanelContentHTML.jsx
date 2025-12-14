@@ -1,16 +1,56 @@
+import { useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 import styles from "./HCJCodePanelContent.module.css";
+import { useDarkMode } from "@/hooks/useDarkMode";
 
 export default function HCJCodePanelContentHTML({ code, onChange }) {
+  const { darkMode } = useDarkMode();
+  const [monacoInstance, setMonacoInstance] = useState(null);
+
+  const applyTheme = (monaco) => {
+    if (!monaco) return;
+
+    const bg = getComputedStyle(document.documentElement)
+      .getPropertyValue("--color-bg-primary")
+      .trim();
+
+    const baseTheme = darkMode ? "vs-dark" : "vs";
+
+    monaco.editor.defineTheme("customTheme", {
+      base: baseTheme,
+      inherit: true,
+      rules: [],
+      colors: {
+        "editor.background": bg,
+      },
+    });
+
+    monaco.editor.setTheme("customTheme");
+  };
+
+  useEffect(() => {
+    if (!monacoInstance) return;
+
+    requestAnimationFrame(() => {
+      applyTheme(monacoInstance);
+    });
+  }, [code, darkMode]);
+
+  const handleEditorMount = (_, monaco) => {
+    setMonacoInstance(monaco);
+    applyTheme(monaco);
+  };
+
   return (
     <div className={styles.wrapper}>
       <Editor
         height="100%"
         width="100%"
-        defaultLanguage="html"
+        language="html"
         value={code}
         onChange={(value) => onChange(value)}
-        theme="vs-dark"
+        onMount={handleEditorMount}
+        theme="customTheme"
         options={{
           fontSize: 14,
           minimap: { enabled: false },

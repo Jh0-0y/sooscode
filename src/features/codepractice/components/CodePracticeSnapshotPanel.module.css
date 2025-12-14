@@ -11,7 +11,7 @@
 
 .snapshotContainer {
   flex: 8;
-  border: 2px solid white;
+  border: 2px solid var(--color-border-light);
   min-height: 0;      /* ★★★ flex shrink 허용 */
   overflow: hidden;   /* ★★★ Monaco 강제 확장 방지 */
 }
@@ -23,4 +23,23 @@
   font-size: 14px;
   padding: 2px 6px;
   border-radius: 4px;
+}
+
+.ellipsisTitle {
+  max-width: 300px;        /* ← 원하는 폭 */
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+@media (max-width: 1000px) {
+  .ellipsisTitle {
+  max-width: 120px;        /* ← 원하는 폭 */
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 }

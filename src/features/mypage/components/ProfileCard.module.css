@@ -12,7 +12,7 @@
 .profileBackground {
   width: 100%;
   height: 140px;
-  background: linear-gradient(90deg, #6f7dfb, #5b5fe8);
+  background: linear-gradient(90deg, #6f7dfb, var(--color-primary-300: #93c5fd));
 }
 
 /* ===== 프로필 이미지 ===== */
@@ -47,7 +47,20 @@
 
 .nameContainer,
 .emailContainer {
+  flex-direction:row;
   margin-bottom: 20px;
+}
+
+.nameContent{
+  display:flex;
+  flex-direction:row;
+  align-item:center;
+  gap:10px;
+}
+
+.editButton{
+  margin-top:3px;
+  cursor:pointer;
 }
 
 @media (max-width: 480px) {
