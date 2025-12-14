@@ -158,7 +158,9 @@ public class SnapshotServiceImpl implements SnapshotService {
                 .stream()
                 .map(s -> new SnapshotTitleResponse(
                         s.getCodeSnapshotId(),
-                        s.getTitle()
+                        s.getTitle(),
+                        s.getLanguage(),
+                        s.getCreatedAt()
                 ))
                 .toList();
     }
@@ -174,13 +176,18 @@ public class SnapshotServiceImpl implements SnapshotService {
 
     }
     @Override
-    public  Page<SnapShotResponse> readSnapshotByLanguageAndDate(Long userId, Long classId, SnapshotLanguage language, LocalDateTime start, LocalDateTime end, Pageable pageable){
+    public  Page<SnapshotTitleResponse> readSnapshotByLanguageAndDate(Long userId, Long classId, SnapshotLanguage language, LocalDateTime start, LocalDateTime end, Pageable pageable){
         Page<CodeSnapshot> page = codeSnapshotRepository
                 .findByUser_UserIdAndClassRoom_ClassIdAndLanguageAndCreatedAtBetween(
                         userId, classId, language, start, end, pageable
                 );
 
-        return page.map(SnapShotResponse::from);
+        return page.map(s -> new SnapshotTitleResponse(
+                s.getCodeSnapshotId(),
+                s.getTitle(),
+                s.getLanguage(),
+                s.getCreatedAt()
+        ));
 
     }
 }
