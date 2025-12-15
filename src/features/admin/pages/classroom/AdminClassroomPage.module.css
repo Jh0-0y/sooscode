@@ -1,0 +1,38 @@
+/* ===== AdminClassroom Page Styles ===== */
+
+/* Description Cell */
+.descriptionCell {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-width: 200px;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+/* Date Cell */
+.dateCell {
+    white-space: nowrap;
+    font-size: var(--font-size-sm);
+}
+
+/* Type Badge (Online/Offline) */
+.typeBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+}
+
+.typeBadge.online {
+    background-color: var(--color-info-50);
+    color: var(--color-info-700);
+}
+
+.typeBadge.offline {
+    background-color: var(--color-warning-50);
+    color: var(--color-warning-700);
+}
