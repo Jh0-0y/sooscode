@@ -1,0 +1,101 @@
+/* ===== Pagination Component Styles ===== */
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    margin-top: var(--spacing-6);
+    padding: var(--spacing-4) 0;
+}
+
+/* Page Button */
+.btnPage {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 var(--spacing-2);
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.btnPage:hover:not(:disabled) {
+    background-color: var(--color-bg-tertiary);
+    border-color: var(--color-primary-500);
+    color: var(--color-primary-600);
+}
+
+.btnPage:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background-color: var(--color-bg-secondary);
+}
+
+.btnPage.active {
+    background-color: var(--color-primary-600);
+    border-color: var(--color-primary-600);
+    color: var(--color-text-inverse);
+}
+
+.btnPage.active:hover {
+    background-color: var(--color-primary-700);
+    border-color: var(--color-primary-700);
+    color: var(--color-text-inverse);
+}
+
+/* Ellipsis */
+.ellipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+    user-select: none;
+}
+
+/* Page Info */
+.pageInfo {
+    margin-left: var(--spacing-3);
+    padding-left: var(--spacing-3);
+    border-left: 1px solid var(--color-border-medium);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .pagination {
+        gap: var(--spacing-1);
+        margin-top: var(--spacing-4);
+        padding: var(--spacing-3) 0;
+    }
+
+    .btnPage {
+        min-width: 32px;
+        height: 32px;
+        font-size: var(--font-size-xs);
+    }
+
+    .ellipsis {
+        min-width: 32px;
+        height: 32px;
+        font-size: var(--font-size-xs);
+    }
+
+    .pageInfo {
+        margin-left: var(--spacing-2);
+        padding-left: var(--spacing-2);
+        font-size: var(--font-size-xs);
+    }
+}

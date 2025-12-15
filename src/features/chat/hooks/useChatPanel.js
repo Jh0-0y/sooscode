@@ -2,7 +2,7 @@
 // 채팅 패널에서 사용하는 모든 상태 / 효과 / 소켓 / API 로직을 모아둔 커스텀 훅
 
 import { useEffect, useRef, useState } from "react";
-import useSocket from "@/features/classroom/hooks/useSocket.js";
+import useSocket from "@/features/classroom/hooks/class/useSocket.js";
 import { useUser } from "@/hooks/useUser.js";
 
 export const useChatPanel = (classId = 1) => {

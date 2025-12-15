@@ -1,0 +1,18 @@
+.adminPage {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-bg-secondary);
+}
+
+.mainContent {
+  flex: 1;
+  margin-left: 260px;
+  padding: var(--spacing-6);
+  transition: margin-left var(--transition-base);
+  overflow-y: auto;
+  min-height: 100vh;
+}
+
+.mainContent.collapsed {
+  margin-left: 80px;
+}
