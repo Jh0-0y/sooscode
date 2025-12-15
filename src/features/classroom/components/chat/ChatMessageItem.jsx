@@ -1,5 +1,4 @@
 import React from "react";
-import ReactionCheckbox from "@/features/chat/components/ui/ReactionCheckbox.jsx";
 export default function ChatMessageItem({
                                             msg,
                                             myEmail,

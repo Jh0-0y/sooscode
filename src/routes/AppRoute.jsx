@@ -26,10 +26,9 @@ import ColorPalette from '@/pages/test/ColorPalette';
 import LogoutButton from "@/features/auth/components/base/LogoutButton.jsx";
 
 // 현영 테스트
-import AdminPage from "@/pages/admin/AdminPage.jsx";
 import CodeTestPage from '../pages/codepractice/CodeTestPage';
 import ClassJoinTest from "@/features/classroom/pages/ClassJoinTest.jsx";
-import AdminPage from "@/features/admin/layouts/AdminLayout.jsx";
+import AdminLayout from "@/features/admin/layouts/AdminLayout.jsx";
 import AdminClassroomPage from "@/features/admin/pages/classroom/AdminClassroomPage.jsx";
 import AdminUserPage from "@/features/admin/pages/user/AdminUserPage.jsx";
 import AdminClassroomDetailPage from "@/features/admin/pages/classroom/AdminClassroomDetailPage.jsx";
@@ -50,8 +49,6 @@ export default function AppRoute() {
                 <Route path="/color" element={<ColorPalette />} />
                 <Route path="/logout" element={<LogoutButton />} />
 
-                <Route path="/admin" element={<AdminPage />} />
-                
                 <Route path="/classdetail/student" element={<StudentClassDetail />} />
                 <Route path="/classdetail/instructor" element={<InstructorClassDetail />} />
                 <Route path="/codepractice" element={<CodePracticePage />} />
@@ -73,7 +70,7 @@ export default function AppRoute() {
 
                 {/* Private - 관리자 전용 */}
                 {/*<Route element={<PrivateRoute allowedRoles={['ADMIN']} />}>*/}
-                    <Route path="/admin" element={<AdminPage />}>
+                    <Route path="/admin" element={<AdminLayout />}>
                         <Route path="classes" element={<AdminClassroomPage />} />
                         <Route path="classes/:id" element={<AdminClassroomDetailPage />} />
                         <Route path="users" element={<AdminUserPage />} />

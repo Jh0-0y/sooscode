@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import styles from '../styles/SnapshotModal.module.css';
+import styles from './SnapshotModal.module.css';
 
 /**
  * 스냅샷 저장을 위해 제목을 입력받는 모달 컴포넌트

@@ -2,8 +2,6 @@ import Editor from '@monaco-editor/react';
 import {useEffect, useRef, useState} from "react";
 import {useDarkMode} from "@/hooks/useDarkMode.js";
 import styles from './CodePanel.module.css';
-import {api} from "@/services/api";
-
 
 const CodeSharePanel = ({socket, classId}) => {
     const {darkMode} = useDarkMode();

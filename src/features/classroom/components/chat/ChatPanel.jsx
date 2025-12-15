@@ -1,9 +1,9 @@
 import React from "react";
 import "./ChatPanel.css";
-import { useChatPanel } from "./hooks/useChatPanel.js"; // 경로 맞게 수정
-import ChatHeader from "./components/ChatHeader.jsx";
-import ChatMessageList from "./components/ChatMessageList.jsx";
-import ChatInput from "./components/ChatInput.jsx";
+import { useChatPanel } from "@/features/classroom/hooks/chat/useChatPanel.js"; // 경로 맞게 수정
+import ChatHeader from "./ChatHeader.jsx";
+import ChatMessageList from "./ChatMessageList.jsx";
+import ChatInput from "./ChatInput.jsx";
 
 export default function ChatPanel({ classId = 1 }) {
     // 커스텀 훅에서 상태와 핸들러 전부 가져오기

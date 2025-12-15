@@ -11,7 +11,7 @@ const mockClassDetail = {
     title: 'JAVA 기초 강의',
     description: '자바 프로그래밍의 기초를 배우는 입문 과정입니다. 변수, 자료형, 조건문, 반복문부터 객체지향 프로그래밍의 기본 개념까지 학습합니다.',
     startDate: '2025-11-15',
-    endDate: '2025-12-19',
+    endDate: '2025-12-30',
     startTime: '09:00:00',
     endTime: '12:00:00',
     instructorName: '박지민',

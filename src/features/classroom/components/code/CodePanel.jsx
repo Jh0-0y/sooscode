@@ -2,8 +2,8 @@ import Editor from '@monaco-editor/react';
 import {useEffect, useRef, useState} from "react";
 import {useDarkMode} from "@/hooks/useDarkMode.js";
 import styles from './CodePanel.module.css';
-import {useCode} from "@/features/code/hooks/useCode.js";
-import {api} from "@/services/api";
+import {useCode} from "@/features/classroom/hooks/code/useCode.js";
+import {api} from "@/services/api.js";
 
 
 const CodePanel = ({socket, classId}) => {

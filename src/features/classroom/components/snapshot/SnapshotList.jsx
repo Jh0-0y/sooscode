@@ -1,4 +1,4 @@
-import styles from "../styles/SnapshotList.module.css";
+import styles from "./SnapshotList.module.css";
 import { formatDate } from "@/utils/date";
 
 const SnapshotList = ({ snapshots, onSelect, listRef, observerRef }) => {

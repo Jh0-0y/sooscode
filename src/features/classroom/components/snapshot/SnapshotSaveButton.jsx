@@ -1,4 +1,4 @@
-import styles from "../styles/SnapshotSaveButton.module.css";
+import styles from "./SnapshotSaveButton.module.css";
 
 /**
  * 현재 코드 스냅샷 저장 버튼 컴포넌트

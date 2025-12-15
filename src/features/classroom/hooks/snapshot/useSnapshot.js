@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { useCallback } from "react";
-import { snapshotService } from "@/features/snapshot/service/snapshotService";
-import { useCode } from "@/features/code/hooks/useCode";
-import { useToast } from "@/hooks/useToast";
+import { snapshotService } from "@/features/classroom/services/snapshotService.js";
+import { useCode } from "@/features/classroom/hooks/code/useCode.js";
+import { useToast } from "@/hooks/useToast.js";
 
 const snapshotStore = create((set) => ({
     snapshots: [],

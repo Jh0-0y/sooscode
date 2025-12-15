@@ -1,7 +1,7 @@
 import styles from './ClassSidebar.module.css';
 import { useState } from "react";
 import {useSidebar} from "@/features/classroom/hooks/class/useSidebar.js";
-import ChatPanel from "@/features/chat/ChatPanel.jsx";
+import ChatPanel from "@/features/classroom/components/chat/ChatPanel.jsx";
 
 const ClassSidebar = () => {
     const { collapsed } = useSidebar();

@@ -3,9 +3,9 @@ import styles from './ClassBody.module.css';
 import { useSidebar } from "@/features/classroom/hooks/class/useSidebar.js";
 import { useUser } from "@/hooks/useUser.js";
 import { useResize } from "@/features/classroom/hooks/class/useResize.js";
-import SnapshotPanel from "@/features/snapshot/components/SnapshotPanel.jsx";
-import CodePanel from "@/features/code/CodePanel.jsx";
-import CodeSharePanel from "@/features/code/CodeSharePanel.jsx";
+import SnapshotPanel from "@/features/classroom/components/snapshot/SnapshotPanel.jsx";
+import CodePanel from "@/features/classroom/components/code/CodePanel.jsx";
+import CodeSharePanel from "@/features/classroom/components/code/CodeSharePanel.jsx";
 
 const ClassBody = () => {
     const { collapsed } = useSidebar();

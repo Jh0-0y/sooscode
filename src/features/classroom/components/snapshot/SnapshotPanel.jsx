@@ -3,8 +3,8 @@ import SnapshotList from "./SnapshotList";
 import SnapshotModal from "./SnapshotModal";
 import SnapshotRestoreModal from "./SnapshotRestoreModal";
 import SnapshotSaveButton from "./SnapshotSaveButton";
-import { useSnapshot } from "@/features/snapshot/hooks/useSnapshot";
-import styles from "../styles/SnapshotPanel.module.css";
+import { useSnapshot } from "@/features/classroom/hooks/snapshot/useSnapshot.js";
+import styles from "./SnapshotPanel.module.css";
 
 const SnapshotPanel = () => {
     const {
