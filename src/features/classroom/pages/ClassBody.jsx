@@ -10,6 +10,8 @@ import {useParams} from "react-router-dom";
 import { decodeNumber } from "@/utils/urlEncoder";
 import { useSocketContext } from "@/features/classroom/contexts/SocketContext";
 import ModeToggleBar from "@/features/classroom/components/code/ModeToggleBar.jsx";
+import LivekitVideo from "@/features/classroom/components/livekit/LivekitVideo.jsx";
+
 
 const ClassBody = () => {
     const { collapsed } = useSidebar();
@@ -43,7 +45,7 @@ const ClassBody = () => {
             <div className={styles.page}>
                 <div className={styles.content}>
                     <div className={styles.inner}>
-                        라이브킷
+                        <LivekitVideo />
                     </div>
                 </div>
             </div>

@@ -1,0 +1,38 @@
+.reply-wrapper {
+    position: relative;
+}
+
+.reply {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.reply:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+}
+
+.reply:active {
+    transform: scale(0.96);
+}
+
+.reply-icon {
+    transition: stroke 0.2s ease, transform 0.2s ease;
+}
+
+.reply:hover .reply-icon {
+    stroke: #4f8cff;
+}
+.reply-wrapper:hover .reply-tooltip {
+    opacity: 1;
+}

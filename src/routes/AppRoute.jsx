@@ -38,6 +38,7 @@ import AdminUserDetailPage from "@/features/admin/pages/user/AdminUserDetailPage
 import CodePracticePage from '../pages/codepractice/CodePracticePage';
 import StudentClassDetail from '@/pages/classdetail/StudentClassDetail.jsx'
 import InstructorClassDetail from '@/pages/classdetail/InstructorClassDetail.jsx'
+import Mypage from '../pages/mypage/Mypage';
 
 export default function AppRoute() {
     return (
@@ -53,6 +54,7 @@ export default function AppRoute() {
                 <Route path="/classdetail/instructor" element={<InstructorClassDetail />} />
                 <Route path="/codepractice" element={<CodePracticePage />} />
                 <Route path="/test" element={<CodeTestPage />} />
+                <Route path="/mypage" element={<Mypage/>} />
 
                 <Route path="/" element={<Home />} />
                 <Route path="/classjoin" element={<ClassJoinTest />} />

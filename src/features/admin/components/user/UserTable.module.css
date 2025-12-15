@@ -1,0 +1,121 @@
+/* UserTable.module.css */
+
+.tableContainer {
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.dataTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.dataTable th {
+    padding: var(--spacing-3) var(--spacing-4);
+    background-color: var(--color-bg-tertiary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-secondary);
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--color-border-light);
+    text-align: center;
+}
+
+.dataTable td {
+    padding: var(--spacing-3) var(--spacing-4);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    border-bottom: 1px solid var(--color-border-light);
+    text-align: center;
+}
+
+.dataTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.dataTable tbody tr:hover {
+    background-color: var(--color-bg-secondary);
+}
+
+.clickableRow {
+    cursor: pointer;
+}
+
+.userName {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+.roleBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+}
+
+.roleBadge.student {
+    background-color: var(--color-primary-100);
+    color: var(--color-primary-700);
+}
+
+.roleBadge.instructor {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--color-success);
+}
+
+.roleBadge.admin {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: var(--color-warning);
+}
+
+.statusBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+}
+
+.statusBadge.active {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--color-success);
+}
+
+.statusBadge.inactive {
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-secondary);
+}
+
+.emptyState {
+    text-align: center;
+    padding: var(--spacing-8);
+    color: var(--color-text-secondary);
+}
+
+.emptyState svg {
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--spacing-4);
+}
+
+.emptyState p {
+    font-size: var(--font-size-base);
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .dataTable {
+        font-size: var(--font-size-xs);
+    }
+
+    .dataTable th,
+    .dataTable td {
+        padding: var(--spacing-2);
+    }
+}

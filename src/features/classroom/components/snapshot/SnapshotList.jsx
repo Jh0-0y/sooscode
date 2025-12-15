@@ -1,7 +1,7 @@
 import styles from "./SnapshotList.module.css";
 import { formatDate } from "@/utils/date";
 
-const SnapshotList = ({ snapshots, onSelect, listRef, observerRef }) => {
+const SnapshotList = ({ snapshots, onSelect, listRef }) => {
     return (
         <div ref={listRef} className={styles.container}>
             {snapshots.map((snapshot) => (
@@ -23,8 +23,6 @@ const SnapshotList = ({ snapshots, onSelect, listRef, observerRef }) => {
                     <span className={styles.title}>{snapshot.title}</span>
                 </button>
             ))}
-
-            <div ref={observerRef} style={{ height: 1 }} />
         </div>
     );
 };

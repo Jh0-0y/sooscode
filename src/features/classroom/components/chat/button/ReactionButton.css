@@ -1,0 +1,82 @@
+.chat-react-btn{
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: var(--spacing-1);
+    border-radius: var(--radius-md);
+    color: var(--color-border-dark);
+    transition: var(--transition-fast);
+}
+
+.chat-react-btn:hover{
+    background: var(--color-bg-secondary);
+    color: var(--color-primary-500);
+}
+
+.chat-react-btn:disabled{
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+.chat-react-icon{
+    width: var(--spacing-5);
+    height: var(--spacing-5);
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* 기본 상태: 체크 숨김 */
+.chat-react-icon path{
+    stroke-dasharray: 60;
+    stroke-dashoffset: 0;
+}
+
+.chat-react-icon polyline{
+    stroke-dasharray: 22;
+    stroke-dashoffset: 66;
+}
+
+/* ✅ 공감 존재하면 체크 표시 */
+.chat-react-btn.is-active{
+    color: var(--color-primary-500);
+}
+
+.chat-react-btn.is-active .chat-react-icon path{
+    stroke-dashoffset: 60;
+    transition: var(--transition-slow);
+}
+
+.chat-react-btn.is-active .chat-react-icon polyline{
+    stroke-dashoffset: 42;
+    transition: var(--transition-base);
+    transition-delay: var(--transition-fast);
+}
+/* ===== 기본 상태 (항상 transition 있음) ===== */
+.chat-react-icon path {
+    stroke-dasharray: 60;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset var(--transition-slow);
+}
+
+.chat-react-icon polyline {
+    stroke-dasharray: 22;
+    stroke-dashoffset: 66;
+    transition: stroke-dashoffset var(--transition-base);
+}
+
+/* ===== 활성화 (체크 그려짐) ===== */
+.chat-react-btn.is-active .chat-react-icon path {
+    stroke-dashoffset: 60;
+}
+
+.chat-react-btn.is-active .chat-react-icon polyline {
+    stroke-dashoffset: 42;
+    transition-delay: var(--transition-fast);
+}
+
+/* ===== 비활성화로 돌아갈 때 (딜레이 제거 → 자연스럽게 사라짐) ===== */
+.chat-react-btn:not(.is-active) .chat-react-icon polyline {
+    transition-delay: 0ms;
+}

@@ -1,0 +1,149 @@
+/* UserClassCard.module.css */
+
+.card {
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-4);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.cardTitle {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.classCount {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    background-color: var(--color-bg-tertiary);
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--radius-full);
+}
+
+.cardBody {
+    padding: var(--spacing-4);
+}
+
+.classList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: var(--spacing-2);
+}
+
+.classList::-webkit-scrollbar {
+    width: 6px;
+}
+
+.classList::-webkit-scrollbar-track {
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-sm);
+}
+
+.classList::-webkit-scrollbar-thumb {
+    background-color: var(--color-border-medium);
+    border-radius: var(--radius-sm);
+}
+
+.classList::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-border-dark);
+}
+
+.classItem {
+    padding: var(--spacing-3);
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-base);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.classItem:hover {
+    background-color: var(--color-bg-tertiary);
+    border-color: var(--color-primary-500);
+}
+
+.classInfo {
+    margin-bottom: var(--spacing-2);
+}
+
+.classTitle {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--spacing-1);
+}
+
+.classInstructor {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+.classProgress {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-2);
+}
+
+.progressBar {
+    flex: 1;
+    height: 8px;
+    background-color: var(--color-bg-tertiary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background-color: var(--color-primary-600);
+    border-radius: var(--radius-full);
+    transition: width var(--transition-base);
+}
+
+.progressText {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-primary-600);
+    min-width: 35px;
+    text-align: right;
+}
+
+.classFooter {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.enrolledDate {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+}
+
+.emptyState {
+    text-align: center;
+    padding: var(--spacing-8);
+    color: var(--color-text-secondary);
+}
+
+.emptyState svg {
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--spacing-4);
+}
+
+.emptyState p {
+    font-size: var(--font-size-sm);
+    margin: 0;
+}

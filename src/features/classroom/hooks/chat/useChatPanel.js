@@ -38,6 +38,8 @@ export const useChatPanel = (classId = 1) => {
     const myEmail = user?.email ?? null;
     const myName = user?.name ?? null;
 
+
+
     // ---------------- 스크롤 핸들러 ----------------
     const handleScroll = () => {
         const el = messagesRef.current;
@@ -105,7 +107,24 @@ export const useChatPanel = (classId = 1) => {
                 const result = await res.json();
                 console.log(result, "📜 채팅 히스토리 응답");
                 const list = Array.isArray(result.data) ? result.data : [];
-                setMessages(list);
+                const seeded = list.map((m) => ({ ...m, reactedByMe: false }));
+                setMessages(seeded);
+
+                // 공감 있는 애들만 내가 눌렀는지 조회해서 채우기
+                const targets = seeded.filter((m) => (m.reactionCount ?? 0) > 0);
+
+                if (targets.length > 0) {
+                    const pairs = await Promise.all(
+                        targets.map(async (m) => [m.chatId, await fetchReactedByMe(m.chatId)])
+                    );
+                    const map = new Map(pairs);
+
+                    setMessages((prev) =>
+                        prev.map((m) =>
+                            map.has(m.chatId) ? { ...m, reactedByMe: map.get(m.chatId) } : m
+                        )
+                    );
+                }
             } catch (e) {
                 console.error("히스토리 요청 에러:", e);
                 setMessages([]);
@@ -258,7 +277,6 @@ export const useChatPanel = (classId = 1) => {
             console.error("chatId 없음, 공감 전송 불가");
             return;
         }
-
         try {
             const res = await fetch("http://localhost:8080/api/chat/chat.react", {
                 method: "POST",
@@ -269,12 +287,38 @@ export const useChatPanel = (classId = 1) => {
 
             if (!res.ok) {
                 console.error("공감 요청 실패:", res.status);
+                return;
             }
+
+            //  내 reactedByMe만 따로 조회해서 업데이트
+            const reacted = await fetchReactedByMe(chatId);
+            setMessages((prev) =>
+                prev.map((m) => (m.chatId === chatId ? { ...m, reactedByMe: reacted } : m))
+            );
+
             // 서버에서 WebSocket 브로드캐스트 해주므로 여기서는 setMessages 안 함
         } catch (e) {
             console.error("공감 요청 에러:", e);
         }
     };
+    // 내가 공감했는지 안했는지 여부확인
+    const fetchReactedByMe = async (chatId) => {
+        try {
+            const res = await fetch(`http://localhost:8080/api/chat/${chatId}/reacted`, {
+                method: "GET",
+                credentials: "include",
+            });
+            if (!res.ok) return false;
+            const json = await res.json();
+            return json.data === true;
+        } catch (e) {
+            console.error(e);
+            return false;
+        }
+    };
+
+
+
 
     // ---------------- 훅 반환값 ----------------
     return {
@@ -292,6 +336,7 @@ export const useChatPanel = (classId = 1) => {
         myEmail,
 
         // setter / 핸들러
+        setReplyTarget,
         setInputValue,
         setActiveMenuId,
         handleScroll,

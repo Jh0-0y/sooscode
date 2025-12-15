@@ -1,38 +1,46 @@
-/* ===== AdminClassroom Page Styles ===== */
+/* ===== AdminClassroomPage.module.css ===== */
 
-/* Description Cell */
-.descriptionCell {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    max-width: 200px;
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
+/* Base Layout */
+.adminPage {
+    padding: var(--spacing-6);
+    background-color: var(--color-bg-secondary);
+    min-height: 100%;
 }
 
-/* Date Cell */
-.dateCell {
-    white-space: nowrap;
-    font-size: var(--font-size-sm);
-}
-
-/* Type Badge (Online/Offline) */
-.typeBadge {
-    display: inline-flex;
+/* Loading & Error States */
+.loadingState,
+.errorState {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    padding: var(--spacing-1) var(--spacing-2);
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
+    justify-content: center;
+    min-height: 400px;
+    gap: var(--spacing-4);
 }
 
-.typeBadge.online {
-    background-color: var(--color-info-50);
-    color: var(--color-info-700);
+.errorState p {
+    color: var(--color-error);
+    font-size: var(--font-size-base);
 }
 
-.typeBadge.offline {
-    background-color: var(--color-warning-50);
-    color: var(--color-warning-700);
+.retryButton {
+    padding: var(--spacing-2) var(--spacing-4);
+    background-color: var(--color-primary-600);
+    color: var(--color-text-inverse);
+    border: none;
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.retryButton:hover {
+    background-color: var(--color-primary-700);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .adminPage {
+        padding: var(--spacing-4);
+    }
 }

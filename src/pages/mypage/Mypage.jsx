@@ -42,6 +42,7 @@ export default function Mypage() {
                     navigate(`/classdetail/instructor?classId=${item.classId}`);
                   }
                 }}
+                classId={item.classId}
               />
             ))}
         </div>

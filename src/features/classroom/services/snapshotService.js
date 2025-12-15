@@ -9,7 +9,7 @@ const SNAPSHOT_ENDPOINTS = {
 
 export const snapshotService = {
     /**
-     * 전체 조회
+     * 전체 조회 (검색어 없음)
      */
     getAll: async (classId, page = 0, size = 10) => {
         const response = await api.get(SNAPSHOT_ENDPOINTS.READ, {
@@ -20,7 +20,26 @@ export const snapshotService = {
             return response.data.data;
         }
 
-        // 예외 처리: 구조가 다를 경우를 대비해 원본 data 반환
+        return response.data;
+    },
+
+    /**
+     * 제목 검색 조회 (keyword -> title 매핑)
+     */
+    searchByTitle: async (classId, keyword, page = 0, size = 10) => {
+        const response = await api.get(SNAPSHOT_ENDPOINTS.READ_BY_TITLE, {
+            params: {
+                classId,
+                title: keyword,
+                page,
+                size
+            }
+        });
+
+        if (response.data && response.data.data) {
+            return response.data.data;
+        }
+
         return response.data;
     },
 

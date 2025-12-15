@@ -4,8 +4,12 @@ import { useChatPanel } from "@/features/classroom/hooks/chat/useChatPanel.js"; 
 import ChatHeader from "./ChatHeader.jsx";
 import ChatMessageList from "./ChatMessageList.jsx";
 import ChatInput from "./ChatInput.jsx";
+import { useClassroom } from "@/features/classroom/contexts/ClassroomContext.jsx";
+import ReplyPreview from "@/features/classroom/components/chat/ReplyPreview.jsx";
 
-export default function ChatPanel({ classId = 1 }) {
+export default function ChatPanel() {
+
+    const { classId } = useClassroom()
     // 커스텀 훅에서 상태와 핸들러 전부 가져오기
     const {
         messages,
@@ -26,6 +30,9 @@ export default function ChatPanel({ classId = 1 }) {
         handleReply,
         scrollToMessage,
         sendReaction,
+        replyTarget,
+        setReplyTarget,
+        fetchReactionUsers
     } = useChatPanel(classId);
 
     return (
@@ -51,9 +58,15 @@ export default function ChatPanel({ classId = 1 }) {
                 handleDelete={handleDelete}
                 handleReply={handleReply}
                 scrollToMessage={scrollToMessage}
+                fetchReactionUsers={fetchReactionUsers}
             />
 
             {/* 입력창 */}
+            <ReplyPreview
+                replyTarget={replyTarget}
+                onCancelReply={() => setReplyTarget(null)}
+            />
+
             <ChatInput
                 inputValue={inputValue}
                 setInputValue={setInputValue}

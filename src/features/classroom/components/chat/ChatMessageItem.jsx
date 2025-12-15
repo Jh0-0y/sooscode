@@ -1,4 +1,10 @@
 import React from "react";
+import CheckIcon from "./button/ReactionButton.jsx";
+import useReactionUsers from "@/features/classroom/hooks/chat/useReactionUserList.js";
+import DeleteButton from "@/features/classroom/components/chat/button/DeleteButton.jsx";
+import CopyButton from "@/features/classroom/components/chat/button/CopyButton.jsx";
+import ReplyButton from "@/features/classroom/components/chat/button/ReplyButton.jsx";
+
 export default function ChatMessageItem({
                                             msg,
                                             myEmail,
@@ -16,6 +22,8 @@ export default function ChatMessageItem({
                                         }) {
     const mine = msg.email === myEmail;          // 내 메시지인지
     const isDeleted = msg.deleted === true;      // 삭제 여부 (boolean)
+
+    const {users, visible, onEnter, onLeave} = useReactionUsers();
 
     // 메세지 복사
     const handleCopy = () => {
@@ -103,17 +111,32 @@ export default function ChatMessageItem({
 
             <div className="chat-actions">
                 {/* 공감 버튼 / 카운트 */}
+                <div
+                    className="chat-react-wrap"
+                    onMouseEnter={() => onEnter(msg.chatId, msg.reactionCount)}
+                    onMouseLeave={onLeave}
+                >
                 <button
                     type="button"
-                    className="chat-react-btn"
+                    className={`chat-react-btn ${msg.reactedByMe ? "is-active" : ""}`}
                     onClick={() => !isDeleted && sendReaction(msg.chatId)}
                     disabled={isDeleted} // 삭제된 메시지는 공감 불가
                 >
-                    ✅
+                    <CheckIcon className="chat-react-icon" />
                 </button>
                 <span className="chat-react-count">
                     {msg.reactionCount ?? 0}
                 </span>
+                    {visible && users.length > 0 && (
+                        <div className="chat-react-tooltip">
+                            {users.map((u) => (
+                                <div key={u.userId} className="chat-react-user">
+                                    {u.name}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
 
                 {/* 삭제된 메시지는 ··· 메뉴 안 보이게 */}
                 {!isDeleted && (
@@ -135,32 +158,23 @@ export default function ChatMessageItem({
                         {/* 세 점 메뉴 내용 */}
                         {activeMenuId === msg.chatId && (
                             <div className="chat-more-menu">
-                                <button
-                                    type="button"
+                                <CopyButton
                                     onClick={handleCopy}
-                                >
-                                    복사
-                                </button>
+                                    />
 
                                 {mine ? (
                                     // 내가 쓴 메시지 → 삭제만 가능
-                                    <button
-                                        type="button"
+                                    <DeleteButton
                                         onClick={() => handleDelete(msg.chatId)}
-                                    >
-                                        삭제
-                                    </button>
+                                    />
                                 ) : (
                                     // 남의 메시지 → 답장하기만 가능
-                                    <button
-                                        type="button"
+                                    <ReplyButton
                                         onClick={() => {
                                             handleReply(msg);
                                             setActiveMenuId(null); // 메뉴 닫기
                                         }}
-                                    >
-                                        답장하기
-                                    </button>
+                                    />
                                 )}
                             </div>
                         )}

@@ -1,6 +1,9 @@
 import React from "react";
+import {useClassroom } from "@/features/classroom/contexts/ClassroomContext.jsx";
 
-export default function ChatHeader({ classId, connected }) {
+export default function ChatHeader({  connected }) {
+
+    const { classId } = useClassroom()
     return (
         <div className="chat-sidebar__header">
             <div className="chat-sidebar__title">

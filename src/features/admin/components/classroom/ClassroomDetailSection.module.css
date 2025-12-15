@@ -1,0 +1,296 @@
+/* ===== Classroom Detail Section Styles ===== */
+
+.detailContainer {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: var(--spacing-6);
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-5);
+    margin-bottom: var(--spacing-6);
+}
+
+/* Thumbnail Section */
+.thumbnailSection {
+    width: 240px;
+    height: 160px;
+    flex-shrink: 0;
+}
+
+.thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius-base);
+}
+
+.thumbnailPlaceholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    background-color: var(--color-bg-tertiary);
+    border: 2px dashed var(--color-border-light);
+    border-radius: var(--radius-base);
+    color: var(--color-text-tertiary);
+}
+
+.thumbnailPlaceholder span {
+    font-size: var(--font-size-sm);
+}
+
+/* Info Section */
+.infoSection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.btnEdit {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-4);
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.btnEdit:hover {
+    background-color: var(--color-bg-tertiary);
+    border-color: var(--color-border-dark);
+}
+
+.infoGroup {
+    display: flex;
+    justify-content: space-between;
+}
+
+.infoGrid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-2);
+}
+
+.infoItem {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+.infoLabel {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.infoValue {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+.editButtonWrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: var(--spacing-3);
+    height: 36%;
+}
+
+/* Description Box */
+.descriptionBox {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Progress Section */
+.progressSection {
+    padding-top: var(--spacing-3);
+    border-top: 1px solid var(--color-border-light);
+}
+
+.progressHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-2);
+    gap: var(--spacing-2);
+}
+
+.progressPercent {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary-600);
+}
+
+.progressBarLarge {
+    height: 10px;
+    background-color: var(--color-bg-tertiary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: var(--spacing-2);
+}
+
+.progressFillLarge {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary-500), var(--color-primary-400));
+    border-radius: var(--radius-full);
+    transition: width var(--transition-base);
+}
+
+.progressInfo {
+    display: flex;
+    justify-content: end;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+.progressInfo strong {
+    color: var(--color-primary-600);
+}
+
+.progressInfo .completed {
+    color: var(--color-success-600);
+    font-weight: var(--font-weight-medium);
+}
+
+/* Form Styles (Edit Mode) */
+.formGroup {
+    margin-bottom: var(--spacing-4);
+}
+
+.formGroup label {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-2);
+}
+
+.required {
+    color: var(--color-error);
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+    width: 100%;
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    transition: border-color var(--transition-fast);
+    outline: none;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+    border-color: var(--color-primary-500);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.formGroup input::placeholder,
+.formGroup textarea::placeholder {
+    color: var(--color-text-tertiary);
+}
+
+.formGroup textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.formRow {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-4);
+}
+
+.formActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-3);
+    margin-top: var(--spacing-4);
+    padding-top: var(--spacing-4);
+    border-top: 1px solid var(--color-border-light);
+}
+
+.btnSecondary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-4);
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.btnSecondary:hover {
+    background-color: var(--color-bg-tertiary);
+    border-color: var(--color-border-dark);
+}
+
+.btnPrimary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-4);
+    background-color: var(--color-primary-600);
+    color: var(--color-text-inverse);
+    border: none;
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.btnPrimary:hover {
+    background-color: var(--color-primary-700);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .detailContainer {
+        grid-template-columns: 1fr;
+    }
+
+    .thumbnailSection {
+        width: 100%;
+        height: 180px;
+    }
+
+    .infoGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .formRow {
+        grid-template-columns: 1fr;
+    }
+}

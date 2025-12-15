@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import styles from "./SnapshotModal.module.css";
 
 const SnapshotRestoreModal = ({ isOpen, onClose, onConfirm, snapshotTitle, snapshotCode }) => {
-    // 키보드 이벤트 리스너 등록
+
     useEffect(() => {
         if (!isOpen) return;
 
