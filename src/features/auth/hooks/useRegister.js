@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import {api} from "@/services/api";
 import useTimer from "./useTimer";
 import {useNavigate} from "react-router-dom";
-import {handleAuthError} from "@/features/auth/hooks/useEmail.js";
+import {handleAuthError} from "@/features/auth/hooks/useMessage.js";
 
 const useRegister = () => {
     const navigate = useNavigate();

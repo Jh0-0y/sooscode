@@ -11,41 +11,78 @@ const CodePanel = ({socket, classId}) => {
     const {code, setCode, editorInstance, setEditorInstance} = useCode();
     const [monacoInstance, setMonacoInstance] = useState(null);
     const [output, setOutput] = useState("");
+    const [lastSavedTime, setLastSavedTime] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // 디바운싱을 위한 타이머 ref
+    const debounceTimerRef = useRef(null);
+    const isInitialLoadRef = useRef(true);
 
     /**
-     * 코드 전송
+     * 페이지 진입 시 자동 저장된 코드 불러오기
      */
-    const sendCode = () => {
-        if (!socket) {
-            alert('소켓이 초기화되지 않았습니다.');
-            return;
-        }
+    useEffect(() => {
+        const loadAutoSavedCode = async () => {
+            try {
+                const autoSaved = await api.get("/api/code/auto-save", {
+                    params: { classId }
+                });
 
-        if (!socket.connected) {
-            alert('웹소켓 연결이 끊어졌습니다.');
-            return;
-        }
-
-        if (!socket.publish) {
-            alert('publish 메서드를 찾을 수 없습니다.');
-            console.error('Socket object:', socket);
-            return;
-        }
-
-        const message = {
-            code: code,
-            language: 'javascript',
-            output: output || null,
+                if (autoSaved?.code) {
+                    setCode(autoSaved.code);
+                }
+            } catch (e) {
+                // 204 / 자동저장 없음 → 정상 흐름
+                console.log("자동 저장 없음");
+            } finally {
+                setIsLoading(false);
+                isInitialLoadRef.current = false;
+            }
         };
 
-        try {
-            socket.publish(`/app/code/${classId}`, message);
-            console.log("======보내는 데이터======", message)
-        } catch (error) {
-            alert('전송 실패: ' + error.message);
+        if (classId) {
+            loadAutoSavedCode();
         }
-    };
+    }, [classId]);
 
+
+    /**
+     * 코드 자동 전송 (디바운싱 적용)
+     */
+    useEffect(() => {
+        // 초기 로딩 중이거나 첫 로드일 때는 전송 안 함
+        if (isInitialLoadRef.current || isLoading) return;
+
+        if (!socket || !socket.connected || !classId) return;
+
+        // 이전 타이머 취소
+        if (debounceTimerRef.current) {
+            clearTimeout(debounceTimerRef.current);
+        }
+
+        // 300ms 후에 전송 (타이핑이 멈추면 전송)
+        debounceTimerRef.current = setTimeout(() => {
+            const message = {
+                code: code,
+                language: 'javascript',
+                output: output || null,
+            };
+
+            try {
+                socket.publish(`/app/code/${classId}`, message);
+                setLastSavedTime(new Date());
+            } catch (error) {
+                console.error('자동 전송 실패:', error);
+            }
+        }, 300);
+
+        // 클린업
+        return () => {
+            if (debounceTimerRef.current) {
+                clearTimeout(debounceTimerRef.current);
+            }
+        };
+    }, [code, output, socket, classId, isLoading]);
 
     /**
      * 라이트/다크 자동 적용
@@ -84,6 +121,11 @@ const CodePanel = ({socket, classId}) => {
         observer.observe(wrapper);
 
         editor.__observer = observer;
+
+        // 에디터 마운트 후 현재 code 값으로 설정
+        if (code && code !== "// write code") {
+            editor.setValue(code);
+        }
     };
 
     /**
@@ -175,6 +217,21 @@ const CodePanel = ({socket, classId}) => {
 
     return (
         <div className={`${styles.relative} ${styles.editorWrapper}`}>
+            {/* 자동 저장 상태 표시 */}
+            {lastSavedTime && (
+                <div className={styles.indigator}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                         className="lucide lucide-save-icon lucide-save">
+                        <path
+                            d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>
+                        <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/>
+                        <path d="M7 3v4a1 1 0 0 0 1 1h7"/>
+                    </svg>
+                    {lastSavedTime.toLocaleTimeString()}
+                </div>
+            )}
+
             <Editor
                 language="javascript"
                 value={code}
@@ -187,7 +244,7 @@ const CodePanel = ({socket, classId}) => {
 
             {/* 하단 결과창 */}
             <div className={styles.bottomPane} ref={bottomRef}>
-                {/* 리사이즈 바 */}
+            {/* 리사이즈 바 */}
                 <div className={styles.resizer} onMouseDown={startResize}>
                     <div className={styles.dotWrap}/>
                 </div>
@@ -217,16 +274,6 @@ const CodePanel = ({socket, classId}) => {
                                  stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
                                 <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
-                            </svg>
-                        </button>
-
-                        {/* 코드 전송 버튼 */}
-                        <button onClick={sendCode} className={styles.sendButton} title="코드 공유">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="m22 2-7 20-4-9-9-4Z"/>
-                                <path d="M22 2 11 13"/>
                             </svg>
                         </button>
                     </div>

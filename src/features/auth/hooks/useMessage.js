@@ -13,7 +13,7 @@ export const handleAuthError = (errorCode, refs) => {
         VALID_USR_009: ["비밀번호를 입력해주세요.", passwordRef],
         VALID_USR_010: ["비밀번호는 6자 이상이어야 합니다.", passwordRef],
         VALID_USR_011: ["비밀번호는 16자 이하이어야 합니다.", passwordRef],
-        VALID_USR_012: ["비밀번호는 영문+숫자 조합이어야 합니다.", passwordRef],
+        //VALID_USR_012: ["비밀번호는 영문+숫자 조합이어야 합니다.", passwordRef],
         VALID_USR_013: ["비밀번호가 일치하지 않습니다.", passwordRef],
 
         // 인증 코드 관련 (이건 그대로 유지)
