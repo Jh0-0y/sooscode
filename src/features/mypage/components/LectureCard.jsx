@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./LectureCard.module.css";
 import defaultImg from "@/assets/img1.jpg";
+import { encode } from '@/utils/urlEncoder';
 
 export default function LectureCard({ 
   thumbnail,
@@ -13,6 +14,12 @@ export default function LectureCard({
 
   const navigate = useNavigate();
 
+  const handleJoinClass = (classId) => {
+        const encoded = encode(classId);
+        navigate(`/class/${encoded}`);  // ← /class/MTIz
+    };
+
+
   return (
     <div className={styles.card}>
       <div className={styles.thumbnailWrapper}>
@@ -20,7 +27,11 @@ export default function LectureCard({
           className={styles.thumbnail}
           src={thumbnail || defaultImg}
           alt={title}
-          onClick={() => navigate("/class")}
+          onClick={() => {
+            // 1. classId는 반드시 props로 내려와 있어야 함
+            // 2. encode는 "객체"를 받는 규칙임
+            handleJoinClass(classId)}
+          }
         />
 
         <div className={styles.overlay}>
@@ -29,8 +40,8 @@ export default function LectureCard({
       </div>
 
       <div className={styles.body}>
-        <h3 className={styles.title}>{title || "React 기초강의"}</h3>
-        <p className={styles.teacher}>{teacher || "김철수"}</p>
+        <h3 className={styles.title}>{title}</h3>
+        <p className={styles.teacher}>{teacher}</p>
       </div>
 
       <div className={styles.buttonBox}>

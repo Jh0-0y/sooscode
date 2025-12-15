@@ -6,6 +6,7 @@ import { useResize } from "@/features/classroom/hooks/class/useResize.js";
 import SnapshotPanel from "@/features/classroom/components/snapshot/SnapshotPanel.jsx";
 import CodePanel from "@/features/classroom/components/code/CodePanel.jsx";
 import CodeSharePanel from "@/features/classroom/components/code/CodeSharePanel.jsx";
+import LivekitVideo from "@/features/classroom/components/livekit/LivekitVideo.jsx";
 
 const ClassBody = () => {
     const { collapsed } = useSidebar();
@@ -32,7 +33,7 @@ const ClassBody = () => {
             <div className={styles.page}>
                 <div className={styles.content}>
                     <div className={styles.inner}>
-                        라이브킷
+                        <LivekitVideo />
                     </div>
                 </div>
             </div>
