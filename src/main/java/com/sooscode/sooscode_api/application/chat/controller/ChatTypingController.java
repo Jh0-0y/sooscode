@@ -26,6 +26,7 @@ public class ChatTypingController{
         TypingResponse res = new TypingResponse(
                 req.getClassId(),
                 user.getUser().getUserId(),
+                user.getUser().getEmail(),
                 user.getUser().getName(),
                 true
         );
@@ -39,6 +40,7 @@ public class ChatTypingController{
         TypingResponse res = new TypingResponse(
                 req.getClassId(),
                 user.getUser().getUserId(),
+                user.getUser().getEmail(),
                 user.getUser().getName(),
                 false
         );

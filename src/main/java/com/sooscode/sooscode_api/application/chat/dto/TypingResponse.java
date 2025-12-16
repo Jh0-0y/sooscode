@@ -8,6 +8,7 @@ import lombok.Getter;
 public class TypingResponse {
     private Long classId;
     private Long userId;
+    private String email;
     private String name;
     private boolean typing; // true=입력중, false=멈춤
 }
