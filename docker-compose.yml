@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  compile-redis:
+    image: redis:alpine
+    container_name: compile-redis
+    ports:
+      - "6380:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - ./redis-data:/data
+    networks:
+      - compile-net
+
+networks:
+  compile-net:
+    driver: bridge

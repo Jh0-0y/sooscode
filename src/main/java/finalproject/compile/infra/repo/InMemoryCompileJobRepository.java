@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * - 동시성 안전성을 위해 ConcurrentHashMap 사용
  * - 단일 서버 운영에서는 빠르고 간단한 방식
  */
-@Repository
+//@Repository
 public class InMemoryCompileJobRepository implements CompileJobRepository {
 
     // Thread-safe 저장소 (Worker 스레드 다중 접근 대비)
