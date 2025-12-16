@@ -40,4 +40,7 @@ public interface ClassParticipantRepository extends JpaRepository<ClassParticipa
             @Param("keyword") String keyword,
             Pageable pageable
     );
+
+    // mypage 진입시 클래스 리스팅
+    Page<ClassParticipant> findByUser_UserId(Long userId, Pageable pageable);
 }
