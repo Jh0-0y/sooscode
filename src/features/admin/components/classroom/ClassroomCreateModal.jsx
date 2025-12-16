@@ -8,9 +8,8 @@ const INITIAL_FORM_DATA = {
     endDate: '',
     startTime: '09:00',
     endTime: '18:00',
-    instructorName: '',
-    online: true,
-    active: true
+    instructorId: '', // instructorName → instructorId
+    isOnline: true,   // online → isOnline
 };
 
 /**
@@ -29,7 +28,14 @@ const ClassroomCreateModal = ({ isOpen, onClose, onSubmit, isSubmitting = false 
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmit(formData);
+
+        // instructorId를 숫자로 변환
+        const submitData = {
+            ...formData,
+            instructorId: parseInt(formData.instructorId, 10)
+        };
+
+        onSubmit(submitData);
         resetForm();
     };
 
@@ -86,18 +92,22 @@ const ClassroomCreateModal = ({ isOpen, onClose, onSubmit, isSubmitting = false 
                         </div>
 
                         <div className={styles.formGroup}>
-                            <label htmlFor="instructorName">
-                                담당 강사 <span className={styles.required}>*</span>
+                            <label htmlFor="instructorId">
+                                담당 강사 ID <span className={styles.required}>*</span>
                             </label>
                             <input
-                                type="text"
-                                id="instructorName"
-                                value={formData.instructorName}
-                                onChange={(e) => handleChange('instructorName', e.target.value)}
-                                placeholder="강사명을 입력하세요"
+                                type="number"
+                                id="instructorId"
+                                value={formData.instructorId}
+                                onChange={(e) => handleChange('instructorId', e.target.value)}
+                                placeholder="강사 ID를 입력하세요 (예: 1)"
                                 required
                                 disabled={isSubmitting}
+                                min="1"
                             />
+                            <small style={{ color: '#6c757d', fontSize: '12px', marginTop: '4px', display: 'block' }}>
+                                * 강사의 사용자 ID를 입력하세요
+                            </small>
                         </div>
 
                         <div className={styles.formRow}>
@@ -158,35 +168,19 @@ const ClassroomCreateModal = ({ isOpen, onClose, onSubmit, isSubmitting = false 
                             </div>
                         </div>
 
-                        <div className={styles.formRow}>
-                            <div className={styles.formGroup}>
-                                <label htmlFor="online">
-                                    수업 유형 <span className={styles.required}>*</span>
-                                </label>
-                                <select
-                                    id="online"
-                                    value={formData.online}
-                                    onChange={(e) => handleChange('online', e.target.value === 'true')}
-                                    disabled={isSubmitting}
-                                >
-                                    <option value="true">온라인</option>
-                                    <option value="false">오프라인</option>
-                                </select>
-                            </div>
-                            <div className={styles.formGroup}>
-                                <label htmlFor="active">
-                                    상태 <span className={styles.required}>*</span>
-                                </label>
-                                <select
-                                    id="active"
-                                    value={formData.active}
-                                    onChange={(e) => handleChange('active', e.target.value === 'true')}
-                                    disabled={isSubmitting}
-                                >
-                                    <option value="true">활성</option>
-                                    <option value="false">비활성</option>
-                                </select>
-                            </div>
+                        <div className={styles.formGroup}>
+                            <label htmlFor="isOnline">
+                                수업 유형 <span className={styles.required}>*</span>
+                            </label>
+                            <select
+                                id="isOnline"
+                                value={formData.isOnline}
+                                onChange={(e) => handleChange('isOnline', e.target.value === 'true')}
+                                disabled={isSubmitting}
+                            >
+                                <option value="true">온라인</option>
+                                <option value="false">오프라인</option>
+                            </select>
                         </div>
                     </form>
                 </div>

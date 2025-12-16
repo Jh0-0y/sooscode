@@ -3,12 +3,12 @@
 .detailContainer {
     display: grid;
     grid-template-columns: 240px 1fr;
-    gap: var(--spacing-6);
-    background-color: var(--color-bg-primary);
-    border: 1px solid var(--color-border-light);
-    border-radius: var(--radius-md);
-    padding: var(--spacing-5);
-    margin-bottom: var(--spacing-6);
+    gap: 24px;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
 }
 
 /* Thumbnail Section */
@@ -22,7 +22,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: var(--radius-base);
+    border-radius: 8px;
 }
 
 .thumbnailPlaceholder {
@@ -32,15 +32,61 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-2);
-    background-color: var(--color-bg-tertiary);
-    border: 2px dashed var(--color-border-light);
-    border-radius: var(--radius-base);
-    color: var(--color-text-tertiary);
+    gap: 8px;
+    background-color: #f9fafb;
+    border: 2px dashed #e5e7eb;
+    border-radius: 8px;
+    color: #9ca3af;
 }
 
 .thumbnailPlaceholder span {
-    font-size: var(--font-size-sm);
+    font-size: 14px;
+}
+
+/* Skeleton Styles */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.skeletonThumbnail {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 20%, #f0f0f0 40%, #f0f0f0 100%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+    border-radius: 8px;
+}
+
+.skeletonText {
+    height: 20px;
+    background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 20%, #f0f0f0 40%, #f0f0f0 100%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.skeletonButton {
+    width: 80px;
+    height: 36px;
+    background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 20%, #f0f0f0 40%, #f0f0f0 100%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+    border-radius: 8px;
+}
+
+.skeletonProgress {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 20%, #f0f0f0 40%, #f0f0f0 100%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+    border-radius: 999px;
 }
 
 /* Info Section */
@@ -50,24 +96,35 @@
     gap: var(--spacing-2);
 }
 
-.btnEdit {
+.btnEdit,
+.btnDanger {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-2);
-    padding: var(--spacing-2) var(--spacing-4);
-    background-color: var(--color-bg-primary);
-    color: var(--color-text-primary);
-    border: 1px solid var(--color-border-medium);
-    border-radius: var(--radius-base);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: white;
+    color: #111827;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.15s;
 }
 
 .btnEdit:hover {
-    background-color: var(--color-bg-tertiary);
-    border-color: var(--color-border-dark);
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+}
+
+.btnDanger {
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+.btnDanger:hover {
+    background-color: #fef2f2;
+    border-color: #dc2626;
 }
 
 .infoGroup {
@@ -104,6 +161,7 @@
 
 .editButtonWrapper {
     display: flex;
+    gap: var(--spacing-2);
     justify-content: flex-end;
     margin-bottom: var(--spacing-3);
     height: 36%;
@@ -275,6 +333,51 @@
     background-color: var(--color-primary-700);
 }
 
+/* Confirm Dialog */
+.confirmOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.confirmDialog {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 400px;
+    width: 90%;
+}
+
+.confirmDialog h3 {
+    margin: 0 0 16px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.confirmDialog p {
+    margin: 0 0 12px;
+    color: #6b7280;
+}
+
+.warning {
+    color: #ef4444 !important;
+    font-weight: 500;
+}
+
+.confirmActions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 24px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .detailContainer {
@@ -292,5 +395,9 @@
 
     .formRow {
         grid-template-columns: 1fr;
+    }
+
+    .editButtonWrapper {
+        justify-content: flex-start;
     }
 }
