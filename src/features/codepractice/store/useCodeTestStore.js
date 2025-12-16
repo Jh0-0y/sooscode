@@ -1,21 +1,19 @@
 // features/codepractice/store/useCodeTestStore.js
 import { create } from "zustand";
-import { runUserCode } from "../components/codingtest/judge";
+import { runInWorker } from "../components/codingtest/judge.runner";
 import { testProblems } from "../components/codingtest/testProblems.mock";
 
 export const useCodeTestStore = create((set, get) => ({
-  // ===== 문제 / 코드 =====
   problem: testProblems[0],
   code: testProblems[0].template.js,
   language: "JS",
-
-  // ===== 결과 상태 =====
-  passed: null,              // true | false | null
+  passed: null, 
   showResultModal: false,
+  isRunning: false,
+  error: null,
 
-  // ===== actions =====
   setCode: (code) => set({ code }),
-
+  setLanguage: (language) => set({ language }),
   setProblem: (problem) =>
     set({
       problem,
@@ -23,21 +21,49 @@ export const useCodeTestStore = create((set, get) => ({
       passed: null,
       showResultModal: false,
     }),
+  run: async () => {
+  const { code, problem } = get();
+  const tc = problem.testCases[0];
 
-  run: () => {
-    const { code, problem } = get();
-    const tc = problem.testCases[0];
+  try {
+    set({
+      isRunning: true,
+      showResultModal: true,
+      passed: null,
+      error: null,
+    });
 
-    const r = runUserCode(code, tc.input);
+    const res = await runInWorker(
+      {
+        mode: "run",
+        userCode: code,
+        testCases: [tc],
+      },
+      5000
+    );
 
-    const passed =
-      !r.error && r.output === tc.output;
+    if (!res.success) {
+      set({
+        passed: false,
+        error: res.error ?? "실행 오류",
+      });
+      return;
+    }
 
     set({
-      passed,
-      showResultModal: true,
+      passed: res.result.output === tc.output,
+      isRunning: false,
     });
-  },
+  } catch (e) {
+    set({
+      passed: false,
+      error: e.message, // Time Limit Exceeded
+      isRunning: false,
+    });
+  }
+},
+
+
 
   closeResultModal: () =>
     set({ showResultModal: false }),

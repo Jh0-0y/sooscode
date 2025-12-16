@@ -1,24 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./LectureCard.module.css";
 import defaultImg from "@/assets/img1.jpg";
-import { encode } from '@/utils/urlEncoder';
+import { encode } from "@/utils/urlEncoder";
 
-export default function LectureCard({ 
+export default function LectureCard({
   thumbnail,
   title,
   teacher,
   onClick,
   isOnAir = false,
-  classId,   
+  classId,
 }) {
-
   const navigate = useNavigate();
 
   const handleJoinClass = (classId) => {
-        const encoded = encode(classId);
-        navigate(`/class/${encoded}`);  // ← /class/MTIz
-    };
-
+    const encoded = encode(classId);
+    navigate(`/class/${encoded}`); // ← /class/MTIz
+  };
 
   return (
     <div className={styles.card}>
@@ -28,14 +26,27 @@ export default function LectureCard({
           src={thumbnail || defaultImg}
           alt={title}
           onClick={() => {
-            // 1. classId는 반드시 props로 내려와 있어야 함
-            // 2. encode는 "객체"를 받는 규칙임
-            handleJoinClass(classId)}
-          }
+            if (!isOnAir) {
+              // TODO: 나중에 토스트 메시지 추가
+              // toast("강의 시간이 아닙니다");
+              return;
+            }
+            handleJoinClass(classId);
+          }}
         />
 
+        {/* ON AIR 상태 뱃지 */}
+        {isOnAir && (
+          <div className={styles.liveBadge}>
+            ON AIR
+          </div>
+        )}
+
+        {/* hover 시 안내 문구 */}
         <div className={styles.overlay}>
-          <span className={styles.enterText}>강의실 입장</span>
+          <span className={styles.enterText}>
+            {isOnAir ? "강의실 입장" : "강의 시간 아님"}
+          </span>
         </div>
       </div>
 
@@ -45,7 +56,12 @@ export default function LectureCard({
       </div>
 
       <div className={styles.buttonBox}>
-        <button className={styles.detailButton} onClick={onClick}>강의 상세 페이지 이동</button>
+        <button
+          className={styles.detailButton}
+          onClick={onClick}
+        >
+          강의 상세 페이지 이동
+        </button>
       </div>
     </div>
   );

@@ -12,7 +12,6 @@ import useLogout from "@/features/auth/hooks/useLogout.js";
 
 const AdminSidebar = ({ activeMenu, onMenuChange, collapsed, onToggleCollapse }) => {
   const menuItems = [
-    { id: 'dashboard', label: '대시보드', icon: LayoutDashboard },
     { id: 'users', label: '사용자 관리', icon: Users },
     { id: 'classes', label: '클래스 관리', icon: GraduationCap },
   ];

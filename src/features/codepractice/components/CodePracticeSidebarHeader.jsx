@@ -27,12 +27,12 @@ export default function CodePracticeSidebarHeader() {
         Test
       </button>
 
-      <button
+      {/* <button
         className={`${styles.tab} ${activeTab === "ai" ? styles.active : ""}`}
         onClick={() => setActiveTab("ai")}
       >
         AI
-      </button>
+      </button> */}
     </div>
   );
 }

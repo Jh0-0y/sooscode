@@ -1,0 +1,60 @@
+/* src/features/classroom/components/snapshot/SnapshotSearchFilter.module.css */
+
+.container {
+    width: 100%;
+    padding: var(--spacing-2);
+    border-bottom: 1px solid var(--color-border-light);
+    background-color: var(--color-bg-primary);
+}
+
+.inputWrapper {
+    display: flex;
+    align-items: center;
+    background-color: var(--color-bg-secondary);
+
+    border-radius: var(--radius-md);
+    padding: 0 var(--spacing-2);
+
+    height: var(--spacing-8);
+    transition: all var(--transition-fast);
+}
+
+
+.icon {
+    color: var(--color-text-tertiary);
+    margin-right: var(--spacing-2);
+}
+
+.input {
+    flex: 1;
+    background: transparent;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    border: none;
+    outline: none;
+    box-shadow: none;
+    min-width: 0;
+}
+.input:focus {
+    outline: none;
+    box-shadow: none;
+}
+.input::placeholder {
+    color: var(--color-text-tertiary);
+}
+
+.clearBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.clearBtn:hover {
+    color: var(--color-text-secondary);
+    background-color: var(--color-gray-200);
+}

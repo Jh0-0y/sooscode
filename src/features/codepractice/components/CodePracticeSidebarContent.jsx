@@ -13,7 +13,7 @@ export default function CodePracticeSidebarContent() {
       {activeTab === "snapshot" && <SnapshotPanel />}
       {activeTab === "snippet" && <SnippetPanel />}
       {activeTab === "test" && <TestPanel />}
-      {activeTab === "ai" && <AIPanel />}
+      {/* {activeTab === "ai" && <AIPanel />} */}
     </div>
   );
 }

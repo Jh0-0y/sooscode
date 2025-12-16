@@ -13,7 +13,6 @@ const Pagination = ({
                         currentPage = 0,
                         totalPages = 1,
                         onPageChange,
-                        showPageInfo = true
                     }) => {
     // 페이지가 1개 이하면 렌더링하지 않음
     if (totalPages <= 1) return null;
@@ -108,10 +107,6 @@ const Pagination = ({
                 »
             </button>
 
-            {/* 페이지 정보 */}
-            {showPageInfo && (
-                <span className={styles.pageInfo}>{currentPage + 1} / {totalPages} 페이지</span>
-            )}
         </div>
     );
 };

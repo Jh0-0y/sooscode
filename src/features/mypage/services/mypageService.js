@@ -1,6 +1,7 @@
 // src/features/mypage/services/mypageService.js
 import { api } from "@/services/api"; // 공용 axios instance
 import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 // 서버 요청: GET /api/classroom/me/classes
 /*
@@ -12,9 +13,45 @@ export const getMyClasses = async (page = 0, size = 10) => {
 };
 */
 
-export const getMyClasses = async () => {
-  const res = await api.get("/api/mypage/classes");
-  return res.data;   // RestUtils.ok() 구조
+// export const getMyClasses = async () => {
+//   const res = await api.get("/api/mypage/classes");
+//   return res.data;   // RestUtils.ok() 구조
+// };
+
+// 페이징 마이페이지 리스팅
+// 서버 요청
+export const getMyClasses = async ({ pageParam = 0 }) => {
+  const res = await api.get("/api/mypage/classes", {
+    params: {
+      page: pageParam,
+      size: 10,
+    },
+  });
+  console.log("res:",res)
+  console.log("res.data:",res.data)
+  console.log("res.data.data:",res.data.data)
+
+
+  return res.data;
+};
+
+// Infinite Query 훅
+export const useMyClassesInfinite = () => {
+  return useInfiniteQuery({
+    queryKey: ["myClasses"],
+    initialPageParam: 0,
+
+    queryFn: ({ pageParam }) =>
+      getMyClasses({ pageParam }),
+
+    // ✅ Page 기준으로 판단
+    getNextPageParam: (lastPage) => {
+      if (!lastPage || lastPage.last) return undefined;
+      return lastPage.number + 1;
+    },
+
+    staleTime: 60 * 1000,
+  });
 };
 
 

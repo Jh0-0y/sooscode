@@ -53,12 +53,14 @@
 
 /* Right Section -------------------------------- */
 .right {
+  height: 70%;
   display: flex;
   align-items: center;
   gap: var(--spacing-3);
 }
 
 .actionBtn {
+  height:100%;
   padding: 8px 14px;
   font-size: var(--font-size-sm);
 

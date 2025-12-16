@@ -117,6 +117,7 @@ export default function CodePracticeHeaderLayout({
     <header className={styles.wrapper}>
       
       <div className={styles.left}>
+        
         <button className={styles.backBtn} onClick={() => navigate("/mypage")}>
           <ChevronLeft size={20} />
         </button>
@@ -129,6 +130,16 @@ export default function CodePracticeHeaderLayout({
       </div>
 
       <div className={styles.right}>
+        <button className={`${styles.actionBtn} ${styles.runBtn}`} 
+          onClick={run}
+          disabled={isRunning}
+        >
+          {isRunning ? "실행 중..." : "실행"}
+        </button>
+        <button className={`${styles.actionBtn} ${styles.runBtn}`} onClick={resetCode}>
+          초기화
+        </button>
+        
         <button className={`${styles.actionBtn} ${styles.sidebarBtn}`} onClick={toggleSidebar}>
           {isSidebarOpen ? <PanelLeftClose size={18} /> : <PanelLeftOpen size={18} />}
           사이드바
@@ -148,12 +159,7 @@ export default function CodePracticeHeaderLayout({
           {isSnapshotOpen ? <PanelRightClose size={18} /> : <PanelRightOpen size={18} />}
           스냅샷
         </button>
-        <button className={`${styles.actionBtn} ${styles.runBtn}`} 
-          onClick={run}
-          disabled={isRunning}
-        >
-          {isRunning ? "실행 중..." : "실행"}
-        </button>
+        
         {language === "CSS_HTML_JS" && (
           <>
             {
@@ -162,7 +168,15 @@ export default function CodePracticeHeaderLayout({
               className={`${styles.actionBtn} ${styles.runBtn} ${styles.hcjBtn}`}
               onClick={() => {
                 const title = window.prompt("스냅샷 이름을 입력하세요");
-                if (!title) return;
+                if (!title){
+                  alert("제목을 입력해주세요");
+                  return;
+                } 
+                if (!classId){
+                  alert("클래스를 선택해주세요");
+                  return;
+                } 
+
                 saveHCJSnapshot(title);
               }}
             >
@@ -181,9 +195,7 @@ export default function CodePracticeHeaderLayout({
             </button>
           </>
         )}
-        <button className={`${styles.actionBtn} ${styles.runBtn}`} onClick={resetCode}>
-          초기화
-        </button>
+        
         <button className={styles.actionBtn} onClick={handleLangToggle}>
           {selectedLang}
         </button>

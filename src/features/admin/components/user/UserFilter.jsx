@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './UserFilter.module.css';
 
 /**
@@ -7,7 +7,7 @@ import styles from './UserFilter.module.css';
  * @param {Function} onSearch - 검색 핸들러
  * @param {string} startDate - 가입 시작일 필터
  * @param {string} endDate - 가입 종료일 필터
- * @param {string} filterRole - 권한 필터 (student/instructor/admin/all)
+ * @param {string} filterRole - 권한 필터 (STUDENT/INSTRUCTOR/ADMIN/'')
  * @param {Function} onFilterChange - 필터 변경 핸들러
  * @param {Function} onSortChange - 정렬 변경 핸들러
  * @param {Function} onReset - 필터 초기화 핸들러
@@ -17,48 +17,88 @@ const UserFilter = ({
                         onSearch,
                         startDate = '',
                         endDate = '',
-                        filterRole = 'all',
+                        filterRole = '',
                         onFilterChange,
                         onSortChange,
                         onReset
                     }) => {
     const [searchValue, setSearchValue] = useState(keyword);
-    const [filters, setFilters] = useState({
-        startDate,
-        endDate,
-        filterRole,
-    });
+    const [localStartDate, setLocalStartDate] = useState(startDate);
+    const [localEndDate, setLocalEndDate] = useState(endDate);
+    const [sortValue, setSortValue] = useState('createdAt-DESC');
+
+    // filterRole을 select value 형식으로 변환 (대문자 → 소문자, 빈값 → 'all')
+    const getRoleSelectValue = (role) => {
+        if (!role) return 'all';
+        return role.toLowerCase();
+    };
+
+    const [localRole, setLocalRole] = useState(getRoleSelectValue(filterRole));
+
+    // 외부에서 keyword가 변경되면 동기화
+    useEffect(() => {
+        setSearchValue(keyword);
+    }, [keyword]);
+
+    useEffect(() => {
+        setLocalStartDate(startDate);
+    }, [startDate]);
+
+    useEffect(() => {
+        setLocalEndDate(endDate);
+    }, [endDate]);
+
+    useEffect(() => {
+        setLocalRole(getRoleSelectValue(filterRole));
+    }, [filterRole]);
 
     const handleSearchKeyDown = (e) => {
         if (e.key === 'Enter') {
-            onSearch(searchValue);
+            onSearch?.(searchValue);
         }
     };
 
-    const handleFilterChange = (field, value) => {
-        const newFilters = {
-            ...filters,
-            [field]: value
-        };
-        setFilters(newFilters);
-        onFilterChange(newFilters);
+    const handleSearchClick = () => {
+        onSearch?.(searchValue);
+    };
+
+    const handleStartDateChange = (e) => {
+        const value = e.target.value;
+        setLocalStartDate(value);
+        onFilterChange?.({ startDate: value, endDate: localEndDate });
+    };
+
+    const handleEndDateChange = (e) => {
+        const value = e.target.value;
+        setLocalEndDate(value);
+        onFilterChange?.({ startDate: localStartDate, endDate: value });
+    };
+
+    const handleRoleChange = (e) => {
+        const value = e.target.value;
+        setLocalRole(value);
+        onFilterChange?.({ filterRole: value });
     };
 
     const handleSortChange = (e) => {
         const value = e.target.value;
+        setSortValue(value);
         const [sortBy, sortDirection] = value.split('-');
-        onSortChange(sortBy, sortDirection);
+        onSortChange?.(sortBy, sortDirection);
     };
 
     const handleReset = () => {
         setSearchValue('');
-        const resetFilters = {
-            startDate: '',
-            endDate: '',
-            filterRole: 'all',
-        };
-        setFilters(resetFilters);
-        onReset();
+        setLocalStartDate('');
+        setLocalEndDate('');
+        setLocalRole('all');
+        setSortValue('createdAt-DESC');
+        onReset?.();
+    };
+
+    const handleClearSearch = () => {
+        setSearchValue('');
+        onSearch?.('');
     };
 
     return (
@@ -66,23 +106,22 @@ const UserFilter = ({
             {/* 상단 행: 날짜 필터 */}
             <div className={styles.topRow}>
                 <div className={styles.dateTimeFilters}>
-                    {/* 가입일 필터 */}
                     <div className={styles.filterGroup}>
                         <label className={styles.filterLabel}>가입일</label>
                         <div className={styles.dateGroup}>
                             <input
                                 type="date"
                                 className={styles.dateInput}
-                                value={filters.startDate}
-                                onChange={(e) => handleFilterChange('startDate', e.target.value)}
+                                value={localStartDate}
+                                onChange={handleStartDateChange}
                                 placeholder="시작일"
                             />
                             <span className={styles.separator}>~</span>
                             <input
                                 type="date"
                                 className={styles.dateInput}
-                                value={filters.endDate}
-                                onChange={(e) => handleFilterChange('endDate', e.target.value)}
+                                value={localEndDate}
+                                onChange={handleEndDateChange}
                                 placeholder="종료일"
                             />
                         </div>
@@ -90,7 +129,7 @@ const UserFilter = ({
                 </div>
             </div>
 
-            {/* 하단 행: 검색 + 권한/상태/정렬/초기화 */}
+            {/* 하단 행: 검색 + 권한/정렬/초기화 */}
             <div className={styles.bottomRow}>
                 {/* 검색 박스 */}
                 <div className={styles.searchBox}>
@@ -108,10 +147,7 @@ const UserFilter = ({
                     {searchValue && (
                         <button
                             className={styles.btnClear}
-                            onClick={() => {
-                                setSearchValue('');
-                                onSearch('');
-                            }}
+                            onClick={handleClearSearch}
                         >
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <path d="M18 6L6 18M6 6l12 12"/>
@@ -124,19 +160,18 @@ const UserFilter = ({
                 <div className={styles.filterOptions}>
                     <select
                         className={styles.roleSelect}
-                        value={filters.filterRole}
-                        onChange={(e) => handleFilterChange('filterRole', e.target.value)}
+                        value={localRole}
+                        onChange={handleRoleChange}
                     >
                         <option value="all">모든 권한</option>
                         <option value="student">학생</option>
                         <option value="instructor">강사</option>
-                        <option value="admin">관리자</option>
                     </select>
 
                     <select
                         className={styles.sortSelect}
+                        value={sortValue}
                         onChange={handleSortChange}
-                        defaultValue="createdAt-DESC"
                     >
                         <option value="createdAt-DESC">최신순</option>
                         <option value="createdAt-ASC">오래된순</option>
