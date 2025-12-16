@@ -7,38 +7,38 @@ import ClassroomTable from '../../components/classroom/ClassroomTable';
 import ClassroomCreateModal from '../../components/classroom/ClassroomCreateModal';
 import useClassroomList from '../../hooks/classroom/useClassroomList.js';
 import useClassroomCreate from '../../hooks/classroom/useClassroomCreate.js';
-import {useToast} from "@/hooks/useToast.js";
+import { useToast } from "@/hooks/useToast.js";
 import styles from './AdminClassroomPage.module.css';
 
 const AdminClassroomPage = () => {
     const navigate = useNavigate();
     const toast = useToast();
 
+    // ============ 목록 조회 훅 ============
     const {
         classes,
         loading,
         error,
-        keyword,
-        startDate,
-        endDate,
-        onSearch,
-        onDateFilterChange,
-        onSortChange,
-        resetFilters,
-        currentPage,
-        totalPages,
-        onPageChange,
+        filters,
+        pagination,
+        handleSearch,
+        handleFilterChange,
+        handleSortChange,
+        handleReset,
+        handlePageChange,
         refetch,
     } = useClassroomList({ pageSize: 10 });
 
+    // ============ 생성 훅 ============
     const {
         isModalOpen,
         openModal,
         closeModal,
         isSubmitting,
-        handleSubmit,
+        submitError,
+        handleSubmit
     } = useClassroomCreate({
-        onSuccess: () => {
+        onSuccess: (newClass) => {
             toast.success('클래스가 등록되었습니다.');
             refetch();
         },
@@ -47,61 +47,55 @@ const AdminClassroomPage = () => {
         }
     });
 
+    // ============ 클래스 클릭 핸들러 ============
     const handleClassClick = (cls) => {
         navigate(`/admin/classes/${cls.classId}`);
     };
 
-    if (loading) {
-        return (
-            <div className={styles.adminPage}>
-                <div className={styles.loadingState}>로딩 중...</div>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className={styles.adminPage}>
-                <div className={styles.errorState}>
-                    <p>에러: {error}</p>
-                    <button className={styles.retryButton} onClick={refetch}>
-                        다시 시도
-                    </button>
-                </div>
-            </div>
-        );
-    }
-
+    // ============ 메인 렌더링 ============
     return (
         <div className={styles.adminPage}>
+            {/* 헤더 */}
             <ClassroomHeader onAddClass={openModal} />
 
+            {/* 필터 */}
             <ClassroomFilter
-                keyword={keyword}
-                onSearch={onSearch}
-                startDate={startDate}
-                endDate={endDate}
-                onDateFilterChange={onDateFilterChange}
-                onSortChange={onSortChange}
-                onReset={resetFilters}
+                keyword={filters.keyword}
+                onSearch={handleSearch}
+                startDate={filters.startDate}
+                endDate={filters.endDate}
+                startTime={filters.startTime}
+                endTime={filters.endTime}
+                classType={filters.classType}
+                onFilterChange={handleFilterChange}
+                onSortChange={handleSortChange}
+                onReset={handleReset}
             />
 
+            {/* 테이블 - loading과 error를 props로 전달 */}
             <ClassroomTable
                 classes={classes}
                 onClassClick={handleClassClick}
+                loading={loading}
+                error={error}
+                currentPage={pagination.currentPage}
+                pageSize={pagination.pageSize}
             />
 
+            {/* 페이지네이션 */}
             <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={onPageChange}
+                currentPage={pagination.currentPage}
+                totalPages={pagination.totalPages}
+                onPageChange={handlePageChange}
             />
 
+            {/* 생성 모달 */}
             <ClassroomCreateModal
                 isOpen={isModalOpen}
                 onClose={closeModal}
                 onSubmit={handleSubmit}
                 isSubmitting={isSubmitting}
+                error={submitError}
             />
         </div>
     );

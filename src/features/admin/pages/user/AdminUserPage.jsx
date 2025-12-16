@@ -1,140 +1,112 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Pagination from '../../common/Pagination.jsx';
-import UserHeader from '../../components/user/UserHeader.jsx';
-import UserFilter from '../../components/user/UserFilter.jsx';
-import UserTable from '../../components/user/UserTable.jsx';
-import UserCreateModal from '../../components/user/UserCreateModal.jsx';
-import UserBulkUploadModal from '../../components/user/UserBulkUploadModal.jsx';
+import { useAdminUserList } from '../../hooks/user/useAdminUserList';
+import UserFilter from '../../components/user/UserFilter';
+import UserTable from '../../components/user/UserTable';
+import Pagination from '../../common/Pagination';
 import styles from './AdminUserPage.module.css';
-
-// 더미 데이터 (실제로는 API에서 가져옴)
-const mockUsers = [
-    { id: 1, name: '김철수', email: 'kim@example.com', role: 'student', status: 'active', classes: ['React 기초반', 'Spring Boot 입문'], createdAt: '2024-01-15', lastLogin: '2024-12-13 14:30' },
-    { id: 2, name: '이영희', email: 'lee@example.com', role: 'student', status: 'active', classes: ['Python 중급'], createdAt: '2024-02-20', lastLogin: '2024-12-12 09:15' },
-    { id: 3, name: '박지민', email: 'park@example.com', role: 'instructor', status: 'active', classes: ['React 기초반'], createdAt: '2024-01-10', lastLogin: '2024-12-13 16:45' },
-    { id: 4, name: '최수진', email: 'choi@example.com', role: 'student', status: 'inactive', classes: [], createdAt: '2024-03-05', lastLogin: '2024-11-28 11:20' },
-    { id: 5, name: '정민호', email: 'jung@example.com', role: 'student', status: 'active', classes: ['Spring Boot 입문', 'Python 중급'], createdAt: '2024-02-28', lastLogin: '2024-12-13 10:00' },
-    { id: 6, name: '강예진', email: 'kang@example.com', role: 'student', status: 'active', classes: ['React 기초반'], createdAt: '2024-03-10', lastLogin: '2024-12-13 11:30' },
-    { id: 7, name: '윤도현', email: 'yoon@example.com', role: 'instructor', status: 'active', classes: ['Python 중급'], createdAt: '2024-01-20', lastLogin: '2024-12-12 15:00' },
-    { id: 8, name: '한소희', email: 'han@example.com', role: 'student', status: 'inactive', classes: [], createdAt: '2024-04-01', lastLogin: '2024-10-15 09:00' },
-];
-
-const USERS_PER_PAGE = 10;
 
 const AdminUserPage = () => {
     const navigate = useNavigate();
-    const [users, setUsers] = useState(mockUsers);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filterRole, setFilterRole] = useState('all');
-    const [filterStatus, setFilterStatus] = useState('all');
-    const [showCreateModal, setShowCreateModal] = useState(false);
-    const [showBulkUpload, setShowBulkUpload] = useState(false);
-    const [userPage, setUserPage] = useState(0);
 
-    // 필터링된 사용자 목록
-    const filteredUsers = useMemo(() => {
-        return users.filter(user => {
-            const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                user.email.toLowerCase().includes(searchTerm.toLowerCase());
-            const matchesRole = filterRole === 'all' || user.role === filterRole;
-            const matchesStatus = filterStatus === 'all' || user.status === filterStatus;
-            return matchesSearch && matchesRole && matchesStatus;
-        });
-    }, [users, searchTerm, filterRole, filterStatus]);
+    const {
+        // 데이터
+        users,
+        totalPages,
+        totalElements,
+        loading,
 
-    // 페이지네이션 적용된 사용자 목록
-    const paginatedUsers = useMemo(() => {
-        const startIndex = userPage * USERS_PER_PAGE;
-        return filteredUsers.slice(startIndex, startIndex + USERS_PER_PAGE);
-    }, [filteredUsers, userPage]);
+        // 페이지네이션
+        page,
+        size,
+        handlePageChange,
 
-    const totalUserPages = Math.ceil(filteredUsers.length / USERS_PER_PAGE);
+        // 필터링
+        keyword,
+        role,
+        startDate,
+        endDate,
+        handleKeywordChange,
+        handleRoleChange,
+        handleDateRangeChange,
 
-    // 필터 변경 시 페이지 초기화
-    const handleSearchChange = (value) => {
-        setSearchTerm(value);
-        setUserPage(0);
-    };
+        // 정렬
+        sortBy,
+        sortDirection,
+        handleSortChange,
 
-    const handleFilterRoleChange = (value) => {
-        setFilterRole(value);
-        setUserPage(0);
-    };
+        // 기타
+        resetFilters,
+        handleExcelDownload,
+    } = useAdminUserList();
 
-    const handleFilterStatusChange = (value) => {
-        setFilterStatus(value);
-        setUserPage(0);
-    };
-
-    // 사용자 상세 페이지로 이동
     const handleUserClick = (user) => {
-        navigate(`/admin/users/${user.id}`);
-    };
-
-    // 신규 사용자 등록
-    const handleCreateUser = (formData) => {
-        const newUser = {
-            ...formData,
-            id: Math.max(...users.map(u => u.id)) + 1,
-            classes: [],
-            createdAt: new Date().toISOString().split('T')[0],
-            lastLogin: '-'
-        };
-        setUsers([...users, newUser]);
-        setShowCreateModal(false);
-    };
-
-    // 엑셀 일괄 업로드
-    const handleBulkUpload = (file) => {
-        // 실제로는 파일을 파싱하여 사용자 추가
-        alert(`${file.name} 파일이 업로드되었습니다.`);
-        setShowBulkUpload(false);
-    };
-
-    // 엑셀 다운로드
-    const handleExcelDownload = () => {
-        alert('사용자 목록을 엑셀 파일로 다운로드합니다.');
+        navigate(`/admin/users/${user.userId}`);
     };
 
     return (
         <div className={styles.adminPage}>
-            <UserHeader
-                onAddUser={() => setShowCreateModal(true)}
-                onBulkUpload={() => setShowBulkUpload(true)}
-                onExcelDownload={handleExcelDownload}
-            />
+            <div className={styles.pageHeader}>
+                <div className={styles.headerLeft}>
+                    <h1 className={styles.pageTitle}>사용자 관리</h1>
+                    <span className={styles.totalCount}>
+                        총 {totalElements}명
+                    </span>
+                </div>
+                <div className={styles.headerRight}>
+                    <button
+                        className={styles.btnExport}
+                        onClick={handleExcelDownload}
+                        disabled={loading}
+                    >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        엑셀 다운로드
+                    </button>
+                </div>
+            </div>
 
             <UserFilter
-                searchTerm={searchTerm}
-                onSearchChange={handleSearchChange}
-                filterRole={filterRole}
-                onFilterRoleChange={handleFilterRoleChange}
-                filterStatus={filterStatus}
-                onFilterStatusChange={handleFilterStatusChange}
+                keyword={keyword}
+                onSearch={handleKeywordChange}
+                startDate={startDate}
+                endDate={endDate}
+                filterRole={role}
+                onFilterChange={(filters) => {
+                    if (filters.startDate !== undefined || filters.endDate !== undefined) {
+                        handleDateRangeChange(filters.startDate || startDate, filters.endDate || endDate);
+                    }
+                    if (filters.filterRole !== undefined) {
+                        handleRoleChange(filters.filterRole === 'all' ? '' : filters.filterRole.toUpperCase());
+                    }
+                }}
+                onSortChange={(field, direction) => {
+                    handleSortChange(field);
+                }}
+                onReset={resetFilters}
             />
 
-            <UserTable users={paginatedUsers} onUserClick={handleUserClick} />
+            <UserTable
+                users={users}
+                loading={loading}
+                onUserClick={handleUserClick}
+                sortBy={sortBy}
+                sortDirection={sortDirection}
+                onSortChange={handleSortChange}
+                page={page}
+                size={size}
+            />
 
-            {paginatedUsers.length > 0 && (
+            {!loading && totalPages > 1 && (
                 <Pagination
-                    currentPage={userPage}
-                    totalPages={totalUserPages}
-                    onPageChange={setUserPage}
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
                 />
             )}
-
-            <UserCreateModal
-                isOpen={showCreateModal}
-                onClose={() => setShowCreateModal(false)}
-                onSubmit={handleCreateUser}
-            />
-
-            <UserBulkUploadModal
-                isOpen={showBulkUpload}
-                onClose={() => setShowBulkUpload(false)}
-                onSubmit={handleBulkUpload}
-            />
         </div>
     );
 };

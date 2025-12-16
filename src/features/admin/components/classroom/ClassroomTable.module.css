@@ -1,146 +1,159 @@
-/* ===== ClassroomTable.module.css ===== */
-
-/* Table Container */
+/* 테이블 컨테이너 */
 .tableContainer {
-    background-color: var(--color-bg-primary);
-    border: 1px solid var(--color-border-light);
-    border-radius: var(--radius-md);
+    background: white;
+    border-radius: 8px;
     overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
 }
 
+/* 데이터 테이블 */
 .dataTable {
     width: 100%;
     border-collapse: collapse;
 }
 
+.dataTable thead {
+    background: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+}
+
 .dataTable th {
-    padding: var(--spacing-3) var(--spacing-4);
-    background-color: var(--color-bg-tertiary);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text-secondary);
+    padding: 14px;
     text-align: left;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-bottom: 1px solid var(--color-border-light);
+    font-weight: 600;
+    color: #495057;
+    font-size: 14px;
     text-align: center;
+}
+
+.dataTable tbody tr {
+    border-bottom: 1px solid #e9ecef;
+    transition: background-color 0.2s;
+}
+
+.dataTable tbody tr:hover:not(.skeletonRow) {
+    background: #f8f9fa;
 }
 
 .dataTable td {
-    padding: var(--spacing-3) var(--spacing-4);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-primary);
-    border-bottom: 1px solid var(--color-border-light);
+    padding: 12px;
+    color: #212529;
+    font-size: 14px;
     text-align: center;
-}
-
-.dataTable tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.dataTable tbody tr:hover {
-    background-color: var(--color-bg-secondary);
 }
 
 .clickableRow {
     cursor: pointer;
 }
 
-/* Cell Styles */
+/* 셀 스타일 */
 .titleCell {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    max-width: 200px;
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text-primary);
-    cursor: pointer;
-}
-
-.descriptionCell {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    max-width: 200px;
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: #212529;
 }
 
 .dateCell {
-    white-space: nowrap;
-    font-size: var(--font-size-sm);
+    color: #6c757d;
+    font-size: 13px;
 }
 
-/* Badges */
 .typeBadge {
-    display: inline-flex;
-    align-items: center;
-    padding: var(--spacing-1) var(--spacing-2);
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
 }
 
 .typeBadge.online {
-    background-color: var(--color-info-50);
-    color: var(--color-info-700);
+    background: #e3f2fd;
+    color: #1976d2;
 }
 
 .typeBadge.offline {
-    background-color: var(--color-warning-50);
-    color: var(--color-warning-700);
+    background: #f3e5f5;
+    color: #7b1fa2;
 }
 
-.statusBadge {
-    display: inline-flex;
-    align-items: center;
-    padding: var(--spacing-1) var(--spacing-2);
-    border-radius: var(--radius-sm);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
+/* 메시지 셀 (에러/빈상태용) */
+.messageCell {
+    padding: 0 !important;
+    height: 400px;
 }
 
-.statusBadge.active {
-    background-color: rgba(16, 185, 129, 0.1);
-    color: var(--color-success);
-}
-
-.statusBadge.inactive {
-    background-color: var(--color-bg-tertiary);
-    color: var(--color-text-secondary);
-}
-
-/* Empty State */
+/* 빈 상태 */
 .emptyState {
-    text-align: center;
-    padding: var(--spacing-8);
-    color: var(--color-text-secondary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+    color: #6c757d;
+    height: 100%;
 }
 
 .emptyState svg {
-    color: var(--color-text-tertiary);
-    margin-bottom: var(--spacing-4);
+    margin-bottom: 16px;
+    opacity: 0.5;
 }
 
 .emptyState p {
-    font-size: var(--font-size-base);
+    font-size: 16px;
     margin: 0;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .dataTable {
-        font-size: var(--font-size-xs);
-    }
+/* 에러 상태 */
+.errorState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+    color: #dc3545;
+    height: 100%;
+}
 
-    .dataTable th,
-    .dataTable td {
-        padding: var(--spacing-2);
-    }
+.errorState svg {
+    margin-bottom: 16px;
+    opacity: 0.7;
+}
 
-    .descriptionCell {
-        max-width: 120px;
+.errorState p {
+    font-size: 16px;
+    margin: 0;
+}
+
+/* ========== 스켈레톤 UI ========== */
+
+.skeletonWrapper {
+    display: flex;
+    justify-content: center;  /* 중앙 정렬 */
+    align-items: center;
+}
+.skeletonRow {
+    pointer-events: none;
+}
+
+.skeleton {
+    height: 16px;
+    background: linear-gradient(
+            90deg,
+            #f0f0f0 25%,
+            #e0e0e0 50%,
+            #f0f0f0 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
     }
 }

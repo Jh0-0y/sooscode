@@ -80,14 +80,14 @@
 }
 
 .infoList {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: var(--spacing-3);
 }
 
 .infoItem {
     display: flex;
-    justify-content: space-between;
+    gap: var(--spacing-3);
     align-items: center;
     padding: var(--spacing-3);
     background-color: var(--color-bg-secondary);
