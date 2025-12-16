@@ -19,6 +19,7 @@ export default function ChatMessageItem({
                                             handleDelete,
                                             handleReply,
                                             scrollToMessage,
+                                            showTime
                                         }) {
     const mine = msg.email === myEmail;          // 내 메시지인지
     const isDeleted = msg.deleted === true;      // 삭제 여부 (boolean)
@@ -52,7 +53,7 @@ export default function ChatMessageItem({
                 className={`chat-system-notice ${isEnter ? "enter" : "exit"}`}
             >
                 <span className="system-text">{msg.content}</span>
-                {created && (
+                {created && showTime && (
                     <span className="chat-time">
                         {formatTimeOnly(created)}
                     </span>
@@ -105,10 +106,11 @@ export default function ChatMessageItem({
             {/* 본문 내용 */}
             <div className="chat-content">{msg.content}</div>
             {/* 시간 표시 */}
+            {showTime &&(
             <div className="chat-time">
                 {formatTimeOnly(created)}
             </div>
-
+                )}
             <div className="chat-actions">
                 {/* 공감 버튼 / 카운트 */}
                 <div
@@ -157,7 +159,10 @@ export default function ChatMessageItem({
 
                         {/* 세 점 메뉴 내용 */}
                         {activeMenuId === msg.chatId && (
-                            <div className="chat-more-menu">
+                            <div
+                                className="chat-more-menu"
+                                onMouseDown={(e) => e.stopPropagation()}
+                            >
                                 <CopyButton
                                     onClick={handleCopy}
                                     />

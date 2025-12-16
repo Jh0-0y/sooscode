@@ -173,33 +173,43 @@
 /* ... 메뉴 트리거 */
 .chat-actions-more {
     position: relative;
+    display: inline-block;
+}
+
+/* 메뉴 위에 얇은 투명 브릿지 생성 (gap/경계 끊김 방지) */
+.chat-more-menu::before {
+    content: "";
+    position: absolute;
+    top: -8px;          /* 메뉴 위로 8px 확장 */
+    left: 0;
+    right: 0;
+    height: 8px;
 }
 .chat-more-btn {
-    width: calc(var(--spacing-4) + var(--spacing-1));
-    height: calc(var(--spacing-4) + var(--spacing-1));
+    width: 20px;
+    height: 20px;
     border: none;
     background: transparent;
     color: var(--color-text-tertiary);
     cursor: pointer;
-    transition: var(--transition-fast);
 }
 .chat-more-btn:hover {
     color: var(--color-text-primary);
 }
 
-/* 드롭다운 공통 (작고 단단하게) */
+/* 드롭다운 공통 */
 .chat-more-menu {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     position: absolute;
-    margin-top: var(--spacing-1);
+    margin-top: 4px;
     background: var(--color-bg-primary);
     border: 1px solid var(--color-border-light);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-base);
     z-index: 10;
-    min-width: calc(var(--spacing-20) + var(--spacing-4));
-    overflow: hidden;
+    min-width: 90px;
+    overflow: visible;
 }
 
 /* 내가 보낸 메시지: 오른쪽 정렬 */
@@ -213,17 +223,16 @@
 }
 
 .chat-more-menu button {
-    padding: var(--spacing-2) var(--spacing-3);
+    padding: 6px 10px;
     background: transparent;
     border: none;
     cursor: pointer;
     font-size: var(--font-size-xs);
     text-align: left;
     color: var(--color-text-primary);
-    transition: var(--transition-fast);
 }
 .chat-more-menu button:hover {
-    background: var(--color-bg-tertiary);
+
 }
 
 /* ========== 시스템 메시지(입장/퇴장) ========== */
@@ -367,3 +376,52 @@
     font-size: var(--font-size-xs);
     white-space: nowrap;
 }
+.chat-actions-more {
+    position: relative;
+    display: inline-block;
+}
+
+.chat-more-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+
+    display: flex;
+    flex-direction: row;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transition: opacity .15s ease, transform .15s ease;
+
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-base);
+    z-index: 9999;
+    min-width: 90px;
+}
+
+/*  버튼이든 메뉴든 위에 올리면 유지 */
+.chat-actions-more:hover .chat-more-menu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+.chat-typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    color: var(--color-text-tertiary);
+}
+
+.chat-typing-text {
+    white-space: var(--color-text-tertiary);
+}
+
+
