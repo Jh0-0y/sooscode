@@ -1,25 +1,28 @@
 package finalproject.compile.domain.compile.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
- * 컴파일 Job 엔티티 (Domain Entity)
- * - 컴파일 요청을 표현
- * - 소스코드
- * - 실행 결과
- * - 도메인의 상태와 규칙을 코드로 표현
- * - 실제 테이블 생성을 위함이 아닌 데이터 구조를 정의
- * - 상태(PENDING, SUCCESS, FAIL)
+ * 컴파일 Job 엔티티
+ * - Redis 저장을 위해 기본 생성자(@NoArgsConstructor) 추가
+ * - 직렬화를 위해 @Setter, final 제거
  */
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CompileJob {
 
-    private final String jobId;
-    private final String code;
-    private final String callbackUrl;
+    private String jobId;
+    private String code;
+    private String callbackUrl;
     private CompileJobStatus status;
     private String output;
 
+    // 초기 생성자
     public CompileJob(String jobId, String code , String callbackUrl) {
         this.jobId = jobId;
         this.code = code;
