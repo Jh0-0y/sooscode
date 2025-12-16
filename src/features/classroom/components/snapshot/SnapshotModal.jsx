@@ -5,19 +5,14 @@ import {useToast} from "@/hooks/useToast.js";
 
 /**
  * 스냅샷 저장을 위해 제목을 입력받는 모달 컴포넌트
- * Refactored based on Code Review:
- * 1. useEffect 의존성 최적화 (setTitle 제외)
- * 2. SSR/Test 환경 고려 (document check)
- * 3. UX 개선 (ESC 닫기)
- * 4. 중복 호출 방지 (isLoading 처리)
+ *  useEffect 의존성 최적화 (setTitle 제외)
+ *  중복 호출 방지
  */
-
 const MAX_TITLE_LENGTH = 20;
 const SnapshotModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
     const [title, setTitle] = useState('');
     const toast = useToast();
 
-    // 1. 모달이 열릴 때마다 제목 초기화
     useEffect(() => {
         if (isOpen) {
             // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -25,7 +20,6 @@ const SnapshotModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
         }
     }, [isOpen]);
 
-    // 2. ESC 키로 닫기
     useEffect(() => {
         if (!isOpen) return;
 
@@ -34,10 +28,11 @@ const SnapshotModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
         };
 
         window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
+        return () =>
+            window.removeEventListener('keydown', handleKeyDown);
     }, [isOpen, onClose]);
 
-    // 3. Portal + SSR 안정성 가드
+
     if (!isOpen || typeof document === 'undefined') return null;
 
     const handleSubmit = () => {
@@ -49,7 +44,6 @@ const SnapshotModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
             toast.warning(`제목은 ${MAX_TITLE_LENGTH}자를 초과할 수 없습니다`);
             return;
         }
-        // 저장 중이면 중복 실행 방지
         if (isLoading) return;
 
         onConfirm(title);
@@ -68,13 +62,11 @@ const SnapshotModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
                     onChange={(e) => setTitle(e.target.value)}
                     autoFocus
                     maxLength={MAX_TITLE_LENGTH}
-                    // 저장 중 입력 방지
                     disabled={isLoading}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter' && !isLoading) handleSubmit();
                     }}
                 />
-
                 <div className={styles.actions}>
                     <button
                         className={styles.cancelButton}
@@ -86,7 +78,6 @@ const SnapshotModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
                     <button
                         className={styles.saveButton}
                         onClick={handleSubmit}
-                        // 저장 중 버튼 비활성화
                         disabled={isLoading}
                     >
                         {isLoading ? '저장 중...' : '저장'}
@@ -97,5 +88,4 @@ const SnapshotModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
         document.body
     );
 };
-
 export default SnapshotModal;

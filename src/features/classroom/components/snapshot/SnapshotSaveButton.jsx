@@ -17,5 +17,4 @@ const SnapshotSaveButton = ({ loading, onClick }) => {
         </button>
     );
 };
-
 export default SnapshotSaveButton;

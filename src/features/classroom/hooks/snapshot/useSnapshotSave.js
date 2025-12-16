@@ -4,28 +4,37 @@ import { useCode } from "@/features/classroom/hooks/code/useCode.js";
 import { useToast } from "@/hooks/useToast.js";
 import { useClassroom } from "@/features/classroom/contexts/ClassroomContext.jsx";
 
+// 코드 내용 제한 상수
 const MAX_CONTENT_LENGTH = 10000;
-
+/**
+ * 스냅샷 저장 전용 스토어
+ * 역할:
+ * -스냅샷 저장 상태 전역관리
+ **/
 const snapshotSaveStore = create((set) => ({
     loadingSave: false,
     setLoadingSave: (loading) => set({ loadingSave: loading }),
 }));
-
+/**
+ * 스냅샷 저장 비지니스 훅
+ * 역할:
+ * -현재 에디터 코드내용 스냅샷 저장
+ **/
 export const useSnapshotSave = () => {
     const { classId } = useClassroom();
     const { code } = useCode();
     const toast = useToast();
 
+    //저장상태 구독
     const {
         loadingSave,
         setLoadingSave,
     } = snapshotSaveStore();
-
     /**
-     * 스냅샷 저장
-     * 목록 갱신 로직(onSaveSuccess) 제거. 저장 책임만 가짐.
+     * 스냅샷 저장 처리
+     * -저장 책임만
      */
-    const handleSaveSnapshot = async (title) => { // onSaveSuccess 인수 제거
+    const handleSaveSnapshot = async (title) => {
         if (!classId) {
             toast.error("클래스 정보가 유효하지 않습니다.");
             return false;
@@ -53,17 +62,15 @@ export const useSnapshotSave = () => {
             });
             toast.success("스냅샷이 저장되었습니다.");
 
-
-            return true; // 저장 성공
+            return true;
         } catch (error) {
             console.error("스냅샷 저장 에러:", error);
             toast.error("저장에 실패했습니다.");
-            return false; // 저장 실패
+            return false;
         } finally {
             setLoadingSave(false);
         }
     };
-
     return {
         loadingSave,
         handleSaveSnapshot,

@@ -17,9 +17,9 @@ const SnapshotRestoreModal = ({ isOpen, onClose, onConfirm, snapshotTitle, snaps
                 onClose();
             }
         };
-
         window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
+        return () =>
+            window.removeEventListener('keydown', handleKeyDown);
     }, [isOpen, onConfirm, onClose]);
 
     if (!isOpen) return null;
