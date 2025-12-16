@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import useAvailableStudentsSearch from '../../hooks/classroom/useAvailableStudentsSearch';
 import styles from './ClassroomStudentAddModal.module.css';
 
 /**
- * 학생 추가 모달
+ * 학생 추가 모달 (무한 스크롤 지원)
  * @param {boolean} show - 모달 표시 여부
  * @param {Function} onClose - 닫기 핸들러
  * @param {number} classId - 클래스 ID
@@ -13,9 +13,10 @@ import styles from './ClassroomStudentAddModal.module.css';
 const ClassroomStudentAddModal = ({ show, onClose, classId, onConfirm, isSubmitting = false }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedStudents, setSelectedStudents] = useState([]);
+    const observerTarget = useRef(null);
 
-    // 학생 검색 Hook
-    const { students, loading, searchStudents } = useAvailableStudentsSearch(classId);
+    // 학생 검색 Hook (무한 스크롤 지원)
+    const { students, loading, hasMore, searchStudents, loadMore } = useAvailableStudentsSearch(classId);
 
     // 모달 열릴 때 초기 검색 (전체 목록)
     useEffect(() => {
@@ -34,6 +35,25 @@ const ClassroomStudentAddModal = ({ show, onClose, classId, onConfirm, isSubmitt
 
         return () => clearTimeout(timer);
     }, [searchTerm, show, searchStudents]);
+
+    // 무한 스크롤 - Intersection Observer
+    const handleObserver = useCallback((entries) => {
+        const [target] = entries;
+        if (target.isIntersecting && hasMore && !loading) {
+            loadMore();
+        }
+    }, [hasMore, loading, loadMore]);
+
+    useEffect(() => {
+        const element = observerTarget.current;
+        if (!element) return;
+
+        const option = { threshold: 0 };
+        const observer = new IntersectionObserver(handleObserver, option);
+        observer.observe(element);
+
+        return () => observer.disconnect();
+    }, [handleObserver]);
 
     const toggleStudentSelection = (studentId) => {
         setSelectedStudents(prev =>
@@ -113,8 +133,36 @@ const ClassroomStudentAddModal = ({ show, onClose, classId, onConfirm, isSubmitt
 
                     {/* 학생 목록 */}
                     <div className={styles.studentSelectList}>
-                        {loading ? (
-                            // 스켈레톤 UI
+                        {students.length > 0 ? (
+                            <>
+                                {students.map(student => (
+                                    <label key={student.userId} className={styles.studentSelectItem}>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedStudents.includes(student.userId)}
+                                            onChange={() => toggleStudentSelection(student.userId)}
+                                        />
+                                        <div className={styles.studentSelectInfo}>
+                                            <span className={styles.studentName}>{student.name}</span>
+                                            <span className={styles.studentEmail}>{student.email}</span>
+                                        </div>
+                                    </label>
+                                ))}
+
+                                {/* 무한 스크롤 트리거 */}
+                                {hasMore && (
+                                    <div ref={observerTarget} className={styles.loadingTrigger}>
+                                        {loading && (
+                                            <div className={styles.loadingMore}>
+                                                <div className={styles.spinner}></div>
+                                                <span>로딩 중...</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </>
+                        ) : loading ? (
+                            // 초기 로딩 스켈레톤 UI
                             [...Array(5)].map((_, index) => (
                                 <div key={`skeleton-${index}`} className={styles.skeletonItem}>
                                     <div className={styles.skeletonCheckbox}></div>
@@ -123,20 +171,6 @@ const ClassroomStudentAddModal = ({ show, onClose, classId, onConfirm, isSubmitt
                                         <div className={styles.skeleton} style={{ width: '180px', height: '14px', marginTop: '4px' }}></div>
                                     </div>
                                 </div>
-                            ))
-                        ) : students.length > 0 ? (
-                            students.map(student => (
-                                <label key={student.userId} className={styles.studentSelectItem}>
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedStudents.includes(student.userId)}
-                                        onChange={() => toggleStudentSelection(student.userId)}
-                                    />
-                                    <div className={styles.studentSelectInfo}>
-                                        <span className={styles.studentName}>{student.name}</span>
-                                        <span className={styles.studentEmail}>{student.email}</span>
-                                    </div>
-                                </label>
                             ))
                         ) : (
                             <div className={styles.emptyState}>

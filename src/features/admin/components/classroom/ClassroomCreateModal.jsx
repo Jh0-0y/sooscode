@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import useInstructorSearch from '../../hooks/classroom/useInstructorSearch';
 import styles from './ClassroomCreateModal.module.css';
 
 const INITIAL_FORM_DATA = {
@@ -8,28 +9,56 @@ const INITIAL_FORM_DATA = {
     endDate: '',
     startTime: '09:00',
     endTime: '18:00',
-    instructorId: '', // instructorName → instructorId
-    isOnline: true,   // online → isOnline
+    instructorId: '',
+    instructorName: '',
+    isOnline: true,
 };
 
-/**
- * 클래스 등록 모달 컴포넌트
- * @param {boolean} isOpen - 모달 열림 상태
- * @param {Function} onClose - 모달 닫기 핸들러
- * @param {Function} onSubmit - 폼 제출 핸들러
- * @param {boolean} isSubmitting - 제출 중 상태
- */
 const ClassroomCreateModal = ({ isOpen, onClose, onSubmit, isSubmitting = false }) => {
     const [formData, setFormData] = useState(INITIAL_FORM_DATA);
+    const [instructorInput, setInstructorInput] = useState('');
+    const [showDropdown, setShowDropdown] = useState(false);
+    const dropdownRef = useRef(null);
+
+    const { instructors, loading, searchInstructors } = useInstructorSearch();
+
+    // 드롭다운 외부 클릭 감지
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setShowDropdown(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    // 검색어 변경 시 디바운스 검색
+    useEffect(() => {
+        if (!instructorInput || !isOpen) return;
+
+        const timer = setTimeout(() => {
+            searchInstructors(instructorInput);
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, [instructorInput, isOpen, searchInstructors]);
 
     const resetForm = () => {
         setFormData(INITIAL_FORM_DATA);
+        setInstructorInput('');
+        setShowDropdown(false);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // instructorId를 숫자로 변환
+        if (!formData.instructorId) {
+            alert('강사를 선택해주세요.');
+            return;
+        }
+
         const submitData = {
             ...formData,
             instructorId: parseInt(formData.instructorId, 10)
@@ -46,6 +75,33 @@ const ClassroomCreateModal = ({ isOpen, onClose, onSubmit, isSubmitting = false 
 
     const handleChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
+    };
+
+    // 강사 입력 필드 변경
+    const handleInstructorInputChange = (e) => {
+        const value = e.target.value;
+        setInstructorInput(value);
+        setShowDropdown(true);
+
+        // 입력이 지워지면 선택 초기화
+        if (!value) {
+            setFormData(prev => ({
+                ...prev,
+                instructorId: '',
+                instructorName: ''
+            }));
+        }
+    };
+
+    // 강사 선택
+    const handleInstructorSelect = (instructor) => {
+        setFormData(prev => ({
+            ...prev,
+            instructorId: instructor.userId,
+            instructorName: instructor.name
+        }));
+        setInstructorInput(instructor.name);
+        setShowDropdown(false);
     };
 
     if (!isOpen) return null;
@@ -91,23 +147,55 @@ const ClassroomCreateModal = ({ isOpen, onClose, onSubmit, isSubmitting = false 
                             />
                         </div>
 
-                        <div className={styles.formGroup}>
-                            <label htmlFor="instructorId">
-                                담당 강사 ID <span className={styles.required}>*</span>
+                        {/* 강사 검색 Autocomplete */}
+                        <div className={styles.formGroup} ref={dropdownRef}>
+                            <label htmlFor="instructor">
+                                담당 강사 <span className={styles.required}>*</span>
                             </label>
-                            <input
-                                type="number"
-                                id="instructorId"
-                                value={formData.instructorId}
-                                onChange={(e) => handleChange('instructorId', e.target.value)}
-                                placeholder="강사 ID를 입력하세요 (예: 1)"
-                                required
-                                disabled={isSubmitting}
-                                min="1"
-                            />
-                            <small style={{ color: '#6c757d', fontSize: '12px', marginTop: '4px', display: 'block' }}>
-                                * 강사의 사용자 ID를 입력하세요
-                            </small>
+                            <div className={styles.autocompleteWrapper}>
+                                <input
+                                    type="text"
+                                    id="instructor"
+                                    value={instructorInput}
+                                    onChange={handleInstructorInputChange}
+                                    onFocus={() => instructorInput && setShowDropdown(true)}
+                                    placeholder="강사 이름 또는 이메일을 입력하세요"
+                                    required
+                                    disabled={isSubmitting}
+                                    autoComplete="off"
+                                />
+                                {showDropdown && instructorInput && (
+                                    <div className={styles.dropdown}>
+                                        {loading ? (
+                                            <div className={styles.dropdownItem} style={{ cursor: 'default' }}>
+                                                <span>검색 중...</span>
+                                            </div>
+                                        ) : instructors.length > 0 ? (
+                                            instructors.map(instructor => (
+                                                <div
+                                                    key={instructor.userId}
+                                                    className={styles.dropdownItem}
+                                                    onClick={() => handleInstructorSelect(instructor)}
+                                                >
+                                                    <div className={styles.instructorInfo}>
+                                                        <span className={styles.instructorName}>{instructor.name}</span>
+                                                        <span className={styles.instructorEmail}>{instructor.email}</span>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div className={styles.dropdownItem} style={{ cursor: 'default' }}>
+                                                <span>검색 결과가 없습니다</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                            {formData.instructorId && (
+                                <small className={styles.selectedInfo}>
+                                    ✓ 선택됨: {formData.instructorName}
+                                </small>
+                            )}
                         </div>
 
                         <div className={styles.formRow}>

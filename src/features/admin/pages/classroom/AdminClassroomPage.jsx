@@ -18,7 +18,6 @@ const AdminClassroomPage = () => {
     const {
         classes,
         loading,
-        initialLoading,
         error,
         filters,
         pagination,
@@ -28,7 +27,6 @@ const AdminClassroomPage = () => {
         handleReset,
         handlePageChange,
         refetch,
-        addClassToList
     } = useClassroomList({ pageSize: 10 });
 
     // ============ 생성 훅 ============

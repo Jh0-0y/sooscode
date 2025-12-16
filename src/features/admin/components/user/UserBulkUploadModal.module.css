@@ -72,16 +72,67 @@
     transition: all var(--transition-fast);
 }
 
-.btnClose:hover {
+.btnClose:hover:not(:disabled) {
     background-color: var(--color-bg-tertiary);
     color: var(--color-text-primary);
+}
+
+.btnClose:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .modalBody {
     padding: var(--spacing-4);
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
 }
 
+/* 안내 정보 박스 */
+.infoBox {
+    display: flex;
+    gap: var(--spacing-3);
+    padding: var(--spacing-3);
+    background-color: var(--color-info-50);
+    border: 1px solid var(--color-info-200);
+    border-radius: var(--radius-md);
+    color: var(--color-info-700);
+}
+
+.infoBox svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.infoContent {
+    flex: 1;
+}
+
+.infoTitle {
+    font-weight: var(--font-weight-semibold);
+    margin: 0 0 var(--spacing-2) 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-info-900);
+}
+
+.infoList {
+    margin: 0;
+    padding-left: var(--spacing-4);
+    font-size: var(--font-size-xs);
+    line-height: 1.5;
+}
+
+.infoList li {
+    margin-bottom: var(--spacing-1);
+}
+
+.infoList li:last-child {
+    margin-bottom: 0;
+}
+
+/* 업로드 영역 */
 .uploadZone {
     display: flex;
     flex-direction: column;
@@ -94,11 +145,24 @@
     cursor: pointer;
     transition: all var(--transition-fast);
     position: relative;
+    min-height: 200px;
 }
 
-.uploadZone:hover {
+.uploadZone:hover:not(.hasFile) {
     border-color: var(--color-primary-500);
     background-color: var(--color-primary-50);
+}
+
+.uploadZone.dragActive {
+    border-color: var(--color-primary-500);
+    background-color: var(--color-primary-50);
+}
+
+.uploadZone.hasFile {
+    cursor: default;
+    border-color: var(--color-success-400);
+    background-color: var(--color-success-50);
+    padding: var(--spacing-4);
 }
 
 .uploadZone svg {
@@ -110,6 +174,7 @@
     font-size: var(--font-size-sm);
     color: var(--color-text-primary);
     margin: 0 0 var(--spacing-1);
+    font-weight: var(--font-weight-medium);
 }
 
 .uploadHint {
@@ -127,8 +192,76 @@
     cursor: pointer;
 }
 
+.uploadZone input:disabled {
+    cursor: not-allowed;
+}
+
+/* 파일 정보 */
+.fileInfo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    width: 100%;
+    padding: var(--spacing-3);
+    background-color: var(--color-bg-primary);
+    border-radius: var(--radius-md);
+}
+
+.fileInfo svg {
+    color: var(--color-success-600);
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.fileDetails {
+    flex: 1;
+    min-width: 0;
+}
+
+.fileName {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--spacing-1) 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fileSize {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+.btnRemove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.btnRemove:hover:not(:disabled) {
+    background-color: var(--color-error-100);
+    color: var(--color-error-600);
+}
+
+.btnRemove:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 템플릿 다운로드 */
 .templateDownload {
-    margin-top: var(--spacing-4);
+    margin-top: var(--spacing-2);
     text-align: center;
 }
 
@@ -142,13 +275,20 @@
     font-size: var(--font-size-sm);
     cursor: pointer;
     transition: color var(--transition-fast);
+    padding: var(--spacing-1);
 }
 
-.btnLink:hover {
+.btnLink:hover:not(:disabled) {
     color: var(--color-primary-700);
     text-decoration: underline;
 }
 
+.btnLink:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 푸터 */
 .modalFooter {
     display: flex;
     justify-content: flex-end;
@@ -172,13 +312,14 @@
     transition: background-color var(--transition-fast);
 }
 
-.btnPrimary:hover {
+.btnPrimary:hover:not(:disabled) {
     background-color: var(--color-primary-700);
 }
 
 .btnPrimary:disabled {
     background-color: var(--color-gray-400);
     cursor: not-allowed;
+    opacity: 0.6;
 }
 
 .btnSecondary {
@@ -196,7 +337,39 @@
     transition: all var(--transition-fast);
 }
 
-.btnSecondary:hover {
+.btnSecondary:hover:not(:disabled) {
     background-color: var(--color-bg-tertiary);
     border-color: var(--color-border-dark);
+}
+
+.btnSecondary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 반응형 */
+@media (max-width: 640px) {
+    .modal {
+        max-width: 100%;
+    }
+
+    .modalHeader,
+    .modalBody,
+    .modalFooter {
+        padding: var(--spacing-3);
+    }
+
+    .uploadZone {
+        padding: var(--spacing-6);
+        min-height: 180px;
+    }
+
+    .uploadZone.hasFile {
+        padding: var(--spacing-3);
+    }
+
+    .infoBox {
+        flex-direction: column;
+        gap: var(--spacing-2);
+    }
 }

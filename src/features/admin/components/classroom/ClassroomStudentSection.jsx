@@ -11,7 +11,6 @@ const ClassroomStudentSection = ({ classroomId }) => {
     const navigate = useNavigate();
     const toast = useToast();
     const [showAddStudent, setShowAddStudent] = useState(false);
-    const [allStudents] = useState([]); // TODO: 전체 학생 목록 API 연동
 
     // 학생 목록
     const {
@@ -237,8 +236,7 @@ const ClassroomStudentSection = ({ classroomId }) => {
             <ClassroomStudentAddModal
                 show={showAddStudent}
                 onClose={() => setShowAddStudent(false)}
-                allStudents={allStudents}
-                enrolledStudents={students}
+                classId={classroomId}
                 onConfirm={handleConfirmAddStudents}
                 isSubmitting={isAssigning}
             />

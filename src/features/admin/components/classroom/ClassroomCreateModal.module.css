@@ -47,6 +47,10 @@
     color: #6b7280;
 }
 
+.btnClose:hover {
+    color: #111827;
+}
+
 /* Modal Body */
 .modalBody {
     padding: 20px;
@@ -73,6 +77,21 @@
     border: 1px solid #d1d5db;
     border-radius: 6px;
     font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus,
+.formGroup select:focus {
+    border-color: #3b82f6;
+}
+
+.formGroup input:disabled,
+.formGroup textarea:disabled,
+.formGroup select:disabled {
+    background-color: #f3f4f6;
+    cursor: not-allowed;
 }
 
 .formRow {
@@ -102,6 +121,7 @@
     font-weight: 500;
     cursor: pointer;
     border: none;
+    transition: background-color 0.15s;
 }
 
 .btnPrimary {
@@ -109,8 +129,13 @@
     color: white;
 }
 
-.btnPrimary:hover {
+.btnPrimary:hover:not(:disabled) {
     background-color: #2563eb;
+}
+
+.btnPrimary:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
 }
 
 .btnSecondary {
@@ -118,6 +143,84 @@
     color: #374151;
 }
 
-.btnSecondary:hover {
+.btnSecondary:hover:not(:disabled) {
     background-color: #e5e7eb;
+}
+
+.btnSecondary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Autocomplete Styles */
+.autocompleteWrapper {
+    position: relative;
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #d1d5db;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-top: -1px;
+}
+
+.dropdownItem {
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: background-color 0.15s;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.dropdownItem:last-child {
+    border-bottom: none;
+}
+
+.dropdownItem:hover {
+    background-color: #f9fafb;
+}
+
+.instructorInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.instructorName {
+    font-size: 14px;
+    font-weight: 500;
+    color: #111827;
+}
+
+.instructorEmail {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.selectedInfo {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #10b981;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .formRow {
+        grid-template-columns: 1fr;
+    }
+
+    .modal {
+        width: 95%;
+        max-height: 95vh;
+    }
 }

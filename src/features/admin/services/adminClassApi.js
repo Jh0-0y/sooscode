@@ -127,5 +127,59 @@ export const adminClassApi = {
         if (keyword) queryParams.append('keyword', keyword);
 
         return api.get(`${BASE_URL}/${classId}/students/available?${queryParams.toString()}`);
+    },
+
+    /**
+     * 클래스 정보 및 수강생 목록 엑셀 다운로드
+     * GET /api/admin/classes/{classId}/export
+     * @returns {Promise<Blob>} Excel 파일
+     */
+    exportClassToExcel: async (classId) => {
+        const response = await api.get(`${BASE_URL}/${classId}/export`, {
+            responseType: 'blob'
+        });
+        return response;
+    },
+
+    /**
+     * 전체 클래스 목록 엑셀 다운로드
+     * GET /api/admin/classes/export
+     * @returns {Promise<Blob>} Excel 파일
+     */
+    exportClassListToExcel: async (params = {}) => {
+        const {
+            keyword,
+            startDate,
+            endDate,
+            sortBy = 'createdAt',
+            sortDirection = 'DESC'
+        } = params;
+
+        const queryParams = new URLSearchParams();
+        queryParams.append('sortBy', sortBy);
+        queryParams.append('sortDirection', sortDirection);
+
+        if (keyword) queryParams.append('keyword', keyword);
+        if (startDate) queryParams.append('startDate', startDate);
+        if (endDate) queryParams.append('endDate', endDate);
+
+        const response = await api.get(`${BASE_URL}/export?${queryParams.toString()}`, {
+            responseType: 'blob'
+        });
+        return response;
     }
+};
+
+/**
+ * 파일 다운로드 헬퍼 함수
+ */
+export const downloadFile = (blob, filename) => {
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
 };

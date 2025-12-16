@@ -57,6 +57,7 @@
     cursor: pointer;
     outline: none;
     min-width: 140px;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
 }
 
 .dateInput:focus {
@@ -86,6 +87,11 @@
     border: 1px solid var(--color-border-medium);
     border-radius: var(--radius-base);
     flex: 1;
+    transition: border-color var(--transition-fast);
+}
+
+.searchBox:focus-within {
+    border-color: var(--color-primary-500);
 }
 
 .searchBox svg {
@@ -122,6 +128,23 @@
     color: var(--color-text-primary);
 }
 
+.btnSearch {
+    padding: var(--spacing-1) var(--spacing-3);
+    background-color: var(--color-primary-600);
+    color: white;
+    border: none;
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+    white-space: nowrap;
+}
+
+.btnSearch:hover {
+    background-color: var(--color-primary-700);
+}
+
 /* 필터 옵션 */
 .filterOptions {
     display: flex;
@@ -141,6 +164,7 @@
     cursor: pointer;
     outline: none;
     min-width: 120px;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
 }
 
 .roleSelect:focus,

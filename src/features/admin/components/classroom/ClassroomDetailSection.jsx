@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useClassroomDetail from '../../hooks/classroom/useClassroomDetail.js';
 import { useClassroomUpdate, useClassroomDelete } from '../../hooks/classroom/useClassroomUpdate.js';
+import useInstructorSearch from '../../hooks/classroom/useInstructorSearch';
 import { useToast } from "@/hooks/useToast.js";
 import styles from './ClassroomDetailSection.module.css';
 
@@ -9,6 +10,11 @@ const ClassroomDetailSection = ({ classroomId }) => {
     const navigate = useNavigate();
     const toast = useToast();
     const [isEditing, setIsEditing] = useState(false);
+    const [instructorInput, setInstructorInput] = useState('');
+    const [showDropdown, setShowDropdown] = useState(false);
+    const dropdownRef = useRef(null);
+
+    const { instructors, loading: searchLoading, searchInstructors } = useInstructorSearch();
 
     // 클래스 상세 정보
     const {
@@ -54,6 +60,29 @@ const ClassroomDetailSection = ({ classroomId }) => {
         }
     });
 
+    // 드롭다운 외부 클릭 감지
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setShowDropdown(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    // 검색어 변경 시 디바운스 검색
+    useEffect(() => {
+        if (!instructorInput || !isEditing) return;
+
+        const timer = setTimeout(() => {
+            searchInstructors(instructorInput);
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, [instructorInput, isEditing, searchInstructors]);
+
     // 편집 모드 시작
     const handleStartEdit = () => {
         setEditForm({
@@ -63,29 +92,75 @@ const ClassroomDetailSection = ({ classroomId }) => {
             endDate: classData.endDate,
             startTime: classData.startTime,
             endTime: classData.endTime,
+            instructorId: classData.instructorId,
             instructorName: classData.instructorName,
-            online: classData.online,
+            isOnline: classData.online ?? classData.isOnline,
             active: classData.active,
             thumbnail: classData.thumbnail
         });
+        setInstructorInput(classData.instructorName || '');
         setIsEditing(true);
     };
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
+
+        let newValue;
+        if (type === 'checkbox') {
+            newValue = checked;
+        } else if (name === 'isOnline') {
+            // select의 value는 문자열이므로 boolean으로 변환
+            newValue = value === 'true';
+        } else {
+            newValue = value;
+        }
+
         setEditForm(prev => ({
             ...prev,
-            [name]: type === 'checkbox' ? checked : value
+            [name]: newValue
         }));
     };
 
+    // 강사 입력 필드 변경
+    const handleInstructorInputChange = (e) => {
+        const value = e.target.value;
+        setInstructorInput(value);
+        setShowDropdown(true);
+
+        // 입력이 지워지면 선택 초기화
+        if (!value) {
+            setEditForm(prev => ({
+                ...prev,
+                instructorId: '',
+                instructorName: ''
+            }));
+        }
+    };
+
+    // 강사 선택
+    const handleInstructorSelect = (instructor) => {
+        setEditForm(prev => ({
+            ...prev,
+            instructorId: instructor.userId,
+            instructorName: instructor.name
+        }));
+        setInstructorInput(instructor.name);
+        setShowDropdown(false);
+    };
+
     const handleSave = () => {
-        handleUpdateSubmit(editForm);
+        if (!editForm.instructorId) {
+            toast.error('강사를 선택해주세요.');
+            return;
+        }
+        handleUpdateSubmit(classroomId, editForm);
     };
 
     const handleCancel = () => {
         setIsEditing(false);
         setEditForm({});
+        setInstructorInput('');
+        setShowDropdown(false);
     };
 
     const formatTime = (time) => {
@@ -156,26 +231,69 @@ const ClassroomDetailSection = ({ classroomId }) => {
                         />
                     </div>
 
-                    <div className={styles.formRow}>
-                        <div className={styles.formGroup}>
-                            <label>담당 강사</label>
+                    {/* 강사 검색 Autocomplete */}
+                    <div className={styles.formGroup} ref={dropdownRef}>
+                        <label>
+                            담당 강사 <span className={styles.required}>*</span>
+                        </label>
+                        <div className={styles.autocompleteWrapper}>
                             <input
                                 type="text"
-                                name="instructorName"
-                                value={editForm.instructorName}
-                                onChange={handleChange}
+                                value={instructorInput}
+                                onChange={handleInstructorInputChange}
+                                onFocus={() => instructorInput && setShowDropdown(true)}
+                                placeholder="강사 이름 또는 이메일을 입력하세요"
+                                required
+                                autoComplete="off"
                             />
+                            {showDropdown && instructorInput && (
+                                <div className={styles.dropdown}>
+                                    {searchLoading ? (
+                                        <div className={styles.dropdownItem} style={{ cursor: 'default' }}>
+                                            <span>검색 중...</span>
+                                        </div>
+                                    ) : instructors.length > 0 ? (
+                                        instructors.map(instructor => (
+                                            <div
+                                                key={instructor.userId}
+                                                className={styles.dropdownItem}
+                                                onClick={() => handleInstructorSelect(instructor)}
+                                            >
+                                                <div className={styles.instructorInfo}>
+                                                    <span className={styles.instructorName}>{instructor.name}</span>
+                                                    <span className={styles.instructorEmail}>{instructor.email}</span>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className={styles.dropdownItem} style={{ cursor: 'default' }}>
+                                            <span>검색 결과가 없습니다</span>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
+                        {editForm.instructorId && (
+                            <small className={styles.selectedInfo}>
+                                ✓ 선택됨: {editForm.instructorName}
+                            </small>
+                        )}
+                    </div>
+
+                    <div className={styles.formRow}>
                         <div className={styles.formGroup}>
                             <label>수업 유형</label>
                             <select
-                                name="online"
-                                value={editForm.online}
+                                name="isOnline"
+                                value={editForm.isOnline}
                                 onChange={handleChange}
                             >
                                 <option value={true}>온라인</option>
                                 <option value={false}>오프라인</option>
                             </select>
+                        </div>
+                        <div className={styles.formGroup}>
+                            {/* 빈 공간 */}
                         </div>
                     </div>
 
@@ -249,7 +367,7 @@ const ClassroomDetailSection = ({ classroomId }) => {
         );
     }
 
-    // 기본 모드 - 로딩 중이면 스켈레톤, 아니면 실제 데이터
+    // 기본 모드
     return (
         <div className={styles.detailContainer}>
             <div className={styles.thumbnailSection}>

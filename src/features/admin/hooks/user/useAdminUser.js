@@ -1,6 +1,5 @@
-// hooks/useAdminUser.js
 import { useState } from 'react';
-import { adminUserApi, downloadFile } from '@/api/adminUserApi';
+import { adminUserApi, downloadFile } from '../../services/adminUserApi';
 import { useError } from '@/hooks/useError';
 import { useToast } from '@/hooks/useToast';
 
@@ -185,6 +184,22 @@ export const useAdminUser = () => {
         }
     };
 
+    /**
+     * 특정 유저가 수강 중인 클래스 목록 조회
+     */
+    const getUserEnrolledClasses = async (userId) => {
+        setLoading(true);
+        try {
+            const response = await adminUserApi.getUserEnrolledClasses(userId);
+            return response.data;
+        } catch (error) {
+            handleError(error);
+            throw error;
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return {
         loading,
         createUser,
@@ -197,37 +212,8 @@ export const useAdminUser = () => {
         changeUserRole,
         exportUsersToExcel,
         downloadExcelTemplate,
+        getUserEnrolledClasses,
     };
 };
 
-/**
- * 사용 예시:
- *
- * import { useAdminUser } from '@/hooks/useAdminUser';
- *
- * const MyComponent = () => {
- *     const { loading, getUserList, createUser } = useAdminUser();
- *
- *     // 사용자 목록 조회
- *     const fetchUsers = async () => {
- *         const data = await getUserList({
- *             page: 0,
- *             size: 10,
- *             keyword: 'test',
- *             role: 'INSTRUCTOR'
- *         });
- *         console.log(data);
- *     };
- *
- *     // 계정 생성
- *     const handleCreate = async () => {
- *         await createUser({
- *             email: 'test@example.com',
- *             name: '홍길동',
- *             role: 'INSTRUCTOR'
- *         });
- *     };
- *
- *     return <div>{loading ? 'Loading...' : 'Ready'}</div>;
- * };
- */
+export default useAdminUser;

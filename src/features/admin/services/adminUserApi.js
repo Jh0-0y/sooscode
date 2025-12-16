@@ -1,5 +1,5 @@
 // api/adminUserApi.js
-import { api } from './api';
+import { api } from '@/services/api';
 
 const BASE_URL = '/api/admin/users';
 
@@ -12,7 +12,7 @@ export const adminUserApi = {
      * POST /api/admin/users/create
      */
     createUser: async (data) => {
-        return await api.post('{BASE_URL}/create', data);
+        return await api.post(`${BASE_URL}/create`, data);
     },
 
     /**
@@ -24,7 +24,7 @@ export const adminUserApi = {
         const formData = new FormData();
         formData.append('file', file);
 
-        const response = await api.post('{BASE_URL}/bulk', formData, {
+        const response = await api.post(`${BASE_URL}/bulk`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             responseType: 'blob',
         });
@@ -37,7 +37,7 @@ export const adminUserApi = {
      * GET /api/admin/users
      */
     getUserList: async (params) => {
-        return await api.get('{BASE_URL}', { params });
+        return await api.get(`${BASE_URL}`, { params });
     },
 
     /**
@@ -45,7 +45,7 @@ export const adminUserApi = {
      * GET /api/admin/users/{userId}
      */
     getUserDetail: async (userId) => {
-        return await api.get(`{BASE_URL}/${userId}`);
+        return await api.get(`${BASE_URL}/${userId}`);
     },
 
     /**
@@ -53,7 +53,7 @@ export const adminUserApi = {
      * GET /api/admin/users/{userId}/history
      */
     getUserHistory: async (userId, limit = 5) => {
-        return await api.get(`{BASE_URL}/${userId}/history`, {
+        return await api.get(`${BASE_URL}/${userId}/history`, {
             params: { limit }
         });
     },
@@ -63,7 +63,7 @@ export const adminUserApi = {
      * POST /api/admin/users/{userId}/delete
      */
     deleteUser: async (userId) => {
-        return await api.post(`{BASE_URL}/${userId}/delete`);
+        return await api.post(`${BASE_URL}/${userId}/delete`);
     },
 
     /**
@@ -71,7 +71,7 @@ export const adminUserApi = {
      * POST /api/admin/users/{userId}/activate
      */
     activateUser: async (userId) => {
-        return await api.post(`{BASE_URL}/${userId}/activate`);
+        return await api.post(`${BASE_URL}/${userId}/activate`);
     },
 
     /**
@@ -79,7 +79,7 @@ export const adminUserApi = {
      * POST /api/admin/users/{userId}/role
      */
     changeUserRole: async (userId, role) => {
-        return await api.post(`{BASE_URL}/${userId}/role`, { role });
+        return await api.post(`${BASE_URL}/${userId}/role`, { role });
     },
 
     /**
@@ -88,7 +88,7 @@ export const adminUserApi = {
      * @returns {Promise<Blob>} Excel 파일
      */
     exportUsersToExcel: async (params) => {
-        const response = await api.get('{BASE_URL}/export', {
+        const response = await api.get(`${BASE_URL}/export`, {
             params,
             responseType: 'blob',
         });
@@ -102,11 +102,19 @@ export const adminUserApi = {
      * @returns {Promise<Blob>} Excel 파일
      */
     downloadExcelTemplate: async () => {
-        const response = await api.get('{BASE_URL}/template/download', {
+        const response = await api.get(`${BASE_URL}/template/download`, {
             responseType: 'blob',
         });
 
         return response;
+    },
+
+    /**
+     * 특정 유저가 수강 중인 클래스 목록 조회
+     * GET /api/admin/users/{userId}/classes
+     */
+    getUserEnrolledClasses: async (userId) => {
+        return await api.get(`${BASE_URL}/${userId}/classes`);
     },
 };
 

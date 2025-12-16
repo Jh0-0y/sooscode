@@ -46,11 +46,36 @@ export const useClassroomUpdate = (options = {}) => {
     /**
      * 클래스 수정 제출
      *
-     * @param {Object} formData - 수정할 클래스 데이터
+     * 두 가지 방식으로 호출 가능:
+     * 1. handleSubmit(formData) - targetClass가 설정된 경우 (모달 방식)
+     * 2. handleSubmit(classId, formData) - classId를 직접 전달 (인라인 편집 방식)
+     *
+     * @param {number|Object} classIdOrFormData - 클래스 ID 또는 폼 데이터
+     * @param {Object} [formData] - 폼 데이터 (첫 번째 인자가 classId인 경우)
      * @returns {Object} { success: boolean, data?: object, error?: string }
      */
-    const handleSubmit = useCallback(async (formData) => {
-        if (!targetClass?.classId) {
+    const handleSubmit = useCallback(async (classIdOrFormData, formData) => {
+        let classId;
+        let data;
+
+        // 인자 파싱: handleSubmit(classId, formData) 또는 handleSubmit(formData)
+        if (formData !== undefined) {
+            // handleSubmit(classId, formData) 형태
+            classId = classIdOrFormData;
+            data = formData;
+        } else if (typeof classIdOrFormData === 'object') {
+            // handleSubmit(formData) 형태 - targetClass 사용
+            classId = targetClass?.classId;
+            data = classIdOrFormData;
+        } else {
+            // handleSubmit(classId) 형태 - 잘못된 호출
+            const errorMsg = '수정할 데이터가 없습니다.';
+            setSubmitError(errorMsg);
+            onError?.(errorMsg);
+            return { success: false, error: errorMsg };
+        }
+
+        if (!classId) {
             const errorMsg = '수정할 클래스 정보가 없습니다.';
             setSubmitError(errorMsg);
             onError?.(errorMsg);
@@ -61,14 +86,16 @@ export const useClassroomUpdate = (options = {}) => {
         setSubmitError(null);
 
         try {
-            const response = await adminClassApi.update(targetClass.classId, formData);
+            const response = await adminClassApi.update(classId, data);
 
             // api.js 인터셉터가 response.data 반환
             // 실제 클래스 데이터는 response.data에 있음
             const updatedClass = response.data;
 
-            // 성공 시 모달 닫기
-            closeModal();
+            // 모달 방식인 경우 모달 닫기
+            if (isModalOpen) {
+                closeModal();
+            }
 
             // 성공 콜백 호출
             onSuccess?.(updatedClass);
@@ -87,7 +114,7 @@ export const useClassroomUpdate = (options = {}) => {
         } finally {
             setIsSubmitting(false);
         }
-    }, [targetClass, closeModal, onSuccess, onError]);
+    }, [targetClass, isModalOpen, closeModal, onSuccess, onError]);
 
     // ============ 반환 ============
     return {
