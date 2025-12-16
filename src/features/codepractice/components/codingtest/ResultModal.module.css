@@ -1,0 +1,38 @@
+.modal{
+  margin-left:10px;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #bbb;
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+.subText {
+  margin-top: 8px;
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.error {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #ff6b6b;
+  word-break: break-all;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -31,7 +31,6 @@ export default function SnippetPanel() {
 };
   return (
     <div>
-      <h3>🔧Snippet</h3>
       <div className={styles.dropdown}>
         <button
           className={styles.dropdownButton}

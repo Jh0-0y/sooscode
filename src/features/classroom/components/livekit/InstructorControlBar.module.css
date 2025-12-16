@@ -1,0 +1,29 @@
+.bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+
+  width: 100%;
+  height: 64px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  background: transition;
+
+  z-index: 20;
+}
+
+.bar button {
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+
+  border: none;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-size: 14px;
+
+  cursor: pointer;
+}

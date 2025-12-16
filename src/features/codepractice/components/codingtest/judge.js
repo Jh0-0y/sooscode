@@ -1,11 +1,42 @@
 // codepractice/codingtest/judge.js
 
 /**
+ * 🔒 사용자 코드 검증 (1차 방어선)
+ * - import / require
+ * - 네트워크 / 워커 탈출
+ * - 블로킹 API
+ */
+function validateCode(userCode) {
+  const bannedPatterns = [
+    /\bimport\b/,                 // import, import()
+    /\brequire\s*\(/,             // require()
+    /\bfetch\s*\(/,               // fetch
+    /\bXMLHttpRequest\b/,          // xhr
+    /\bWebSocket\b/,               // websocket
+    /\bSharedArrayBuffer\b/,       // shared memory
+    /\bAtomics\b/,                 // atomics.wait
+    /\bimportScripts\b/,           // worker script load
+    /\bglobalThis\b/,              // global escape
+    /\bself\b/,                    // worker self 접근
+  ];
+
+  for (const pattern of bannedPatterns) {
+    if (pattern.test(userCode)) {
+      throw new Error("허용되지 않은 코드가 포함되어 있습니다.");
+    }
+  }
+}
+
+/**
  * 단일 테스트 실행 (Run 버튼)
  */
 export function runUserCode(userCode, input) {
   try {
+    // 🔒 코드 검증
+    validateCode(userCode);
+
     const wrappedCode = `
+      "use strict";
       ${userCode}
       return solution(${JSON.stringify(input)});
     `;
@@ -26,9 +57,20 @@ export function runUserCode(userCode, input) {
 }
 
 /**
- * 전체 테스트 실행 (Submit 버튼)
+ * 전체 테스트 실행 (Submit 버튼 - 단순 비교)
  */
 export function judgeAll(userCode, testCases) {
+  try {
+    validateCode(userCode);
+  } catch (e) {
+    return testCases.map((tc, index) => ({
+      index,
+      input: tc.input,
+      pass: false,
+      error: e.message,
+    }));
+  }
+
   return testCases.map((tc, index) => {
     const result = runUserCode(userCode, tc.input);
 
@@ -51,12 +93,19 @@ export function judgeAll(userCode, testCases) {
   });
 }
 
+/**
+ * JS 전용 채점기 (Submit 버튼 - 권장)
+ */
 export function judgeJS(userCode, testCases) {
   const results = [];
 
   try {
-    // solution 함수 생성
+    // 🔒 코드 검증
+    validateCode(userCode);
+
+    // solution 함수 컴파일
     const fn = new Function(`
+      "use strict";
       ${userCode}
       return solution;
     `)();
@@ -74,7 +123,9 @@ export function judgeJS(userCode, testCases) {
           expected: output,
           result: "Runtime Error",
           pass: false,
+          
         });
+        console.log(e)
         continue;
       }
 
@@ -83,12 +134,12 @@ export function judgeJS(userCode, testCases) {
         input,
         expected: output,
         result,
-        pass: Object.is(result, output),
+        pass: Object.is(String(result), String(output)),
       });
     }
   } catch (e) {
     return {
-      error: "컴파일 에러",
+      error: e.message || "컴파일 에러",
       results: [],
     };
   }

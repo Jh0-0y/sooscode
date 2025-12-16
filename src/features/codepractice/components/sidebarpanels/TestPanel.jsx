@@ -1,16 +1,17 @@
+import { useNavigate } from "react-router-dom";
+import TestMoveButton from "./test/TestMoveButton";
+import styles from './TestPanel.module.css';
+
+
 export default function TestPanel() {
+  const navigate = useNavigate()
   const handleOpenTest = () => {
-    window.open("/test", "_blank");
+    navigate("/test");
   };
 
   return (
-    <div>
-      <h3>🧪 Test</h3>
-      <p>여기는 테스트 용도 패널.</p>
-
-      <button onClick={handleOpenTest}>
-        코드 테스트 시작
-      </button>
+    <div className={styles.codingTestBtn}>
+      <TestMoveButton handleOpenTest={handleOpenTest} />
     </div>
   );
 }

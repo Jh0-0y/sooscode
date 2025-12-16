@@ -11,7 +11,6 @@ export default function CodeEditorPanel() {
   const setCode = useCodeTestStore((s) => s.setCode);
   const language = useCodeTestStore((s) => s.language);
   const run = useCodeTestStore((s) => s.run);
-  const submit = useCodeTestStore((s) => s.submit);
 
   const [monacoInstance, setMonacoInstance] = useState(null);
 
@@ -51,9 +50,6 @@ export default function CodeEditorPanel() {
         <div className={styles.actions}>
           <button className={styles.runBtn} onClick={run}>
             실행
-          </button>
-          <button className={styles.submitBtn} onClick={submit}>
-            제출
           </button>
         </div>
       </div>

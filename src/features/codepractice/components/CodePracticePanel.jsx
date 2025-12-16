@@ -48,17 +48,23 @@ export default function CodePracticePanel() {
     applyTheme(monaco); // 초기 적용
   };
 
+  // code panel에서 저장시 validation
   const handleSaveNew = async () => {
     const { code, language, classId } = usePracticeStore.getState();
     if (!snapshotTitle.trim()) {
       alert("제목을 입력하세요");
       return;
     }
+    if(classId===null){
+      alert("클래스를 선택하세요");
+      return;
+    }
+
     await saveSnapshot({
-    title: snapshotTitle,
-    content: code,
-    language,
-    classId,
+      title: snapshotTitle,
+      content: code,
+      language,
+      classId,
     });
 
     setSnapshotTitle("");
@@ -71,6 +77,7 @@ export default function CodePracticePanel() {
       applyTheme(monacoInstance);
     }
   }, [darkMode]);
+
 
   return (
     <div className={styles.practicePanel}>

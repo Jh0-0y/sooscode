@@ -1,0 +1,134 @@
+.button {
+  position: relative;
+  overflow: hidden;
+
+  padding: 16px 26px;
+  border-radius: 14px;
+
+  background: linear-gradient(
+    135deg,
+    #ffd54f,
+    #ffca28,
+    #ffb300
+  );
+  color: #2b2100;
+
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+
+  border: none;
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 24px rgba(255, 193, 7, 0.45),
+    inset 0 -3px 0 rgba(255, 255, 255, 0.35);
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    filter 0.15s ease;
+}
+
+/* ✨ 왕별 반짝이는 레이어 */
+.button::before {
+  content: "★";
+  position: absolute;
+  top: 50%;
+  left: -20%;
+  transform: translateY(-50%) scale(1);
+
+  font-size: 26px;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, 0.8),
+    0 0 16px rgba(255, 215, 0, 0.9);
+
+  animation: starMove 2.8s infinite ease-in-out;
+  pointer-events: none;
+}
+
+/* ✨ 은은한 광택 스윕 */
+.button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.45),
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  animation: shineMove 3.2s infinite;
+  pointer-events: none;
+}
+
+/* hover */
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 32px rgba(255, 193, 7, 0.6),
+    inset 0 -3px 0 rgba(255, 255, 255, 0.4);
+  filter: brightness(1.05);
+}
+
+/* active */
+.button:active {
+  transform: translateY(0);
+  box-shadow:
+    0 6px 18px rgba(255, 193, 7, 0.4),
+    inset 0 3px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* focus */
+.button:focus-visible {
+  outline: 2px solid rgba(255, 193, 7, 0.8);
+  outline-offset: 3px;
+}
+
+/* 모바일 */
+@media (max-width: 480px) {
+  .button {
+    width: 100%;
+    padding: 14px;
+    font-size: 14px;
+  }
+}
+
+/* 애니메이션 -------------------------- */
+@keyframes starMove {
+  0% {
+    left: -20%;
+    opacity: 0;
+    transform: translateY(-50%) scale(0.6);
+  }
+  30% {
+    opacity: 1;
+  }
+  50% {
+    left: 50%;
+    transform: translateY(-50%) scale(1.2);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    left: 120%;
+    opacity: 0;
+    transform: translateY(-50%) scale(0.6);
+  }
+}
+
+@keyframes shineMove {
+  0% {
+    transform: translateX(-120%);
+  }
+  50% {
+    transform: translateX(120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
