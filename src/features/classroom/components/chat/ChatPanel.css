@@ -173,6 +173,17 @@
 /* ... 메뉴 트리거 */
 .chat-actions-more {
     position: relative;
+    display: inline-block;
+}
+
+/* 메뉴 위에 얇은 투명 브릿지 생성 (gap/경계 끊김 방지) */
+.chat-more-menu::before {
+    content: "";
+    position: absolute;
+    top: -8px;          /* 메뉴 위로 8px 확장 */
+    left: 0;
+    right: 0;
+    height: 8px;
 }
 .chat-more-btn {
     width: 20px;
@@ -406,11 +417,11 @@
     gap: 6px;
     padding: 6px 12px;
     font-size: 13px;
-    color: #9ca3af;
+    color: var(--color-text-tertiary);
 }
 
 .chat-typing-text {
-    white-space: nowrap;
+    white-space: var(--color-text-tertiary);
 }
 
 

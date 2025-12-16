@@ -9,7 +9,7 @@ import ReplyPreview from "@/features/classroom/components/chat/ReplyPreview.jsx"
 
 export default function ChatPanel() {
 
-    const { classId } = useClassroom()
+    const { classId } = useClassroom();
     // 커스텀 훅에서 상태와 핸들러 전부 가져오기
     const {
         messages,

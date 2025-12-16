@@ -39,6 +39,35 @@ const formatTimeOnly = (iso) => {
 
     return `${ampm} ${hours}:${minutes}`;
 };
+// email 기준 (확정)
+const getSenderEmail = (m) => m?.email ?? "";
+
+// 분 단위 비교
+const isSameMinute = (a, b) => {
+    const A = (a ?? "").slice(0, 16);
+    const B = (b ?? "").slice(0, 16);
+    return A && B && A === B;
+};
+
+// 시간 표시 여부 판단
+const shouldShowTime = (messages, idx) => {
+    const cur = messages[idx];
+    const next = messages[idx + 1];
+    if (!next) return true;
+
+    const curCreated = cur?.created_at || cur?.createdAt || "";
+    const nextCreated = next?.created_at || next?.createdAt || "";
+
+    // 시스템 메시지는 항상 표시
+    const isSystem = cur?.type === "ENTER" || cur?.type === "EXIT";
+    if (isSystem) return true;
+
+    const sameEmail = getSenderEmail(cur) === getSenderEmail(next);
+    const sameMinute = isSameMinute(curCreated, nextCreated);
+    const sameDate = getDateKey(curCreated) === getDateKey(nextCreated);
+
+    return !(sameEmail && sameMinute && sameDate);
+}
 
 export default function ChatMessageList({
                                             messages,
@@ -80,6 +109,7 @@ export default function ChatMessageList({
                     const isNewDate = idx === 0 || prevDateKey !== currentDateKey;
                     const dateDividerText =
                         isNewDate && created ? formatDateOnly(created) : null;
+                    const showTime = shouldShowTime(messages, idx);
 
                     return (
                         <React.Fragment key={msg.chatId ?? idx}>
@@ -105,6 +135,7 @@ export default function ChatMessageList({
                                 handleDelete={handleDelete}
                                 handleReply={handleReply}
                                 scrollToMessage={scrollToMessage}
+                                showTime={showTime}
                             />
                         </React.Fragment>
                     );
