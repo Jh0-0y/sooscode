@@ -51,4 +51,7 @@ public interface ClassParticipantRepository extends JpaRepository<ClassParticipa
             "WHERE cp.user.userId = :userId " +
             "ORDER BY cp.createdAt DESC")
     List<ClassParticipant> findByUserIdWithClassAndInstructor(@Param("userId") Long userId);
+  
+    // mypage 진입시 클래스 리스팅
+    Page<ClassParticipant> findByUser_UserId(Long userId, Pageable pageable);
 }

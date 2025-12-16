@@ -70,7 +70,7 @@ public class User {
         if (this.file != null) {
             return this.file.getUrl();
         }
-        return "https://image-none.com";
+        return "https://sooscode-s3file.s3.ap-northeast-2.amazonaws.com/profile.png";
     }
 }
 

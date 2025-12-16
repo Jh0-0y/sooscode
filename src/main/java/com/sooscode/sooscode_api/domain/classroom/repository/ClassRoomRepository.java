@@ -55,6 +55,7 @@ public interface ClassRoomRepository extends JpaRepository<ClassRoom, Long> {
             @Param("nowTime") LocalTime nowTime
     );
 
+
     /**
      * 페이징 없이 정렬만 적용한 클래스 목록 조회
      * Sort를 사용하여 정렬 기능 제공
@@ -76,4 +77,8 @@ public interface ClassRoomRepository extends JpaRepository<ClassRoom, Long> {
             @Param("endDate") LocalDate endDate,
             Sort sort
     );
+
+    //mypage 진입시 리스팅
+    Page<ClassRoom> findByUser_UserId(Long userId, Pageable pageable);
+
 }

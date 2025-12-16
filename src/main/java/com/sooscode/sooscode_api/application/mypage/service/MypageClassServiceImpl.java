@@ -13,6 +13,8 @@ import com.sooscode.sooscode_api.global.api.status.ClassRoomStatus;
 import com.sooscode.sooscode_api.global.api.status.UserStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,37 +42,61 @@ public class MypageClassServiceImpl implements MypageClassService {
         return MypageClassDetailResponse.from(classRoom);
     }
 
-    // 학생이 가지고있는 class의 list를 조회
+//    // 학생이 가지고있는 class의 list를 조회
+//    @Override
+//    public List<MypageMyclassesResponse> getStudentClasses(Long userId) {
+//        log.info("getStudentClasses Service");
+//
+//        // 결과 0건 조회시 빈 리스트 반환
+//        List<ClassParticipant> classes = classParticipantRepository.findByUser_UserId(userId);
+//
+//        log.info(classes.toString());
+//
+//        return classes.stream()
+//                .map(cp -> MypageMyclassesResponse.from(cp.getClassRoom()))
+//                .toList();
+//    }
+//
+//
+//    // 강사가 가지고있는 class의 list를 조회
+//    @Override
+//    public List<MypageMyclassesResponse> getTeacherClasses(Long userId) {
+//        log.info("getTeacherClasses Service");
+//
+//        // user가 존재하는지 검증
+//        User user = userRepository.findById(userId)
+//                .orElseThrow(() -> new CustomException(UserStatus.NOT_FOUND));
+//
+//        // 결과 0건 조회시 빈 리스트 반환
+//        List<ClassRoom> classes = classRoomRepository.findByUser_UserId(userId);
+//
+//        return classes.stream()
+//                .map(MypageMyclassesResponse::from)
+//                .toList();
+//    }
     @Override
-    public List<MypageMyclassesResponse> getStudentClasses(Long userId) {
+    public Page<MypageMyclassesResponse> getStudentClasses(Long userId, Pageable pageable) {
         log.info("getStudentClasses Service");
 
-        // 결과 0건 조회시 빈 리스트 반환
-        List<ClassParticipant> classes = classParticipantRepository.findByUser_UserId(userId);
+        Page<ClassParticipant> pageResult =
+                classParticipantRepository.findByUser_UserId(userId, pageable);
 
-        log.info(classes.toString());
-
-        return classes.stream()
-                .map(cp -> MypageMyclassesResponse.from(cp.getClassRoom()))
-                .toList();
+        return pageResult.map(cp ->
+                MypageMyclassesResponse.from(cp.getClassRoom())
+        );
     }
 
-
-    // 강사가 가지고있는 class의 list를 조회
     @Override
-    public List<MypageMyclassesResponse> getTeacherClasses(Long userId) {
+    public Page<MypageMyclassesResponse> getTeacherClasses(Long userId, Pageable pageable) {
         log.info("getTeacherClasses Service");
 
-        // user가 존재하는지 검증
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(UserStatus.NOT_FOUND));
 
-        // 결과 0건 조회시 빈 리스트 반환
-        List<ClassRoom> classes = classRoomRepository.findByUser_UserId(userId);
+        Page<ClassRoom> pageResult =
+                classRoomRepository.findByUser_UserId(userId, pageable);
 
-        return classes.stream()
-                .map(MypageMyclassesResponse::from)
-                .toList();
+        return pageResult.map(MypageMyclassesResponse::from);
     }
 
 
