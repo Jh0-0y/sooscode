@@ -33,8 +33,7 @@
 /* ===== Main ===== */
 .main {
   flex: 1;
-  display: grid;
-  grid-template-columns: 600px 1fr;
+  display: flex;
   overflow: hidden;
 }
 
@@ -43,6 +42,8 @@
   padding: var(--spacing-5);
   background: var(--color-bg-secondary);
   overflow-y: auto;
+  height:100%;
+  width:%;
 }
 
 .title {
@@ -84,6 +85,7 @@
 /* ===== Editor ===== */
 .editor {
   display: flex;
+  heigth:100%;
   flex-direction: column;
   background: var(--color-bg-primary);
 }

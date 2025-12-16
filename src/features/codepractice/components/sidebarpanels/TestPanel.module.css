@@ -1,0 +1,6 @@
+.codingTestBtn{
+  display:flex;
+  margin-top:16px;
+  justify-content:center;
+  flex:1;
+}

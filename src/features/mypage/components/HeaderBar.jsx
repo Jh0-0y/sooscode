@@ -3,12 +3,15 @@ import styles from "./HeaderBar.module.css";
 import { useDarkMode } from "@/hooks/useDarkMode";
 import ProfileModal from "./ProfileModal";
 import { useNavigate } from "react-router-dom";
+import LogoutButton from "/src/features/auth/components/base/LogoutButton.jsx";
+import useLogout from "../../auth/hooks/useLogout";
 
 export default function HeaderBar() {
 
   const { darkMode, toggleDarkMode } = useDarkMode();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { logout } = useLogout();
   
 
   return (
@@ -36,6 +39,9 @@ export default function HeaderBar() {
         </button>
         <button onClick={toggleDarkMode} className={styles.actionBtn}>
             {darkMode ? "🌙 다크모드" : "☀️ 라이트모드"}
+        </button>
+        <button className={styles.logout} onClick={logout}>
+          로그아웃
         </button>
       </div>
       {isProfileModalOpen && (

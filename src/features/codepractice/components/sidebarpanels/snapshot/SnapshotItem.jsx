@@ -1,10 +1,8 @@
 import styles from "./SnapshotItem.module.css";
 import { formatDate } from "../../../../../utils/date";
 import { X } from "lucide-react";
-export default function SnapshotItem({ snapshot,onClick ,lang,onDelete}) {
+export default function SnapshotItem({ snapshot,onClick,onDelete}) {
 
-  // 추후 테이블에 language 생성시 컴포넌트 전달
-  console.log(lang);
   return (
     <div className={styles.item} onClick={onClick}>
       <div className={styles.title}>

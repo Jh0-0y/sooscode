@@ -29,7 +29,7 @@ export default function StudentControlBar({
     setMicMuted(!micMuted);
   };
 
-  // 
+  // 내 비디오 켜기
   const toggleVideo = async () => {
     if (!room) return;
     await room.localParticipant.setCameraEnabled(videoOff);
@@ -61,16 +61,15 @@ export default function StudentControlBar({
 
   return (
     <div className={styles.bar}>
-      <button onClick={toggleScreenShare}>내 화면 공유</button>
+      <button onClick={toggleScreenShare}>
+        내 화면 공유
+      </button>
       <button onClick={toggleVideo}>
         {videoOff ? "비디오 켜기" : "비디오 끄기"}
       </button>
       <button onClick={toggleMic}>
         {micMuted ? "마이크 켜기" : "마이크 음소거"}
       </button>
-      {/* <button onClick={toggleMyView}>
-        {showMyCam ? "내 화면 숨기기" : "내 화면 보기"}
-      </button> */}
       <button onClick={onToggleMyPreview}>
         {showMyPreview ? "내 화면 숨기기" : "내 화면 다시 보기"}
       </button>

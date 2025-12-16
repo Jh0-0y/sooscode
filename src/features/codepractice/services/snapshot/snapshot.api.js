@@ -76,6 +76,8 @@ export const getSnapshotsByLanguageAndDate = async ({
   language,
   startDate,
   endDate,
+  page = 0,
+  size = 10,
 }) => {
   const res = await api.get("/api/snapshot/read/language/date", {
     params: {
@@ -83,11 +85,41 @@ export const getSnapshotsByLanguageAndDate = async ({
       language,
       startDate,
       endDate,
+      page,
+      size,
     },
   });
 
+  console.log("res.data : ", res.data);
+
   // axios interceptor 때문에 res === response.data
   return res.data.content;
+};
+
+
+export const getSnapshotsByLanguageAndDatePaging = async ({
+  classId,
+  language,
+  startDate,
+  endDate,
+  page = 0,
+  size = 10,
+}) => {
+  const res = await api.get("/api/snapshot/read/language/date", {
+    params: {
+      classId,
+      language,
+      startDate,
+      endDate,
+      page,
+      size,
+    },
+  });
+
+  console.log("res.data : ", res.data);
+
+  // axios interceptor 때문에 res === response.data
+  return res.data;
 };
 
 // 스냅샷 콘텐츠 단건 조회

@@ -88,6 +88,7 @@ export default function CodePracticeSnapshotPanel() {
   // new snapshot save hook
   const handleSaveNewSnapshot = async () => {
     if (!editorInstance) return;
+    console.log("handleSaveNewSnapshot 실행")
 
     try {
       const content = editorInstance.getValue();
@@ -95,7 +96,7 @@ export default function CodePracticeSnapshotPanel() {
       const res = await saveSnapshot({
         title: editTitle || "새 스냅샷",
         content,
-        classId: 1,
+        classId,
         language:language
       });
 

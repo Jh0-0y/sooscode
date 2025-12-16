@@ -9,6 +9,7 @@ import { runUserCode, judgeAll } from "@/features/codepractice/components/coding
 
 import styles from "./CodeTestPage.module.css";
 import ResultModal from "../../features/codepractice/components/codingtest/ResultModal";
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 export default function CodeTestPage() {
   const [problem, setProblem] = useState(testProblems[0]);
@@ -33,12 +34,20 @@ export default function CodeTestPage() {
         error: r.error,
       },
     ]);
+    console.log("결과 : " , results);
   };
 
   const handleSubmit = () => {
     const r = judgeAll(code, problem.testCases);
     setResults(r);
+    console.log("결과 : " , results);
   };
+
+  useEffect(() => {
+    console.log("문제 : ",problem)
+    console.log("코드 : ", code)
+    console.log("결과 : ", results)
+  })
 
   return (
     <div className={styles.CodeTestPage}>
@@ -47,24 +56,35 @@ export default function CodeTestPage() {
       </header>
 
       <div className={styles.main}>
-        <section className={styles.problem}>
-          <ProblemPanel problem={problem} />
-        </section>
+        <PanelGroup direction="horizontal">
 
-        <section className={styles.editor}>
-          <CodeEditorPanel
-            code={code}
-            onChangeCode={setCode}
-            onRun={handleRun}
-            onSubmit={handleSubmit}
-          />
-        </section>
+          <Panel defaultSize={30} minSize={20}>
+            <section className={styles.problem}>
+              <ProblemPanel problem={problem} />
+            </section>
+          </Panel>
+
+          <PanelResizeHandle className={styles.resizeBar} />
+
+          <Panel defaultSize={70} minSize={20}>
+            <section className={styles.editor}>
+              <CodeEditorPanel
+                code={code}
+                onChangeCode={setCode}
+                onRun={handleRun}
+                onSubmit={handleSubmit}
+              />
+            </section>
+          </Panel>
+
+        </PanelGroup>
       </div>
 
       <section className={styles.result}>
         <ResultPanel results={results} />
+        <ResultModal />
       </section>
-      <ResultModal />
+      
     </div>
   );
 }

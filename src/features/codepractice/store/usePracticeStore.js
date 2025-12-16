@@ -12,7 +12,7 @@ function encodeBase64(str) {
 
 export const usePracticeStore = create((set, get) => ({
   /* default snippets */ 
-  code: `public class HelloWorld {
+  code: `public class Main {
     public static void main(String[] args) {
         System.out.println("Hello, World!");
     }
@@ -156,25 +156,19 @@ export const usePracticeStore = create((set, get) => ({
     // Java 실행
     // =======================================
     if (language === "JAVA") {
-  try {
-    console.log("java 컴파일러 실행");
+  console.log("java 컴파일러 실행");
 
-    const encoded = encodeBase64(code);
+  set({ isRunning: true, output: "실행 중..." });
 
-    // ★ 이제 result = output 텍스트 그 자체
-    const output = await runJavaCode({ code: encoded });
-
-    set({ output });
-
-  } catch (err) {
-    set({
-      output:
-        err.response?.data?.message ||
-        err.response?.data ||
-        String(err)
-    });
+  const result = await runJavaCode({ code: encodeBase64(code) });
+      console.log(result)
+  if (result.success) {
+    set({ output: result.output });
+  } else {
+    set({ output: result.output }); // 컴파일/런타임 에러 메시지
   }
 
+  set({ isRunning: false });
   return;
 }
 
