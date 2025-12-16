@@ -16,7 +16,6 @@ const CodePanel = ({classId, isInstructor = false}) => {
     const [isLoading, setIsLoading] = useState(true);
     const socket = useSocketContext();
     const { mode } = useClassMode();
-    const { activeQuiz, isQuizActive } = useQuiz();
 
     const debounceTimerRef = useRef(null);
     const isInitialLoadRef = useRef(true);
@@ -33,16 +32,6 @@ const CodePanel = ({classId, isInstructor = false}) => {
         });
     }, [isReadOnly]);
 
-    // 퀴즈가 시작되면 초기 코드 로드
-    useEffect(() => {
-        if (isQuizActive && activeQuiz?.initialCode) {
-            console.log('[CodePanel] 퀴즈 코드 로드:', activeQuiz.title);
-            setCode(activeQuiz.initialCode);
-            if (editorInstance) {
-                editorInstance.setValue(activeQuiz.initialCode);
-            }
-        }
-    }, [isQuizActive, activeQuiz, editorInstance]);
 
     useEffect(() => {
         const loadAutoSavedCode = async () => {
@@ -237,10 +226,6 @@ const CodePanel = ({classId, isInstructor = false}) => {
 
     return (
         <div className={`${styles.relative} ${styles.editorWrapper}`}>
-            {/* 퀴즈 문제 패널 */}
-            {isQuizActive && activeQuiz && (
-                <QuizProblemPanel problem={activeQuiz} />
-            )}
 
             {/* 학생에게만 읽기 전용 모드 표시 */}
             {!isInstructor && isReadOnly && (

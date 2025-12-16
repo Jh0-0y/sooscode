@@ -35,11 +35,9 @@ const ClassroomPage = () => {
     return (
         <ClassroomProvider classId={classId}>
             <SocketProvider classId={classId}>
-                <QuizProvider classId={classId}>
                     <ClassModeProvider classId={classId}>
                         <ClassroomContent />
                     </ClassModeProvider>
-                </QuizProvider>
             </SocketProvider>
         </ClassroomProvider>
     );
