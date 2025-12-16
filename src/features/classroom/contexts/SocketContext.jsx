@@ -2,6 +2,7 @@
 
 import { createContext, useContext } from 'react';
 import useSocket from '../hooks/class/useSocket';
+import {USER_ROLES, useUser} from "@/hooks/useUser.js";
 
 // Context 생성
 const SocketContext = createContext(null);
@@ -12,7 +13,15 @@ const SocketContext = createContext(null);
  * - ClassroomPage 최상위에서 사용
  */
 export const SocketProvider = ({ classId, children }) => {
-    const socket = useSocket(classId);  // 여기서 한 번만 연결
+    //const socket = useSocket(classId);  // 여기서 한 번만 연결
+    const {user} = useUser();
+
+    // 사용자 역할에 따라 isIntructuor 결정
+    const isInstructor = user?.role === USER_ROLES.INSTRUCTOR;
+
+    // useSocket에 역할 정보 전달
+    const socket = useSocket(classId, isInstructor);
+
 
     return (
         <SocketContext.Provider value={socket}>

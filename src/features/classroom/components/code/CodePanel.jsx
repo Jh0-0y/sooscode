@@ -88,8 +88,15 @@ const CodePanel = ({classId, isInstructor = false}) => {
             };
 
             try {
-                socket.publish(`/app/code/${classId}`, message);
+                // ✅ 수정: 역할에 따라 다른 엔드포인트 사용
+                const endpoint = isInstructor
+                    ? `/app/code/instructor/${classId}`  // 강사용
+                    : `/app/code/student/${classId}`;    // 학생용
+
+                socket.publish(endpoint, message);
                 setLastSavedTime(new Date());
+
+                console.log(`[CodePanel] 코드 전송: ${endpoint}`);
             } catch (error) {
                 console.error('자동 전송 실패:', error);
             }
@@ -100,7 +107,10 @@ const CodePanel = ({classId, isInstructor = false}) => {
                 clearTimeout(debounceTimerRef.current);
             }
         };
-    }, [code, output, socket, classId, isLoading, isReadOnly]);
+    }, [code, output, socket, classId, isLoading, isReadOnly, isInstructor]); // ✅ isInstructor 의존성 추가
+
+
+
 
     const applyTheme = (monaco) => {
         if (!monaco) return;
@@ -134,9 +144,9 @@ const CodePanel = ({classId, isInstructor = false}) => {
 
         editor.__observer = observer;
 
-        if (code && code !== "// write code") {
-            editor.setValue(code);
-        }
+        // if (code && code !== "// write code") {
+        //     editor.setValue(code);
+        // }
     };
 
     // 모드가 변경될 때 에디터 옵션 업데이트
@@ -196,8 +206,7 @@ const CodePanel = ({classId, isInstructor = false}) => {
 
     const reset = () => {
         if (isReadOnly) return; // 읽기 전용에서는 리셋 불가
-        setCode("// write code");
-        if (editorInstance) editorInstance.setValue("// write code");
+        //if (editorInstance) editorInstance.setValue("// write code");
     };
 
     const copy = () => {
