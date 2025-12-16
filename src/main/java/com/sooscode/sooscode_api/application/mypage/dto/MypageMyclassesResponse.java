@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -14,6 +17,10 @@ public class MypageMyclassesResponse {
         private String title;
         private String teacherName;
         private String thumbnailUrl;
+        private LocalDate startDate;
+        private LocalDate endDate;
+        private LocalTime startTime;
+        private LocalTime endTime;
 
     public static MypageMyclassesResponse from(ClassRoom classRoom) {
         return MypageMyclassesResponse.builder()
@@ -25,6 +32,10 @@ public class MypageMyclassesResponse {
                                 ? classRoom.getFile().getUrl()
                                 : "/images/default-thumbnail.png"
                 )
+                .startDate(classRoom.getStartDate())
+                .endDate(classRoom.getEndDate())
+                .startTime(classRoom.getStartTime())
+                .endTime(classRoom.getEndTime())
                 .build();
     }
 }

@@ -54,4 +54,7 @@ public interface ClassRoomRepository extends JpaRepository<ClassRoom, Long> {
             @Param("today") LocalDate today,
             @Param("nowTime") LocalTime nowTime
     );
+
+    //mypage 진입시 리스팅
+    Page<ClassRoom> findByUser_UserId(Long userId, Pageable pageable);
 }

@@ -13,6 +13,10 @@ import com.sooscode.sooscode_api.global.security.CustomUserDetails;
 import com.sooscode.sooscode_api.global.utils.FileValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -42,26 +46,58 @@ public class MypageClassController {
 
     // Instructor 및 student에 따라 가지고있는 class의 List를 반환
     @GetMapping("/classes")
-    public ResponseEntity<ApiResponse<List<MypageMyclassesResponse>>> getClasses(
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<ApiResponse<Page<MypageMyclassesResponse>>> getClasses(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
         log.info("Get My Classes Controller");
 
-        List<MypageMyclassesResponse> response;
         User user = userDetails.getUser();
-
         UserRole userRole = user.getRole();
         Long userId = user.getUserId();
 
-        log.info("User Role : {}", userRole);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 
-        if(userRole.equals(UserRole.STUDENT)) {
-            response = mypageClassService.getStudentClasses(userId);
-        }else if(userRole.equals(UserRole.INSTRUCTOR)){
-            response = mypageClassService.getTeacherClasses(userId);
-        }else {
+        Page<MypageMyclassesResponse> response;
+
+        if (userRole.equals(UserRole.STUDENT)) {
+            response = mypageClassService.getStudentClasses(userId, pageable);
+        } else if (userRole.equals(UserRole.INSTRUCTOR)) {
+            response = mypageClassService.getTeacherClasses(userId, pageable);
+        } else {
             throw new CustomException(UserStatus.SUSPENDED);
         }
 
         return ApiResponse.ok(GlobalStatus.OK, response);
-        }
     }
+}
+
+
+
+
+// 원본 classes
+//@GetMapping("/classes")
+//public ResponseEntity<ApiResponse<List<MypageMyclassesResponse>>> getClasses(
+//        @AuthenticationPrincipal CustomUserDetails userDetails) {
+//    log.info("Get My Classes Controller");
+//
+//    List<MypageMyclassesResponse> response;
+//    User user = userDetails.getUser();
+//
+//    UserRole userRole = user.getRole();
+//    Long userId = user.getUserId();
+//
+//    log.info("User Role : {}", userRole);
+//
+//    if(userRole.equals(UserRole.STUDENT)) {
+//        response = mypageClassService.getStudentClasses(userId);
+//    }else if(userRole.equals(UserRole.INSTRUCTOR)){
+//        response = mypageClassService.getTeacherClasses(userId);
+//    }else {
+//        throw new CustomException(UserStatus.SUSPENDED);
+//    }
+//
+//    return ApiResponse.ok(GlobalStatus.OK, response);
+//}
+//    }
