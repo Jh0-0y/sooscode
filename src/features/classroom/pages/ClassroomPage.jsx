@@ -9,7 +9,7 @@ import ClassHeader from "./ClassHeader.jsx";
 import ClassSidebar from "./ClassSidebar.jsx";
 import ClassBody from "./ClassBody.jsx";
 import styles from './ClassroomPage.module.css';
-import {QuizProvider} from "@/features/classroom/contexts/QuizContext.jsx";
+
 const ClassroomPage = () => {
     const { encodedId } = useParams();
     const navigate = useNavigate();
@@ -35,11 +35,9 @@ const ClassroomPage = () => {
     return (
         <ClassroomProvider classId={classId}>
             <SocketProvider classId={classId}>
-                <QuizProvider classId={classId}>
                     <ClassModeProvider classId={classId}>
                         <ClassroomContent />
                     </ClassModeProvider>
-                </QuizProvider>
             </SocketProvider>
         </ClassroomProvider>
     );

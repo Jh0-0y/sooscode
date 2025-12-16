@@ -4,7 +4,7 @@ import { Client } from '@stomp/stompjs';
 
 const SOCKET_URL = 'http://localhost:8080/ws';
 
-const useSocket = (classroomId) => {
+const useSocket = (classroomId, isInstructor = false) => {
     const [connected, setConnected] = useState(false);
     const [error, setError] = useState(null);
     const clientRef = useRef(null);
@@ -20,6 +20,11 @@ const useSocket = (classroomId) => {
             webSocketFactory: () => new SockJS(SOCKET_URL, null, {
                 transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
             }),
+
+            // 연결 헤더에 역할 정보 추가
+            connectHeaders: {
+                isInstructor: String(isInstructor), // 'true' 또는 'false' 문자열로 전송
+            },
 
             // 재연결 설정
             reconnectDelay: 3000,
@@ -70,7 +75,7 @@ const useSocket = (classroomId) => {
 
         client.activate();
         clientRef.current = client;
-    }, [classroomId]);
+    }, [classroomId, isInstructor]);
 
     const disconnect = useCallback(() => {
         if (clientRef.current) {

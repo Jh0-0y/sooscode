@@ -13,7 +13,7 @@ const SnapshotSaveButton = ({ loading, onClick }) => {
             onClick={onClick}
             disabled={loading}
         >
-            {loading ? "저장 중..." : "+ 현재 코드 스냅샷 저장"}
+            {loading ? "저장 중..." : "+ 스냅샷 저장"}
         </button>
     );
 };

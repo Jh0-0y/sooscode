@@ -146,6 +146,9 @@ const SnapshotPanel = () => {
     return (
         <div className={styles.container}>
 
+            <div className={styles.header}>
+                {/*<SnapshotSaveFeature />*/}
+
             <SnapshotSearchFilter
                 onSearch={handleSearch}
                 value={filters.title}

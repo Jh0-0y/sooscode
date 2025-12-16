@@ -10,7 +10,7 @@ const ClassJoinTest = () => {
     };
 
     return (
-        <button onClick={() => handleJoinClass(2)}
+        <button onClick={() => handleJoinClass(1)}
                 style={{
                     padding: '10px 18px',
                     borderRadius: '8px',

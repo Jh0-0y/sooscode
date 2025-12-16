@@ -9,8 +9,9 @@ import CodeSharePanel from "@/features/classroom/components/code/CodeSharePanel.
 import {useParams} from "react-router-dom";
 import { decodeNumber } from "@/utils/urlEncoder";
 import { useSocketContext } from "@/features/classroom/contexts/SocketContext";
-import ModeToggleBar from "@/features/classroom/components/code/ModeToggleBar.jsx";
+import TopButtonBar from "@/features/classroom/components/code/TopButtonBar.jsx";
 import LivekitVideo from "@/features/classroom/components/livekit/LivekitVideo.jsx";
+import SnapshotSaveFeature from "@/features/classroom/components/snapshot/SnapshotSaveFeature.jsx";
 
 
 const ClassBody = () => {
@@ -57,9 +58,13 @@ const ClassBody = () => {
                     <div className={`${styles.inner} ${styles.left}`} ref={leftRef}>
                         <div className={styles.tabContainer}>
                             {/*<button className={styles.tab}>내 코드</button>*/}
-                            <ModeToggleBar />
+                            {isInstructor ? (
+                                <TopButtonBar />
+                            ) : (
+                                <SnapshotSaveFeature />
+                            )}
                         </div>
-                        <CodePanel classId={classId} />
+                        <CodePanel classId={classId} isInstructor={isInstructor} />
                     </div>
 
 
@@ -88,7 +93,7 @@ const ClassBody = () => {
                             className={styles.panel}
                             style={{ display: activeTab === 'code' ? 'block' : 'none' }}
                         >
-                            <CodeSharePanel classId={classId} />
+                            <CodeSharePanel classId={classId} isInstructor={isInstructor} />
                         </div>
                         <div
                             className={styles.panel}
