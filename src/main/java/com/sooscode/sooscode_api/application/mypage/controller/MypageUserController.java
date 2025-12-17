@@ -14,6 +14,7 @@ import com.sooscode.sooscode_api.global.api.status.GlobalStatus;
 import com.sooscode.sooscode_api.global.api.status.UserStatus;
 import com.sooscode.sooscode_api.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/mypage")
 @RequiredArgsConstructor
+@Slf4j
 public class MypageUserController {
 
     private final MypageUserService mypageService;
@@ -114,12 +116,10 @@ public class MypageUserController {
             @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail
     ) throws IOException {
 
+        log.info("thumbnailupload 시도");
+
         UserRole userRole = userDetails.getUser().getRole();
 
-        // INSTRUCTOR / ADMIN 만 허용
-        if (userRole != UserRole.INSTRUCTOR && userRole != UserRole.ADMIN) {
-            throw new CustomException(UserStatus.SUSPENDED);
-        }
 
         classRoomService.updateThumbnail(
                 classId,

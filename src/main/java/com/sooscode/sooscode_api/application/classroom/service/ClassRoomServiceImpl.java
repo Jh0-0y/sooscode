@@ -9,6 +9,7 @@ import com.sooscode.sooscode_api.global.api.exception.CustomException;
 import com.sooscode.sooscode_api.global.api.status.ClassRoomStatus;
 import com.sooscode.sooscode_api.infra.file.service.S3FileService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class ClassRoomServiceImpl implements ClassRoomService {
 
     private final ClassRoomRepository classRoomRepository;
@@ -71,14 +73,10 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     @Transactional
     @Override
     public void updateThumbnail(Long classId, Long userId, MultipartFile thumbnail) throws IOException {
-
+        log.info("updateThumbnail시도");
         ClassRoom classRoom = classRoomRepository.findById(classId)
                 .orElseThrow(() -> new CustomException(ClassRoomStatus.CLASS_ALREADY_ENDED));
 
-        // 소유자 검증
-        if (!classRoom.getUser().getUserId().equals(userId)) {
-            throw new CustomException(ClassRoomStatus.CLASS_ALREADY_ENDED);
-        }
 
         // 기존 썸네일
         SooFile oldFile = classRoom.getFile();

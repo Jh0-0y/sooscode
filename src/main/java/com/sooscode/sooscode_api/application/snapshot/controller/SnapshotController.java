@@ -56,7 +56,6 @@ public class SnapshotController {
 
         writeEffectiveness(request.getTitle(), request.getContent());
         classEffectiveness(request.getClassId());
-        languageEffectiveness(request.getLanguage());
         snapshotService.updateCodeSnapshot(request,LoginuserId, snapshotId);
         return ApiResponse.ok(SnapshotStatus.UPDATE_OK);
 

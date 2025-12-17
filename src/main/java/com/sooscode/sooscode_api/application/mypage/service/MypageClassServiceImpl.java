@@ -86,28 +86,47 @@ public class MypageClassServiceImpl implements MypageClassService {
 //    }
     @Override
     public Page<MypageMyclassesResponse> getStudentClasses(Long userId, Pageable pageable) {
-        log.info("getStudentClasses Service");
 
         Page<ClassParticipant> pageResult =
                 classParticipantRepository.findByUser_UserId(userId, pageable);
 
-        return pageResult.map(cp ->
-                MypageMyclassesResponse.from(cp.getClassRoom())
-        );
+        return pageResult.map(cp -> {
+            ClassRoom classRoom = cp.getClassRoom();
+
+            String thumbnailUrl = null;
+            if (classRoom.getFile() != null) {
+                thumbnailUrl = s3FileService.getPublicUrl(
+                        classRoom.getFile().getFileId()
+                );
+            }
+
+            return MypageMyclassesResponse.from(classRoom, thumbnailUrl);
+        });
     }
+
 
     @Override
     public Page<MypageMyclassesResponse> getTeacherClasses(Long userId, Pageable pageable) {
-        log.info("getTeacherClasses Service");
 
-        User user = userRepository.findById(userId)
+        userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(UserStatus.NOT_FOUND));
 
         Page<ClassRoom> pageResult =
                 classRoomRepository.findByUser_UserId(userId, pageable);
 
-        return pageResult.map(MypageMyclassesResponse::from);
+        return pageResult.map(classRoom -> {
+
+            String thumbnailUrl = null;
+            if (classRoom.getFile() != null) {
+                thumbnailUrl = s3FileService.getPublicUrl(
+                        classRoom.getFile().getFileId()
+                );
+            }
+
+            return MypageMyclassesResponse.from(classRoom, thumbnailUrl);
+        });
     }
+
 
 
 }
