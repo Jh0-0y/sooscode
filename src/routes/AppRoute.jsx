@@ -71,14 +71,14 @@ export default function AppRoute() {
                 {/*</Route>*/}
 
                 {/* Private - 관리자 전용 */}
-                {/*<Route element={<PrivateRoute allowedRoles={['ADMIN']} />}>*/}
+                <Route element={<PrivateRoute allowedRoles={['ADMIN']} />}>
                     <Route path="/admin" element={<AdminLayout />}>
                         <Route path="classes" element={<AdminClassroomPage />} />
                         <Route path="classes/:id" element={<AdminClassroomDetailPage />} />
                         <Route path="users" element={<AdminUserPage />} />
                         <Route path="users/:id" element={<AdminUserDetailPage />} />
                     </Route>
-                {/*</Route>*/}
+                </Route>
 
                 {/* Error Pages */}
                 <Route path="/error/403" element={<Forbidden />} />
