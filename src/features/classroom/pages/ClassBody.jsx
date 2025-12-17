@@ -12,6 +12,7 @@ import { useSocketContext } from "@/features/classroom/contexts/SocketContext";
 import TopButtonBar from "@/features/classroom/components/code/TopButtonBar.jsx";
 import LivekitVideo from "@/features/classroom/components/livekit/LivekitVideo.jsx";
 import SnapshotSaveFeature from "@/features/classroom/components/snapshot/SnapshotSaveFeature.jsx";
+import {useClassJoin} from "@/features/classroom/hooks/class/useClassJoin.js";
 
 
 const ClassBody = () => {
@@ -25,6 +26,13 @@ const ClassBody = () => {
     const isInstructor = user?.role === 'INSTRUCTOR';
     const isStudent = user?.role === 'STUDENT';
 
+
+    const classId = decodeNumber(encodedId);
+
+    // 클래스 자동 입장 (채팅 채널 구독)
+    useClassJoin(classId);
+
+
     /**
      * 수업 모드 변경
      */
@@ -34,7 +42,6 @@ const ClassBody = () => {
         return '학생 코드';
     };
 
-    const classId = decodeNumber(encodedId);
 
     return (
         <div
