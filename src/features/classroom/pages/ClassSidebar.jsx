@@ -13,18 +13,17 @@ const ClassSidebar = () => {
     const [activeTab, setActiveTab] = useState('students');
     const { encodedId } = useParams();
     const classId = decodeNumber(encodedId);
-    const { user } = useUser(); // ✅ 현재 사용자
-
+    const { user } = useUser();
     // 실시간 참가자 목록
     const { students, instructors, totalCount } = useParticipants(classId);
 
-    // ✅ 선택된 학생 관리
+    //
     const { selectedStudent, selectStudent } = useSelectedStudent();
 
     // 강사 여부 확인
     const isInstructor = user?.role === 'INSTRUCTOR';
 
-    // ✅ 학생 클릭 핸들러
+    //
     const handleStudentClick = (student) => {
         if (!isInstructor) return; // 강사만 선택 가능
 

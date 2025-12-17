@@ -10,11 +10,11 @@ import { getEditorOptions } from "@/features/classroom/utils/editorUtils.js";
 import { useSocketContext } from "@/features/classroom/contexts/SocketContext";
 import { CLASS_MODES, useClassMode } from "@/features/classroom/contexts/ClassModeContext.jsx";
 import { useUser } from "@/hooks/useUser.js";
-import { useSelectedStudent } from "@/features/classroom/hooks/class/useSelectedStudent.js"; // ✅ 추가
+import { useSelectedStudent } from "@/features/classroom/hooks/class/useSelectedStudent.js";
 
 const CodeSharePanel = ({ classId, isInstructor = false }) => {
     const { user } = useUser();
-    const { selectedStudent } = useSelectedStudent(); // ✅ 선택된 학생
+    const { selectedStudent } = useSelectedStudent(); // 선택된 학생
     const [sharedCode, setSharedCode] = useState('');
     const [senderInfo, setSenderInfo] = useState(null);
     const { editorInstance, handleEditorMount } = useMonacoEditor();
@@ -23,15 +23,15 @@ const CodeSharePanel = ({ classId, isInstructor = false }) => {
     const socket = useSocketContext();
     const debounceTimerRef = useRef(null);
 
-    // 강사는 편집 가능, 학생은 항상 읽기 전용
-    const isReadOnly = !isInstructor;
+    // 항상 읽기 전용
+    const isReadOnly = true;
 
     // 역할에 따른 구독 토픽 결정
     const subscribeTopic = isInstructor
         ? `/topic/code/student/${classId}`
         : `/topic/code/instructor/${classId}`;
 
-    // ✅ 초기 메시지 설정
+    // 초기 메시지 설정
     const getInitialMessage = () => {
         if (isInstructor) {
             return selectedStudent
@@ -41,7 +41,7 @@ const CodeSharePanel = ({ classId, isInstructor = false }) => {
         return '// 강사 코드를 기다리는 중...';
     };
 
-    // ✅ 선택된 학생 변경 시 초기화
+    // 선택된 학생 변경 시 초기화
     useEffect(() => {
         if (isInstructor) {
             if (selectedStudent) {
@@ -72,7 +72,7 @@ const CodeSharePanel = ({ classId, isInstructor = false }) => {
 
             if (!data || data.code == null) return;
 
-            // ✅ 강사: 선택된 학생의 코드만 표시
+            // 강사: 선택된 학생의 코드만 표시
             if (isInstructor) {
                 // 선택된 학생이 없으면 모든 코드 무시
                 if (!selectedStudent) {
@@ -87,10 +87,10 @@ const CodeSharePanel = ({ classId, isInstructor = false }) => {
                     return;
                 }
 
-                console.log('[CodeSharePanel-Instructor] ✅ 선택된 학생 코드 수신:', selectedStudent.username);
+                console.log('[CodeSharePanel-Instructor] 선택된 학생 코드 수신:', selectedStudent.username);
             }
 
-            // ✅ 학생 CodeSharePanel 필터링
+            // 학생 CodeSharePanel 필터링
             if (!isInstructor) {
                 console.log('[CodeSharePanel-Student] 필터링 시작:', {
                     type: data.type,
@@ -101,27 +101,27 @@ const CodeSharePanel = ({ classId, isInstructor = false }) => {
 
                 // 1. 자기가 보낸 메시지 무시
                 if (data.userEmail === user?.email) {
-                    console.log('[CodeSharePanel-Student] ❌ 자기가 보낸 메시지 무시');
+                    console.log('[CodeSharePanel-Student] 자기가 보낸 메시지 무시');
                     return;
                 }
 
                 // 2. STUDENT_EDIT 타입 무시
                 if (data.type === 'STUDENT_EDIT') {
-                    console.log('[CodeSharePanel-Student] ❌ STUDENT_EDIT 무시');
+                    console.log('[CodeSharePanel-Student] STUDENT_EDIT 무시');
                     return;
                 }
 
                 // 3. undefined 타입 무시 (다른 학생)
                 if (data.type === undefined) {
-                    console.log('[CodeSharePanel-Student] ❌ undefined type 무시 (학생 메시지)');
+                    console.log('[CodeSharePanel-Student] undefined type 무시 (학생 메시지)');
                     return;
                 }
 
                 // 4. INSTRUCTOR_EXAMPLE 타입만 통과
                 if (data.type === 'INSTRUCTOR_EXAMPLE') {
-                    console.log('[CodeSharePanel-Student] ✅✅✅ 강사 예제 수신 성공!');
+                    console.log('[CodeSharePanel-Student] 강사 예제 수신 성공!');
                 } else {
-                    console.log('[CodeSharePanel-Student] ❌ 알 수 없는 타입 무시:', data.type);
+                    console.log('[CodeSharePanel-Student] 알 수 없는 타입 무시:', data.type);
                     return;
                 }
             }
@@ -146,7 +146,7 @@ const CodeSharePanel = ({ classId, isInstructor = false }) => {
     useEffect(() => {
         if (!isInstructor) return;
         if (!socket || !socket.connected || !classId) return;
-        if (!senderInfo || !selectedStudent) return; // ✅ 선택된 학생이 있을 때만
+        if (!senderInfo || !selectedStudent) return; // 선택된 학생이 있을 때만
 
         if (debounceTimerRef.current) {
             clearTimeout(debounceTimerRef.current);
@@ -158,7 +158,7 @@ const CodeSharePanel = ({ classId, isInstructor = false }) => {
                 language: 'javascript',
                 output: output || null,
                 type: 'STUDENT_EDIT',
-                targetEmail: selectedStudent.userEmail, // ✅ 선택된 학생 이메일
+                targetEmail: selectedStudent.userEmail, // 선택된 학생 이메일
             };
 
             try {
@@ -184,13 +184,13 @@ const CodeSharePanel = ({ classId, isInstructor = false }) => {
         <div className={`${styles.relative} ${styles.editorWrapper}`}>
             {/* 헤더 */}
             <div className={styles.shareHeader}>
-                <h3 style={{ margin: 0, fontSize: '14px', fontWeight: '600' }}>
-                    {isInstructor ? (
-                        selectedStudent
-                            ? `📝 ${selectedStudent.username}의 코드`
-                            : '📝 학생 코드'
-                    ) : '👨‍🏫 강사 코드 (실시간)'}
-                </h3>
+                {/*<h3 style={{ margin: 0, fontSize: '14px', fontWeight: '600' }}>*/}
+                {/*    {isInstructor ? (*/}
+                {/*        selectedStudent*/}
+                {/*            ? `📝 ${selectedStudent.username}의 코드`*/}
+                {/*            : '📝 학생 코드'*/}
+                {/*    ) : '👨‍🏫 강사 코드 (실시간)'}*/}
+                {/*</h3>*/}
                 {senderInfo && (
                     <span style={{ fontSize: '12px', opacity: 0.7 }}>
                         {senderInfo.timestamp.toLocaleTimeString()}
@@ -233,7 +233,7 @@ const CodeSharePanel = ({ classId, isInstructor = false }) => {
                         onChange={(value) => isInstructor && selectedStudent && setSharedCode(value)}
                         options={{
                             ...options,
-                            readOnly: !isInstructor || !selectedStudent, // ✅ 학생 선택 시에만 편집 가능
+                            readOnly: true
                         }}
                         onMount={handleEditorMount}
                         theme="customTheme"
