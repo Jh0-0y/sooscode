@@ -18,14 +18,14 @@
     width: 44%;
 }
 .deleteButton:hover {
-    background-color: rgb(237, 56, 56);
+    background-color: var(--color-error);
     overflow: visible;
 }
 .bin path {
     transition: all 0.2s;
 }
 .deleteButton:hover .bin path {
-    fill: #fff;
+    fill: var(--color-text-inverse);
 }
 .deleteButton:active {
     transform: scale(0.98);
