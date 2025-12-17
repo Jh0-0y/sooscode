@@ -133,4 +133,6 @@ public interface AdminUserService {
      */
     List<AdminUserResponse.EnrolledClass> getUserEnrolledClasses(Long userId);
 
+
+    AdminUserResponse.Detail updateUser(Long userId, AdminUserRequest.Update request, UserRole role);
 }

@@ -217,10 +217,8 @@ public class AdminClassController {
         return ApiResponse.ok(AdminStatus.OK, students);
     }
 
-
     /**
      * 클래스 정보 및 수강생 목록 엑셀 다운로드
-     * GET /api/admin/classes/{classId}/export
      */
     @GetMapping("/{classId}/export")
     public ResponseEntity<byte[]> exportClassToExcel(@PathVariable Long classId) {
@@ -228,14 +226,11 @@ public class AdminClassController {
 
         byte[] excelData = adminClassService.exportClassToExcel(classId);
 
-        // 파일명 생성 (클래스ID_날짜)
         String filename = "class_" + classId + "_" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + ".xlsx";
-        String encodedFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8).replace("+", "%20");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", encodedFilename);
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"; filename*=UTF-8''" + encodedFilename);
+        headers.setContentDispositionFormData("attachment", filename);  // ← 이것만 남기기
 
         return ResponseEntity.ok()
                 .headers(headers)
@@ -244,9 +239,8 @@ public class AdminClassController {
 
     /**
      * 전체 클래스 목록 엑셀 다운로드
-     * GET /api/admin/classes/export
      */
-    @GetMapping("/export")
+    @GetMapping("/list/export")
     public ResponseEntity<byte[]> exportClassListToExcel(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) LocalDate startDate,
@@ -256,7 +250,6 @@ public class AdminClassController {
     ) {
         log.info("클래스 목록 엑셀 다운로드 요청");
 
-        // 필터 객체 생성
         AdminClassRequest.SearchFilter filter = new AdminClassRequest.SearchFilter();
         filter.setKeyword(keyword);
         filter.setStartDate(startDate);
@@ -266,17 +259,15 @@ public class AdminClassController {
 
         byte[] excelData = adminClassService.exportClassListToExcel(filter);
 
-        // 파일명 생성
         String filename = "classes_" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + ".xlsx";
-        String encodedFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8).replace("+", "%20");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", encodedFilename);
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"; filename*=UTF-8''" + encodedFilename);
+        headers.setContentDispositionFormData("attachment", filename);  // ← 이것만 남기기
 
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(excelData);
     }
+
 }

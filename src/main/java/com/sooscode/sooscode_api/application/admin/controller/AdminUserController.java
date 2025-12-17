@@ -138,6 +138,25 @@ public class AdminUserController {
     }
 
     /**
+     * 사용자 수정
+     * POST /api/admin/users/{userId}/edit
+     */
+    @PostMapping("/{userId}/edit")
+    public ResponseEntity<ApiResponse<AdminUserResponse.Detail>> updateUser(
+            @PathVariable Long userId,
+            @RequestBody AdminUserRequest.Update request
+    ) {
+        log.info("사용자 업데이트 요청: userId={}, request={}", userId, request);
+
+        validateUsername(request.getName());
+        validateEmail(request.getEmail());
+        UserRole role = validateRole(request.getRole());
+
+        AdminUserResponse.Detail response = adminUserService.updateUser(userId, request, role);
+        return ApiResponse.ok(AdminStatus.OK, null);
+    }
+
+    /**
      * 사용자 삭제 (비활성화)
      * POST /api/admin/users/{userId}/delete
      */

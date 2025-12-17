@@ -51,7 +51,17 @@ public interface ClassParticipantRepository extends JpaRepository<ClassParticipa
             "WHERE cp.user.userId = :userId " +
             "ORDER BY cp.createdAt DESC")
     List<ClassParticipant> findByUserIdWithClassAndInstructor(@Param("userId") Long userId);
-  
+
+    /**
+     * 클래스 수강생 목록 조회 (User 정보 포함)
+     * 엑셀 다운로드 시 N+1 문제 방지를 위해 FETCH JOIN 사용
+     */
+    @Query("SELECT cp FROM ClassParticipant cp " +
+            "JOIN FETCH cp.user u " +
+            "WHERE cp.classRoom.classId = :classId " +
+            "ORDER BY cp.createdAt DESC")
+    List<ClassParticipant> findByClassIdWithUser(@Param("classId") Long classId);
+
     // mypage 진입시 클래스 리스팅
     Page<ClassParticipant> findByUser_UserId(Long userId, Pageable pageable);
 }

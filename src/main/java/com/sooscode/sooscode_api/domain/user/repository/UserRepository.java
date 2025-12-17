@@ -38,10 +38,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
      * 사용자 목록 조회 (필터링 + 페이지네이션)
-     * null인 파라미터는 필터에서 제외
+     * 관리자는 제외하고 학생/강사만 조회
      */
     @Query("SELECT u FROM User u WHERE " +
-            "(:keyword IS NULL OR :keyword = '' OR LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(u.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+            "u.role IN (com.sooscode.sooscode_api.domain.user.enums.UserRole.STUDENT, com.sooscode.sooscode_api.domain.user.enums.UserRole.INSTRUCTOR) " +
+            "AND (:keyword IS NULL OR :keyword = '' OR LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(u.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
             "AND (:role IS NULL OR u.role = :role) " +
             "AND (:status IS NULL OR u.status = :status) " +
             "AND (:startDate IS NULL OR u.createdAt >= :startDate) " +
@@ -57,9 +58,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
      * 사용자 목록 조회 (필터링, 페이지네이션 없이 - 엑셀 다운로드용)
+     * 관리자는 제외하고 학생/강사만 조회
      */
     @Query("SELECT u FROM User u WHERE " +
-            "(:keyword IS NULL OR :keyword = '' OR LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(u.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+            "u.role IN (com.sooscode.sooscode_api.domain.user.enums.UserRole.STUDENT, com.sooscode.sooscode_api.domain.user.enums.UserRole.INSTRUCTOR) " +
+            "AND (:keyword IS NULL OR :keyword = '' OR LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(u.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
             "AND (:role IS NULL OR u.role = :role) " +
             "AND (:status IS NULL OR u.status = :status) " +
             "AND (:startDate IS NULL OR u.createdAt >= :startDate) " +

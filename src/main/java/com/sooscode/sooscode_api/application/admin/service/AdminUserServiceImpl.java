@@ -625,4 +625,45 @@ public class AdminUserServiceImpl implements AdminUserService {
 
         return enrolledClasses;
     }
+
+    /**
+     * 사용자 정보 업데이트
+     */
+    @Override
+    @Transactional
+    public AdminUserResponse.Detail updateUser(Long userId, AdminUserRequest.Update request, UserRole role) {
+        log.info("사용자 업데이트 시작: userId={}, request={}", userId, request);
+
+        // 사용자 조회
+        User user = findUserById(userId);
+
+        // 관리자 계정 수정 방지
+        if (user.getRole() == UserRole.ADMIN) {
+            throw new CustomException(AdminStatus.USER_FORBIDDEN_ADMIN_MODIFY);
+        }
+
+        // 이메일 중복 체크 (자신의 이메일이 아닌 경우만)
+        if (!user.getEmail().equals(request.getEmail())) {
+            if (userRepository.existsByEmail(request.getEmail())) {
+                throw new CustomException(AuthStatus.DUPLICATE_EMAIL);
+            }
+        }
+
+        // 정보 업데이트
+        String previousEmail = user.getEmail();
+        String previousName = user.getName();
+        UserRole previousRole = user.getRole();
+
+        user.setEmail(request.getEmail());
+        user.setName(request.getName());
+        user.setRole(role);
+
+        userRepository.save(user);
+
+        log.info("사용자 정보 업데이트 완료: userId={}, email: {} -> {}, name: {} -> {}, role: {} -> {}",
+                userId, previousEmail, request.getEmail(), previousName, request.getName(),
+                previousRole, request.getRole());
+
+        return AdminUserResponse.Detail.from(user);
+    }
 }

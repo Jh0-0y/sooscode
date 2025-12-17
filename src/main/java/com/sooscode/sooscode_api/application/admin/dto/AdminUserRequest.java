@@ -10,12 +10,24 @@ import java.time.LocalDateTime;
 public class AdminUserRequest {
 
     /**
-     * 강사 계정 생성 요청
+     * 강사 계정 요청
      */
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Create {
+        private String email;
+        private String name;
+        private String role;
+    }
+
+    /**
+     * 강사 계정 요청
+     */
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Update {
         private String email;
         private String name;
         private String role;

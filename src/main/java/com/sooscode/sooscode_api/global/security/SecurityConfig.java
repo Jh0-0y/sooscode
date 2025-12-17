@@ -53,6 +53,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/compile/callback/**").permitAll()
                         .requestMatchers("/api/code/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception

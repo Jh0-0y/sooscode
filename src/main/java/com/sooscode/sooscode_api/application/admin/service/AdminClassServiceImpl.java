@@ -480,7 +480,7 @@ public class AdminClassServiceImpl implements AdminClassService {
                 .orElseThrow(() -> new CustomException(ClassRoomStatus.CLASS_NOT_FOUND));
 
         // 수강생 목록 조회
-        List<ClassParticipant> participants = classParticipantRepository.findByClassRoom_ClassId(classId);
+        List<ClassParticipant> participants = classParticipantRepository.findByClassIdWithUser(classId);
 
         try (Workbook workbook = new XSSFWorkbook()) {
             // 스타일 생성
