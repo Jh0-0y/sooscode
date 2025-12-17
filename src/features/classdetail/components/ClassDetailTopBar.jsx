@@ -1,9 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./ClassDetailTopBar.module.css";
 import { FaCode } from "react-icons/fa";
+import { encode } from "@/utils/urlEncoder";
+
 
 export default function ClassDetailTopBar({title,online,classId}) {
   const navigate = useNavigate();
+  const handleJoinClass = (classId) => {
+  const encoded = encode(classId);
+
+  console.log("encoded:", encoded);
+  console.log("current pathname:", window.location.pathname);
+  console.log("target:", `/class/${encoded}`);
+
+  navigate(`/class/${encoded}`);
+};
   return (
     <div className={styles.wrapper}>
       <div className={styles.left}>
@@ -18,9 +29,15 @@ export default function ClassDetailTopBar({title,online,classId}) {
       </div>
 
       <div className={styles.right}>
-        <div className={styles.buttonContainer}>
-          <button className={styles.enterBtn} onClick={() => navigate('/class')}>입장하기</button>
-          <button className={styles.practiceBtn} onClick={() => navigate(`/classdetail/codepractice/${classId}`)}>코드연습</button>
+              <div className={styles.buttonContainer}>
+                <button
+        className={styles.enterBtn}
+        onClick={() => {handleJoinClass(classId);
+        }}
+      >
+        입장하기
+      </button>
+          <button className={styles.practiceBtn} onClick={() => navigate(`/test`)}>코드연습</button>
         </div>
         
       </div>

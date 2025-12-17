@@ -41,6 +41,39 @@
     color: var(--color-text-primary);
 }
 
+/* Header Actions */
+.headerActions {
+    display: flex;
+    gap: var(--spacing-3);
+    flex-wrap: wrap;
+}
+
+/* Secondary Button */
+.btnSecondary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-4);
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.btnSecondary:hover:not(:disabled) {
+    background-color: var(--color-bg-tertiary);
+    border-color: var(--color-border-dark);
+}
+
+.btnSecondary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 /* Type Badge (Online/Offline) */
 .typeBadge {
     display: inline-flex;
@@ -52,13 +85,13 @@
 }
 
 .typeBadge.online {
-    background-color: var(--color-info-50);
-    color: var(--color-info-700);
+    background-color: var(--color-primary-50);
+    color: var(--color-primary-700);
 }
 
 .typeBadge.offline {
-    background-color: var(--color-warning-50);
-    color: var(--color-warning-700);
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-secondary);
 }
 
 /* Status Badge */
@@ -86,5 +119,14 @@
     .headerContainer {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .headerActions {
+        width: 100%;
+    }
+
+    .headerActions button {
+        flex: 1;
+        justify-content: center;
     }
 }

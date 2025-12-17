@@ -10,11 +10,14 @@ export default function LectureCard({
   onClick,
   isOnAir = false,
   classId,
+  imageUrl,
 }) {
   const navigate = useNavigate();
 
   const handleJoinClass = (classId) => {
     const encoded = encode(classId);
+    console.log("encoded:", encoded);
+  console.log("current:", window.location.pathname);
     navigate(`/class/${encoded}`); // ← /class/MTIz
   };
 
@@ -23,7 +26,7 @@ export default function LectureCard({
       <div className={styles.thumbnailWrapper}>
         <img
           className={styles.thumbnail}
-          src={thumbnail || defaultImg}
+          src={imageUrl || defaultImg}
           alt={title}
           onClick={() => {
             if (!isOnAir) {

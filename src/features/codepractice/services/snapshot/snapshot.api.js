@@ -39,8 +39,8 @@ export const saveSnapshot = async ({ title, content, classId ,language}) => {
 };
 
 // 수정
-export const updateSnapshot = async ({ snapshotId, title, content }) => {
-  const res = await api.post(`/api/snapshot/update`, { title, content }, {
+export const updateSnapshot = async ({ classId, snapshotId, title, content }) => {
+  const res = await api.post(`/api/snapshot/update`, { classId,title, content }, {
     params: { snapshotId },
   });
   return res.data;

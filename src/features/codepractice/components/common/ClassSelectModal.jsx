@@ -10,7 +10,8 @@ export default function ClassSelectModal({ onSelect, onClose }) {
     const fetchClasses = async () => {
       try {
         const res = await getMyClasses();
-        setClasses(res || []);
+        console.log(res);
+        setClasses(res?.content ?? []);
       } catch (e) {
         console.error("강의 조회 실패", e);
       } finally {

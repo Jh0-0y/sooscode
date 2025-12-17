@@ -1,27 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminUserList } from '../../hooks/user/useAdminUserList';
 import UserFilter from '../../components/user/UserFilter';
 import UserTable from '../../components/user/UserTable';
 import Pagination from '../../common/Pagination';
+import UserHeader from "@/features/admin/components/user/UserHeader.jsx";
+import UserBulkUploadModal from '../../components/user/UserBulkUploadModal';
 import styles from './AdminUserPage.module.css';
 
 const AdminUserPage = () => {
     const navigate = useNavigate();
 
+    // 일괄 등록 모달 상태
+    const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
+
     const {
-        // 데이터
         users,
         totalPages,
         totalElements,
         loading,
-
-        // 페이지네이션
         page,
         size,
         handlePageChange,
-
-        // 필터링
         keyword,
         role,
         startDate,
@@ -29,45 +29,40 @@ const AdminUserPage = () => {
         handleKeywordChange,
         handleRoleChange,
         handleDateRangeChange,
-
-        // 정렬
         sortBy,
         sortDirection,
         handleSortChange,
-
-        // 기타
         resetFilters,
         handleExcelDownload,
+        refetch,
     } = useAdminUserList();
 
     const handleUserClick = (user) => {
         navigate(`/admin/users/${user.userId}`);
     };
 
+    // 신규 등록
+    const handleAddUser = () => {
+        navigate('/admin/users/new');
+    };
+
+    // 일괄 등록 모달 열기
+    const handleBulkUpload = () => {
+        setIsBulkModalOpen(true);
+    };
+
+    // 일괄 등록 성공 시
+    const handleBulkUploadSuccess = () => {
+        refetch(); // 목록 새로고침
+    };
+
     return (
         <div className={styles.adminPage}>
-            <div className={styles.pageHeader}>
-                <div className={styles.headerLeft}>
-                    <h1 className={styles.pageTitle}>사용자 관리</h1>
-                    <span className={styles.totalCount}>
-                        총 {totalElements}명
-                    </span>
-                </div>
-                <div className={styles.headerRight}>
-                    <button
-                        className={styles.btnExport}
-                        onClick={handleExcelDownload}
-                        disabled={loading}
-                    >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="7 10 12 15 17 10"/>
-                            <line x1="12" y1="15" x2="12" y2="3"/>
-                        </svg>
-                        엑셀 다운로드
-                    </button>
-                </div>
-            </div>
+            <UserHeader
+                onAddUser={handleAddUser}
+                onBulkUpload={handleBulkUpload}
+                onExcelDownload={handleExcelDownload}
+            />
 
             <UserFilter
                 keyword={keyword}
@@ -107,6 +102,13 @@ const AdminUserPage = () => {
                     onPageChange={handlePageChange}
                 />
             )}
+
+            {/* 일괄 등록 모달 */}
+            <UserBulkUploadModal
+                isOpen={isBulkModalOpen}
+                onClose={() => setIsBulkModalOpen(false)}
+                onSuccess={handleBulkUploadSuccess}
+            />
         </div>
     );
 };

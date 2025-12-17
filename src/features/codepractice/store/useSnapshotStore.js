@@ -14,6 +14,7 @@ export const useSnapshotStore = create((set, get) => ({
 
   setSelectedSnapshot: (item) =>
     set({ selectedSnapshot: item }),
+  isSaving: false,
 
   clearSnapshots: () =>
     set({ snapshots: [], selectedSnapshot: null }),
@@ -27,6 +28,13 @@ export const useSnapshotStore = create((set, get) => ({
   const { htmlCode, cssCode, jsCode} =
     usePracticeStore.getState();
 
+  const classId = usePracticeStore.getState().classId;
+  if (!classId) {
+    throw new Error("classId 없음");
+  }
+
+  console.log(classId);
+
   const fullHTML = buildHCJ({
     html: htmlCode,
     css: cssCode,
@@ -38,9 +46,8 @@ export const useSnapshotStore = create((set, get) => ({
     title,
     content: fullHTML,
     language: "CSS_HTML_JS",
-    classId: 1,
+    classId: classId,
   });
-
   get().triggerRefresh();
   },
 
@@ -67,12 +74,35 @@ export const useSnapshotStore = create((set, get) => ({
 },
 
 
-  resetSnapshots: () =>
-  set({
-    snapshots: [],
-    selectedSnapshot: null,
-  }),
+  resetSnapshots: () => {
+    if (get().isSaving) return;
+
+    set({
+      snapshots: [],
+      selectedSnapshot: null,
+    });
+  },
+
+saveNormalSnapshot: async ({ title, content, language, classId }) => {
+  if (get().isSaving) return;
+
+  set({ isSaving: true });
+
+  try {
+    await saveSnapshot({
+      title,
+      content,
+      language,
+      classId,
+    });
+  } finally {
+    set({ isSaving: false });
+  }
+},
+
+
 
 
   
 }));
+

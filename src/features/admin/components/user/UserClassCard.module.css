@@ -5,14 +5,19 @@
     border: 1px solid var(--color-border-light);
     border-radius: var(--radius-md);
     overflow: hidden;
+    box-shadow: var(--shadow-sm);
 }
 
 .cardHeader {
+    padding: var(--spacing-4);
+    background-color: var(--color-bg-secondary);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.headerContent {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-4);
-    border-bottom: 1px solid var(--color-border-light);
 }
 
 .cardTitle {
@@ -23,24 +28,29 @@
 }
 
 .classCount {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
     font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-    background-color: var(--color-bg-tertiary);
-    padding: var(--spacing-1) var(--spacing-2);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-primary-600);
+    background-color: var(--color-primary-50);
+    padding: 0 var(--spacing-2);
     border-radius: var(--radius-full);
 }
 
 .cardBody {
-    padding: var(--spacing-4);
+    padding: var(--spacing-5);
 }
 
 .classList {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-3);
-    max-height: 240px;
+    max-height: 320px; /* 2개 아이템만 보이도록 조절 */
     overflow-y: auto;
-    padding-right: var(--spacing-2);
 }
 
 .classList::-webkit-scrollbar {
@@ -48,22 +58,22 @@
 }
 
 .classList::-webkit-scrollbar-track {
-    background-color: var(--color-bg-secondary);
-    border-radius: var(--radius-sm);
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-base);
 }
 
 .classList::-webkit-scrollbar-thumb {
-    background-color: var(--color-border-medium);
-    border-radius: var(--radius-sm);
+    background: var(--color-border-medium);
+    border-radius: var(--radius-base);
 }
 
 .classList::-webkit-scrollbar-thumb:hover {
-    background-color: var(--color-border-dark);
+    background: var(--color-border-dark);
 }
 
 .classItem {
-    padding: var(--spacing-3);
-    background-color: var(--color-bg-secondary);
+    padding: var(--spacing-4);
+    background-color: var(--color-bg-primary);
     border: 1px solid var(--color-border-light);
     border-radius: var(--radius-base);
     cursor: pointer;
@@ -71,37 +81,78 @@
 }
 
 .classItem:hover {
-    background-color: var(--color-bg-tertiary);
     border-color: var(--color-primary-500);
+    background-color: var(--color-bg-secondary);
+}
+
+.classHeader {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+}
+
+.classIconWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: var(--color-primary-50);
+    border-radius: var(--radius-base);
+    color: var(--color-primary-600);
+    flex-shrink: 0;
 }
 
 .classInfo {
-    margin-bottom: var(--spacing-2);
+    flex: 1;
+    min-width: 0;
 }
 
 .classTitle {
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-sm);
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-primary);
-    margin: 0 0 var(--spacing-1);
+    margin: 0 0 var(--spacing-1) 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .classInstructor {
-    font-size: var(--font-size-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    font-size: var(--font-size-xs);
     color: var(--color-text-secondary);
     margin: 0;
 }
 
 .classProgress {
+    margin-bottom: var(--spacing-3);
+}
+
+.progressHeader {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: var(--spacing-2);
     margin-bottom: var(--spacing-2);
 }
 
+.progressLabel {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-tertiary);
+}
+
+.progressText {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary-600);
+}
+
 .progressBar {
-    flex: 1;
-    height: 8px;
+    height: 6px;
     background-color: var(--color-bg-tertiary);
     border-radius: var(--radius-full);
     overflow: hidden;
@@ -109,22 +160,25 @@
 
 .progressFill {
     height: 100%;
-    background-color: var(--color-primary-600);
+    background-color: var(--color-primary-500);
     border-radius: var(--radius-full);
     transition: width var(--transition-base);
 }
 
-.progressText {
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-primary-600);
-    min-width: 35px;
-    text-align: right;
-}
-
 .classFooter {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.enrolledInfo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+}
+
+.enrolledInfo svg {
+    color: var(--color-text-tertiary);
 }
 
 .enrolledDate {
@@ -132,18 +186,54 @@
     color: var(--color-text-tertiary);
 }
 
-.emptyState {
-    text-align: center;
-    padding: var(--spacing-8);
-    color: var(--color-text-secondary);
+.arrowIcon {
+    color: var(--color-text-tertiary);
+    transition: transform var(--transition-fast);
 }
 
-.emptyState svg {
+.classItem:hover .arrowIcon {
+    transform: translateX(4px);
+    color: var(--color-primary-600);
+}
+
+/* 빈 상태 */
+.emptyState {
+    text-align: center;
+    padding: var(--spacing-12) var(--spacing-5);
+}
+
+.emptyIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    background-color: var(--color-bg-tertiary);
+    border-radius: var(--radius-full);
     color: var(--color-text-tertiary);
     margin-bottom: var(--spacing-4);
 }
 
-.emptyState p {
+.emptyText {
     font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--spacing-1) 0;
+}
+
+.emptySubtext {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
     margin: 0;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .classList {
+        max-height: 280px; /* 모바일에서는 조금 더 작게 */
+    }
+
+    .classItem {
+        padding: var(--spacing-3);
+    }
 }

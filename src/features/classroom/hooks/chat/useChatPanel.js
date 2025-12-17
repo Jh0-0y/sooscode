@@ -25,6 +25,9 @@ export const useChatPanel = () => {
     const { user } = useUser();
     const myEmail = user?.email ?? null;
     const myName = user?.name ?? null;
+    
+
+    
 
     // 스크롤 훅
     const {

@@ -20,8 +20,7 @@ const AdminSidebar = ({ activeMenu, onMenuChange, collapsed, onToggleCollapse })
   return (
     <aside className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''}`}>
       <div className={styles.logo}>
-        <Shield className={styles.logoIcon} />
-        {!collapsed && <span className={styles.logoText}>Admin</span>}
+          <div className="logo" />
       </div>
 
       <nav className={styles.nav}>

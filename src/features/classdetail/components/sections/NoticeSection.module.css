@@ -30,8 +30,15 @@
 .thumbnailWrapper {
   display: flex;
   justify-content: center;
+  align-item:center;
 }
 
 .thumbnail {
   width: 80%;
+}
+
+.label{
+  display:flex;
+  justify-content:center;
+  cursor: pointer;
 }

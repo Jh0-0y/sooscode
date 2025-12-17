@@ -165,23 +165,27 @@ export default function CodePracticeHeaderLayout({
             {
             
              <button
-              className={`${styles.actionBtn} ${styles.runBtn} ${styles.hcjBtn}`}
-              onClick={() => {
-                const title = window.prompt("스냅샷 이름을 입력하세요");
-                if (!title){
-                  alert("제목을 입력해주세요");
-                  return;
-                } 
-                if (!classId){
-                  alert("클래스를 선택해주세요");
-                  return;
-                } 
+  className={`${styles.actionBtn} ${styles.runBtn} ${styles.hcjBtn}`}
+  onClick={async () => {
+    const title = window.prompt("스냅샷 이름을 입력하세요");
+    if (!title) {
+      alert("제목을 입력해주세요");
+      return;
+    }
+    if (!classId) {
+      alert("클래스를 선택해주세요");
+      return;
+    }
 
-                saveHCJSnapshot(title);
-              }}
-            >
-              저장
-            </button>
+    console.log("hcj 저장 시작")
+    await saveHCJSnapshot(title);
+    
+    console.log("hcj 저장 완료")
+  }}
+>
+  저장
+</button>
+
             
             
 

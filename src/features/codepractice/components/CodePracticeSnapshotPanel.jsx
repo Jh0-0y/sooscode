@@ -109,9 +109,9 @@ export default function CodePracticeSnapshotPanel() {
         isNew: false, // 🔥 중요
       });
       toast.saveSuccess();
+      
 
       setIsReadOnly(true);
-      triggerRefresh(); // 왼쪽 리스트 재조회
     } catch (e) {
       console.error("새 스냅샷 저장 실패", e);
       toast.saveFail();
@@ -183,8 +183,10 @@ return (
       onSaveNew={hasSnapshot && isNew ? handleSaveNewSnapshot : null}
       showSaveButton={hasSnapshot && !isNew && !isReadOnly}
       onSave={
+        
         hasSnapshot && !isNew && !isReadOnly
           ? async () => {
+            console.log(language);
               const newCode = editorInstance?.getValue();
               if (newCode == null) return;
 
@@ -193,11 +195,14 @@ return (
                   snapshotId: selectedSnapshot.snapshotId,
                   title: editTitle,
                   content: newCode,
+                  language: language.toUpperCase(),
+                  classId,
                 });
                 setSelectedSnapshot({
                   ...selectedSnapshot,
                   title: editTitle,
                   content: newCode,
+                  classId,
                 });
                 setIsReadOnly(true);
                 triggerRefresh();

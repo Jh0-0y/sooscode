@@ -1,9 +1,10 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useAdminUserDetail from '../../hooks/user/useAdminUserDetail';
-import UserInfoCard from '../../components/user/UserInfoCard';
-import UserClassCard from '../../components/user/UserClassCard';
 import styles from './AdminUserDetailPage.module.css';
+import UserDetailHeader from "@/features/admin/components/user/UserDetailHeader.jsx";
+import UserInfoCard from "@/features/admin/components/user/UserInfoCard.jsx";
+import UserClassCard from "@/features/admin/components/user/UserClassCard.jsx";
 
 const AdminUserDetailPage = () => {
     const params = useParams();
@@ -102,35 +103,7 @@ const AdminUserDetailPage = () => {
     return (
         <div className={styles.pageContainer}>
             {/* 헤더 */}
-            <div className={styles.pageHeader}>
-                <div className={styles.headerLeft}>
-                    <button className={styles.btnBack} onClick={handleBack}>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M19 12H5M12 19l-7-7 7-7"/>
-                        </svg>
-                    </button>
-                    <h1 className={styles.pageTitle}>사용자 상세</h1>
-                </div>
-                <div className={styles.headerRight}>
-                    {!isEditing && (
-                        <>
-                            <button className={styles.btnSecondary} onClick={startEditing}>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                                </svg>
-                                수정
-                            </button>
-                            <button
-                                className={userData.status === 'active' ? styles.btnDanger : styles.btnSuccess}
-                                onClick={handleToggleStatus}
-                            >
-                                {userData.status === 'active' ? '비활성화' : '활성화'}
-                            </button>
-                        </>
-                    )}
-                </div>
-            </div>
+            <UserDetailHeader />
 
             {/* 컨텐츠 */}
             <div className={styles.contentGrid}>

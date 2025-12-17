@@ -1,48 +1,52 @@
 /* UserTable.module.css */
 
+/* 테이블 컨테이너 */
 .tableContainer {
-    background-color: var(--color-bg-primary);
-    border: 1px solid var(--color-border-light);
-    border-radius: var(--radius-md);
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-base);
     overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
 }
 
+/* 데이터 테이블 */
 .dataTable {
     width: 100%;
     border-collapse: collapse;
 }
 
+.dataTable thead {
+    background: var(--color-bg-secondary);
+    border-bottom: 2px solid var(--color-border-light);
+}
+
 .dataTable th {
-    padding: var(--spacing-3) var(--spacing-4);
-    background-color: var(--color-bg-tertiary);
-    font-size: var(--font-size-xs);
+    padding: var(--spacing-3);
+    text-align: center;
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-secondary);
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    font-size: var(--font-size-sm);
+}
+
+.dataTable tbody tr {
     border-bottom: 1px solid var(--color-border-light);
+    transition: background-color var(--transition-fast);
+}
+
+.dataTable tbody tr:hover:not(.skeletonRow) {
+    background: var(--color-bg-secondary);
 }
 
 .dataTable td {
-    padding: var(--spacing-3) var(--spacing-4);
-    font-size: var(--font-size-sm);
+    padding: var(--spacing-3);
     color: var(--color-text-primary);
-    border-bottom: 1px solid var(--color-border-light);
+    font-size: var(--font-size-sm);
     text-align: center;
-}
-
-.dataTable tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.dataTable tbody tr:hover {
-    background-color: var(--color-bg-secondary);
 }
 
 .clickableRow {
     cursor: pointer;
-    transition: background-color var(--transition-fast);
 }
 
 /* 정렬 가능한 헤더 */
@@ -53,7 +57,7 @@
 }
 
 .sortableHeader:hover {
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-tertiary);
 }
 
 .sortIcon {
@@ -69,27 +73,25 @@
     vertical-align: middle;
 }
 
+/* 셀 스타일 */
 .userName {
     font-weight: var(--font-weight-medium);
     color: var(--color-text-primary);
 }
 
 .roleBadge {
-    display: inline-flex;
-    align-items: center;
-    padding: var(--spacing-1) var(--spacing-2);
-    border-radius: var(--radius-sm);
+    display: inline-block;
+    padding: var(--spacing-1) var(--spacing-3);
+    border-radius: var(--radius-md);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-medium);
 }
 
 .roleBadge.student {
-    background-color: var(--color-primary-100);
     color: var(--color-primary-700);
 }
 
 .roleBadge.instructor {
-    background-color: rgba(16, 185, 129, 0.1);
     color: var(--color-success);
 }
 
@@ -99,10 +101,9 @@
 }
 
 .statusBadge {
-    display: inline-flex;
-    align-items: center;
-    padding: var(--spacing-1) var(--spacing-2);
-    border-radius: var(--radius-sm);
+    display: inline-block;
+    padding: var(--spacing-1) var(--spacing-3);
+    border-radius: var(--radius-md);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-medium);
 }
@@ -117,19 +118,26 @@
     color: var(--color-text-secondary);
 }
 
+/* 메시지 셀 (에러/빈상태용) */
+.messageCell {
+    padding: 0 !important;
+    height: 400px;
+}
+
 /* 빈 상태 */
 .emptyState {
-    text-align: center;
-    padding: var(--spacing-12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-20) var(--spacing-5);
     color: var(--color-text-secondary);
-    background-color: var(--color-bg-primary);
-    border: 1px solid var(--color-border-light);
-    border-radius: var(--radius-md);
+    height: 100%;
 }
 
 .emptyState svg {
-    color: var(--color-text-tertiary);
     margin-bottom: var(--spacing-4);
+    opacity: 0.5;
 }
 
 .emptyState p {
@@ -137,31 +145,58 @@
     margin: 0;
 }
 
-/* ===== 스켈레톤 스타일 ===== */
-@keyframes shimmer {
-    0% {
-        background-position: -1000px 0;
-    }
-    100% {
-        background-position: 1000px 0;
-    }
+/* 에러 상태 */
+.errorState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-20) var(--spacing-5);
+    color: var(--color-error);
+    height: 100%;
+}
+
+.errorState svg {
+    margin-bottom: var(--spacing-4);
+    opacity: 0.7;
+}
+
+.errorState p {
+    font-size: var(--font-size-base);
+    margin: 0;
+}
+
+/* ========== 스켈레톤 UI ========== */
+.skeletonWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .skeletonRow {
     pointer-events: none;
 }
 
-.skeletonRow td {
-    padding: var(--spacing-3) var(--spacing-4);
+.skeleton {
+    height: var(--spacing-4);
+    background: linear-gradient(
+            90deg,
+            var(--color-gray-100) 25%,
+            var(--color-gray-200) 50%,
+            var(--color-gray-100) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-sm);
 }
 
-.skeleton {
-    height: 20px;
-    background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 20%, #f0f0f0 40%, #f0f0f0 100%);
-    background-size: 1000px 100%;
-    animation: shimmer 2s infinite linear;
-    border-radius: 4px;
-    display: inline-block;
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
 }
 
 /* 반응형 */

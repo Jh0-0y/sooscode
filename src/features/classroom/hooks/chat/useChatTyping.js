@@ -25,9 +25,12 @@ export const useChatTyping = ({
         const sub = subscribe(`/topic/chat/${classId}/typing`, (body) => {
             // body 형태 통일
             const data = JSON.parse(body.body ?? body);
-
+            console.log(myEmail,"내이메일ㅇ", data.email, "데이타이메일")
             // 내 typing은 표시 안 함
             if (myEmail && data.email === myEmail) return;
+            
+
+            
 
             setTypingUsers((prev) => {
                 const exists = prev.some((u) => u.userId === data.userId);

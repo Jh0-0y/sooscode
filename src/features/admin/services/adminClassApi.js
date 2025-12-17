@@ -132,19 +132,19 @@ export const adminClassApi = {
     /**
      * 클래스 정보 및 수강생 목록 엑셀 다운로드
      * GET /api/admin/classes/{classId}/export
-     * @returns {Promise<Blob>} Excel 파일
+     * @returns {Promise<Blob>} Excel 파일 (인터셉터에서 response.data 자동 추출됨)
      */
     exportClassToExcel: async (classId) => {
-        const response = await api.get(`${BASE_URL}/${classId}/export`, {
+        // 인터셉터가 response.data를 반환하므로 blob이 바로 반환됨
+        return await api.get(`${BASE_URL}/${classId}/export`, {
             responseType: 'blob'
         });
-        return response;
     },
 
     /**
      * 전체 클래스 목록 엑셀 다운로드
-     * GET /api/admin/classes/export
-     * @returns {Promise<Blob>} Excel 파일
+     * GET /api/admin/classes/export (수정: /list/export → /export)
+     * @returns {Promise<Blob>} Excel 파일 (인터셉터에서 response.data 자동 추출됨)
      */
     exportClassListToExcel: async (params = {}) => {
         const {
@@ -163,10 +163,9 @@ export const adminClassApi = {
         if (startDate) queryParams.append('startDate', startDate);
         if (endDate) queryParams.append('endDate', endDate);
 
-        const response = await api.get(`${BASE_URL}/export?${queryParams.toString()}`, {
+        return await api.get(`${BASE_URL}/list/export?${queryParams.toString()}`, {
             responseType: 'blob'
         });
-        return response;
     }
 };
 

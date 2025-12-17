@@ -6,73 +6,37 @@ import { useSnapshotStore } from '../../store/useSnapshotStore';
 import { usePracticeStore } from '../../store/usePracticeStore';
 import {
   getSnapshotDetail,
-  getSnapshotsByLanguageAndDatePaging
+  getSnapshotsByLanguageAndDatePaging,
+  deleteSnapshot,
 } from '../../services/snapshot/snapshot.api';
 import { formatLocalDate } from '../../../../utils/date';
-import { deleteSnapshot } from '../../services/snapshot/snapshot.api';
 
 export default function SnapshotPanel() {
   const today = new Date();
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
-  const classId = usePracticeStore((s) => s.classId);
-  const [snapshots, setSnapshots] = useState([]);
-  const language = usePracticeStore((s) => s.language);
-  const selectedSnapshot = useSnapshotStore((s) => s.selectedSnapshot);
-  const triggerRefresh = useSnapshotStore((s) => s.triggerRefresh);
 
-  // ===== 무한 스크롤 상태 =====
-  const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
+  const classId = usePracticeStore((s) => s.classId);
+  const language = usePracticeStore((s) => s.language);
+
+  const [snapshots, setSnapshots] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  // 🔹 무한스크롤 상태
+  const [page, setPage] = useState(0);
+  const size = 10;
+  const [hasMore, setHasMore] = useState(true);
   const observerRef = useRef(null);
 
-  // 실질적으로 최초로딩 시 작동하는 쿼리
-  const setSelectedSnapshot = useSnapshotStore(
-    (state) => state.setSelectedSnapshot
-  );
-
-  // HCJ Snapshot
+  const selectedSnapshot = useSnapshotStore((s) => s.selectedSnapshot);
+  const setSelectedSnapshot = useSnapshotStore((s) => s.setSelectedSnapshot);
   const loadSelectedHCJSnapshot = useSnapshotStore(
-    (state) => state.loadSelectedHCJSnapshot
+    (s) => s.loadSelectedHCJSnapshot
   );
-
-  // 스냅샷 클릭시 fetch
-  const handleClick = async (snapshot) => {
-    try {
-      // 단건 조회
-      const fullSnapshot = await getSnapshotDetail({
-        classId,
-        snapshotId: snapshot.codeSnapshotId,
-      });
-
-      // store에 저장
-      setSelectedSnapshot(fullSnapshot);
-      console.log(fullSnapshot);
-
-      // HCJ면 에디터 주입
-      loadSelectedHCJSnapshot(fullSnapshot);
-
-    } catch (e) {
-      console.error("스냅샷 단건 조회 실패", e);
-    }
-  };
-
   const refreshKey = useSnapshotStore((s) => s.refreshKey);
 
-  const handleDeleteSnapshot = async (snapshotId) => {
-    await deleteSnapshot({ classId, snapshotId });
-
-    // 선택된 스냅샷 삭제한 경우 초기화
-    if (selectedSnapshot?.snapshotId === snapshotId) {
-      setSelectedSnapshot(null);
-    }
-
-    triggerRefresh(); // 목록 다시 불러오기
-  };
-
   /**
-   * 🔹 필터 변경 시 목록 / 페이지 초기화
+   * 🔹 필터 / refresh 변경 시 초기화
    */
   useEffect(() => {
     setSnapshots([]);
@@ -81,16 +45,13 @@ export default function SnapshotPanel() {
   }, [classId, startDate, endDate, language, refreshKey]);
 
   /**
-   * 🔹 페이지 변경 시 데이터 fetch (무한스크롤 핵심)
+   * 🔹 페이지 로딩 (무한스크롤 핵심)
    */
   useEffect(() => {
-    // 최초 로딩시 classId null 일때 [] 로 에러 방어
-    if (!classId) {
-      setSnapshots([]);
-      return;
-    }
-    if (!startDate || !endDate) return;
-    if (!hasMore || loading) return;
+    if (!classId || !startDate || !endDate) return;
+    if (!hasMore) return;
+
+    let cancelled = false;
 
     const fetchSnapshots = async () => {
       try {
@@ -98,37 +59,39 @@ export default function SnapshotPanel() {
 
         const result = await getSnapshotsByLanguageAndDatePaging({
           classId,
-          language: language,
+          language,
           startDate: formatLocalDate(startDate),
           endDate: formatLocalDate(endDate),
           page,
-          size: 10,
+          size,
         });
 
-        // Page.content 누적
+        if (cancelled) return;
+
         setSnapshots((prev) =>
-          page === 0
-            ? result.content
-            : [...prev, ...result.content]
+          page === 0 ? result.content : [...prev, ...result.content]
         );
 
         setHasMore(!result.last);
-        console.log("page:", page, "result:", result);
       } catch (e) {
-        console.error("스냅샷 조회 실패", e);
+        console.error('스냅샷 목록 조회 실패', e);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
     fetchSnapshots();
-  }, [page]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [classId, startDate, endDate, language, refreshKey, page, hasMore]);
 
   /**
-   * 🔹 IntersectionObserver (스크롤 감지)
+   * 🔹 IntersectionObserver
    */
   useEffect(() => {
-    if (!hasMore) return;
+    if (!hasMore || loading) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -143,6 +106,38 @@ export default function SnapshotPanel() {
 
     return () => observer.disconnect();
   }, [hasMore, loading]);
+
+  /**
+   * 🔹 스냅샷 클릭
+   */
+  const handleClick = async (snapshot) => {
+    try {
+      const fullSnapshot = await getSnapshotDetail({
+        classId,
+        snapshotId: snapshot.codeSnapshotId,
+      });
+
+      setSelectedSnapshot(fullSnapshot);
+      loadSelectedHCJSnapshot(fullSnapshot);
+    } catch (e) {
+      console.error('스냅샷 단건 조회 실패', e);
+    }
+  };
+
+  /**
+   * 🔹 스냅샷 삭제
+   */
+  const handleDeleteSnapshot = async (snapshotId) => {
+    await deleteSnapshot({ classId, snapshotId });
+
+    if (selectedSnapshot?.snapshotId === snapshotId) {
+      setSelectedSnapshot(null);
+    }
+
+    setSnapshots((prev) =>
+      prev.filter((s) => s.codeSnapshotId !== snapshotId)
+    );
+  };
 
   return (
     <div>
@@ -163,13 +158,9 @@ export default function SnapshotPanel() {
           />
         </div>
 
-        <div className={styles.snapshotItemTitle} />
-
         <div className={styles.snapshotItemContainer}>
-          {snapshots.length === 0 && !loading && (
-            <div className={styles.empty}>
-              데이터가 없습니다.
-            </div>
+          {!loading && snapshots.length === 0 && (
+            <div className={styles.empty}>데이터가 없습니다.</div>
           )}
 
           {snapshots.map((snapshot) => (
@@ -185,9 +176,7 @@ export default function SnapshotPanel() {
           <div ref={observerRef} style={{ height: 1 }} />
 
           {loading && (
-            <div className={styles.loading}>
-              로딩중...
-            </div>
+            <div className={styles.loading}>로딩중...</div>
           )}
         </div>
       </div>

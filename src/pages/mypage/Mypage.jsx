@@ -10,6 +10,7 @@ import { useEffect, useRef } from "react";
 
 export default function Mypage() {
   const { user } = useUser();
+  console.log(user);
   const navigate = useNavigate();
   console.log(user);
 
@@ -80,7 +81,7 @@ export default function Mypage() {
       <ProfileCard
         name={user.name}
         email={user.email}
-        imageUrl={defaultImg}
+        imageUrl={user.profileImage || defaultImg}
       />
 
       <div className={styles.wrapper}>

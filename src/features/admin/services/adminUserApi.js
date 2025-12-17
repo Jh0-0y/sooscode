@@ -59,27 +59,53 @@ export const adminUserApi = {
     },
 
     /**
-     * 사용자 삭제 (비활성화)
-     * POST /api/admin/users/{userId}/delete
+     * 사용자 정보 수정
+     * POST /api/admin/users/{userId}/edit
+     * @param {string} userId - 사용자 ID
+     * @param {Object} data - 수정할 데이터 (name, email, role 등)
      */
-    deleteUser: async (userId) => {
-        return await api.post(`${BASE_URL}/${userId}/delete`);
-    },
-
-    /**
-     * 사용자 활성화
-     * POST /api/admin/users/{userId}/activate
-     */
-    activateUser: async (userId) => {
-        return await api.post(`${BASE_URL}/${userId}/activate`);
+    updateUser: async (userId, data) => {
+        return await api.post(`${BASE_URL}/${userId}/edit`, data);
     },
 
     /**
      * 사용자 역할 변경
      * POST /api/admin/users/{userId}/role
+     * @param {string} userId - 사용자 ID
+     * @param {string} role - 변경할 역할 (student, instructor, admin)
      */
     changeUserRole: async (userId, role) => {
         return await api.post(`${BASE_URL}/${userId}/role`, { role });
+    },
+
+    /**
+     * 사용자 완전 삭제
+     * DELETE /api/admin/users/{userId}
+     * @param {string} userId - 사용자 ID
+     * @description 데이터베이스에서 완전히 삭제 (복구 불가)
+     */
+    deleteUser: async (userId) => {
+        return await api.delete(`${BASE_URL}/${userId}`);
+    },
+
+    /**
+     * 사용자 비활성화 (소프트 삭제)
+     * POST /api/admin/users/{userId}/deactivate
+     * @param {string} userId - 사용자 ID
+     * @description 계정을 비활성화하지만 데이터는 보존 (복구 가능)
+     */
+    deactivateUser: async (userId) => {
+        return await api.post(`${BASE_URL}/${userId}/deactivate`);
+    },
+
+    /**
+     * 사용자 활성화
+     * POST /api/admin/users/{userId}/activate
+     * @param {string} userId - 사용자 ID
+     * @description 비활성화된 계정을 다시 활성화
+     */
+    activateUser: async (userId) => {
+        return await api.post(`${BASE_URL}/${userId}/activate`);
     },
 
     /**

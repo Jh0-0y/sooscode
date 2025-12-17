@@ -3,12 +3,12 @@
 .detailContainer {
     display: grid;
     grid-template-columns: 240px 1fr;
-    gap: 24px;
-    background-color: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 24px;
+    gap: var(--spacing-6);
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-5);
+    margin-bottom: var(--spacing-6);
 }
 
 /* Thumbnail Section */
@@ -22,7 +22,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: var(--radius-base);
 }
 
 .thumbnailPlaceholder {
@@ -32,15 +32,15 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    background-color: #f9fafb;
-    border: 2px dashed #e5e7eb;
-    border-radius: 8px;
-    color: #9ca3af;
+    gap: var(--spacing-2);
+    background-color: var(--color-bg-secondary);
+    border: 2px dashed var(--color-border-light);
+    border-radius: var(--radius-base);
+    color: var(--color-text-tertiary);
 }
 
 .thumbnailPlaceholder span {
-    font-size: 14px;
+    font-size: var(--font-size-sm);
 }
 
 /* Skeleton Styles */
@@ -56,37 +56,37 @@
 .skeletonThumbnail {
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 20%, #f0f0f0 40%, #f0f0f0 100%);
+    background: linear-gradient(90deg, var(--color-gray-100) 0%, var(--color-gray-200) 20%, var(--color-gray-100) 40%, var(--color-gray-100) 100%);
     background-size: 1000px 100%;
     animation: shimmer 2s infinite linear;
-    border-radius: 8px;
+    border-radius: var(--radius-base);
 }
 
 .skeletonText {
-    height: 20px;
-    background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 20%, #f0f0f0 40%, #f0f0f0 100%);
+    height: var(--spacing-5);
+    background: linear-gradient(90deg, var(--color-gray-100) 0%, var(--color-gray-200) 20%, var(--color-gray-100) 40%, var(--color-gray-100) 100%);
     background-size: 1000px 100%;
     animation: shimmer 2s infinite linear;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     width: 100%;
 }
 
 .skeletonButton {
     width: 80px;
     height: 36px;
-    background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 20%, #f0f0f0 40%, #f0f0f0 100%);
+    background: linear-gradient(90deg, var(--color-gray-100) 0%, var(--color-gray-200) 20%, var(--color-gray-100) 40%, var(--color-gray-100) 100%);
     background-size: 1000px 100%;
     animation: shimmer 2s infinite linear;
-    border-radius: 8px;
+    border-radius: var(--radius-base);
 }
 
 .skeletonProgress {
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 20%, #f0f0f0 40%, #f0f0f0 100%);
+    background: linear-gradient(90deg, var(--color-gray-100) 0%, var(--color-gray-200) 20%, var(--color-gray-100) 40%, var(--color-gray-100) 100%);
     background-size: 1000px 100%;
     animation: shimmer 2s infinite linear;
-    border-radius: 999px;
+    border-radius: var(--radius-full);
 }
 
 /* Info Section */
@@ -100,31 +100,31 @@
 .btnDanger {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    background-color: white;
-    color: #111827;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-4);
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
     cursor: pointer;
-    transition: all 0.15s;
+    transition: all var(--transition-fast);
 }
 
 .btnEdit:hover {
-    background-color: #f9fafb;
-    border-color: #9ca3af;
+    background-color: var(--color-bg-secondary);
+    border-color: var(--color-border-dark);
 }
 
 .btnDanger {
-    border-color: #ef4444;
-    color: #ef4444;
+    border-color: var(--color-error);
+    color: var(--color-error);
 }
 
 .btnDanger:hover {
-    background-color: #fef2f2;
-    border-color: #dc2626;
+    background-color: rgba(239, 68, 68, 0.05);
+    border-color: var(--color-error);
 }
 
 .infoGroup {
@@ -177,8 +177,12 @@
 .description {
     font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
-    line-height: 1.6;
+    line-height: var(--line-height-normal);
     margin: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: pre-wrap;
 }
 
 /* Progress Section */
@@ -201,7 +205,7 @@
 }
 
 .progressBarLarge {
-    height: 10px;
+    height: var(--spacing-2);
     background-color: var(--color-bg-tertiary);
     border-radius: var(--radius-full);
     overflow: hidden;
@@ -227,7 +231,7 @@
 }
 
 .progressInfo .completed {
-    color: var(--color-success-600);
+    color: var(--color-success);
     font-weight: var(--font-weight-medium);
 }
 
@@ -343,22 +347,22 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: white;
-    border: 1px solid #d1d5db;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-medium);
     border-top: none;
-    border-radius: 0 0 6px 6px;
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
     max-height: 200px;
     overflow-y: auto;
     z-index: 10;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-base);
     margin-top: -1px;
 }
 
 .dropdownItem {
-    padding: 10px 12px;
+    padding: var(--spacing-2) var(--spacing-3);
     cursor: pointer;
-    transition: background-color 0.15s;
-    border-bottom: 1px solid #f3f4f6;
+    transition: background-color var(--transition-fast);
+    border-bottom: 1px solid var(--color-bg-tertiary);
 }
 
 .dropdownItem:last-child {
@@ -366,32 +370,32 @@
 }
 
 .dropdownItem:hover {
-    background-color: #f9fafb;
+    background-color: var(--color-bg-secondary);
 }
 
 .instructorInfo {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: var(--spacing-1);
 }
 
 .instructorName {
-    font-size: 14px;
-    font-weight: 500;
-    color: #111827;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
 }
 
 .instructorEmail {
-    font-size: 12px;
-    color: #6b7280;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
 }
 
 .selectedInfo {
     display: block;
-    margin-top: 6px;
-    font-size: 12px;
-    color: #10b981;
-    font-weight: 500;
+    margin-top: var(--spacing-2);
+    font-size: var(--font-size-xs);
+    color: var(--color-success);
+    font-weight: var(--font-weight-medium);
 }
 
 /* Confirm Dialog */
@@ -409,34 +413,34 @@
 }
 
 .confirmDialog {
-    background: white;
-    border-radius: 12px;
-    padding: 24px;
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-6);
     max-width: 400px;
     width: 90%;
 }
 
 .confirmDialog h3 {
-    margin: 0 0 16px;
-    font-size: 18px;
-    font-weight: 600;
+    margin: 0 0 var(--spacing-4);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
 }
 
 .confirmDialog p {
-    margin: 0 0 12px;
-    color: #6b7280;
+    margin: 0 0 var(--spacing-3);
+    color: var(--color-text-secondary);
 }
 
 .warning {
-    color: #ef4444 !important;
-    font-weight: 500;
+    color: var(--color-error) !important;
+    font-weight: var(--font-weight-medium);
 }
 
 .confirmActions {
     display: flex;
-    gap: 12px;
+    gap: var(--spacing-3);
     justify-content: flex-end;
-    margin-top: 24px;
+    margin-top: var(--spacing-6);
 }
 
 /* Responsive */

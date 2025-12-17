@@ -36,10 +36,6 @@ export default function Section({ classInfo }) {
 
         
       </div>
-
-      <div className={styles.noticeBox}>
-        등록된 공지사항이 없습니다.
-      </div>
     </div>
   );
 }

@@ -1,120 +1,54 @@
-.header {
+/* UserDetailHeader.module.css */
+
+.headerContainer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: var(--spacing-6);
+    flex-wrap: wrap;
+    gap: var(--spacing-4);
 }
 
 .headerLeft {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--spacing-3);
 }
 
-.headerRight {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.pageTitle {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin: 0;
 }
 
 .btnBack {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    background: white;
+    width: 36px;
+    height: 36px;
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-base);
+    color: var(--color-text-secondary);
     cursor: pointer;
-    color: #6b7280;
-    transition: all 0.2s;
+    transition: all var(--transition-fast);
 }
 
 .btnBack:hover {
-    background: #f9fafb;
-    border-color: #d1d5db;
-    color: #374151;
-}
-
-.titleWrapper {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.pageTitle {
-    font-size: 24px;
-    font-weight: 600;
-    color: #111827;
-    margin: 0;
-}
-
-.typeBadge {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.typeBadge.online {
-    background: #dbeafe;
-    color: #1d4ed8;
-}
-
-.typeBadge.offline {
-    background: #fef3c7;
-    color: #b45309;
-}
-
-.btnExport {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 16px;
-    background: #10b981;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.btnExport:hover:not(:disabled) {
-    background: #059669;
-}
-
-.btnExport:disabled {
-    background: #9ca3af;
-    cursor: not-allowed;
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
 }
 
 /* 반응형 */
 @media (max-width: 768px) {
-    .header {
+    .headerContainer {
         flex-direction: column;
         align-items: flex-start;
-        gap: 16px;
-    }
-
-    .headerRight {
-        width: 100%;
-        justify-content: flex-end;
     }
 
     .pageTitle {
-        font-size: 20px;
-    }
-
-    .titleWrapper {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
+        font-size: var(--font-size-xl);
     }
 }

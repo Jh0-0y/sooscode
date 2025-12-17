@@ -21,7 +21,7 @@ import NoticeSection from "../../features/classdetail/components/sections/Notice
 
 export default function InstructorClassDetail() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("snapshot");
+  const [activeTab, setActiveTab] = useState("notice");
 
   // url을 통해서 classId get
   const [params] = useSearchParams();

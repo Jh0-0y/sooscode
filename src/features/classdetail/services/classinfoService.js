@@ -20,3 +20,20 @@ export const useClassInfo = (classId) => {
     retry: 0,
   });
 };
+export const uploadClassThumbnail = async (classId, file) => {
+  if (!classId) {
+    throw new Error("classId 없음");
+  }
+
+  const formData = new FormData();
+  formData.append("thumbnail", file);
+
+  return api.post(
+    `/api/mypage/classroom/${classId}/thumbnail`,
+    formData,
+    {
+      // ❗ headers 명시하지 마라 (axios가 자동 설정)
+      withCredentials: true,
+    }
+  );
+};
