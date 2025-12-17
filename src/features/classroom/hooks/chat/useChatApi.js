@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import {api} from "@/services/api.js";
 
 /**
  * 히스토리 로드 + reactedByMe 채우기 + 공감 관련 API
@@ -6,7 +7,7 @@ import { useCallback } from "react";
 export const useChatApi = ({ classId, setMessages }) => {
     const fetchReactedByMe = useCallback(async (chatId) => {
         try {
-            const res = await fetch(`http://localhost:8080/api/chat/${chatId}/reacted`, {
+            const res = api.get(`/api/chat/${chatId}/reacted`, {
                 method: "GET",
                 credentials: "include",
             });
@@ -22,7 +23,7 @@ export const useChatApi = ({ classId, setMessages }) => {
 
     const fetchHistory = useCallback(async () => {
         try {
-            const res = await fetch(`http://localhost:8080/api/chat/history?classId=${classId}`, {
+            const res =api.get(`/api/chat/history?classId=${classId}`, {
                 method: "GET",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
@@ -67,7 +68,7 @@ export const useChatApi = ({ classId, setMessages }) => {
             }
 
             try {
-                const res = await fetch("http://localhost:8080/api/chat/chat.react", {
+                const res = api.post(`/api/chat/chat.react`, {
                     method: "POST",
                     credentials: "include",
                     headers: { "Content-Type": "application/json" },

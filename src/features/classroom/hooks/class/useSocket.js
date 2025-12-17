@@ -45,9 +45,24 @@ const useSocket = (classroomId, isInstructor = false) => {
 
             // STOMP 에러
             onStompError: (frame) => {
-                console.error('[WebSocket] STOMP 에러:', frame.headers['message']);
-                setError(frame.headers['message'] || '연결 오류');
-                setConnected(false);
+                console.warn('[WebSocket] STOMP 에러:', frame);
+
+                let msg = frame?.headers?.message || '요청 처리 중 오류가 발생했습니다.';
+
+                // 서버가 body에 code/message 내려주는 경우 대응
+                if (frame?.body) {
+                    try {
+                        const parsed = JSON.parse(frame.body);
+                        msg = parsed.code ?? parsed.message ?? msg;
+                    } catch {
+                        msg = frame.body;
+                    }
+                }
+
+                //  STOMP 에러는 "연결 끊김"이 아님 → connected 건드리지 말 것
+                // setConnected(false);  //  제거
+
+                setError(msg);
             },
 
             // WebSocket 에러

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import {api} from "@/services/api.js";
 
 export default function useReactionUsers() {
     const [users, setUsers] = useState([]);
@@ -11,7 +12,7 @@ export default function useReactionUsers() {
         }
 
         try {
-            const res = await fetch(`http://localhost:8080/api/chat/${chatId}/reactionlist`, {
+            const res = api.get(`/api/chat/${chatId}/reactionlist`, {
                 method: "GET",
                 credentials: "include",
             });

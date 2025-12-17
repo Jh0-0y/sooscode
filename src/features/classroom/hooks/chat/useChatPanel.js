@@ -7,10 +7,20 @@ import { useChatScroll } from "./useChatScroll.js";
 import { useChatTyping } from "./useChatTyping.js";
 import { useChatApi } from "./useChatApi.js";
 
+
+
 export const useChatPanel = () => {
     const { classId } = useClassroom();
 
+    const CHAT_ERROR_MAP = {
+        CONTENT_TOO_LONG: "메시지는 500자 이내로 입력해주세요.",
+        NOT_EMPTY: "메시지를 입력해주세요.",
+    };
     // ---------------- 상태 ----------------
+    const [chatError, setChatError] = useState(null);
+    const pendingChatSendRef = useRef(false);
+    const errorTimerRef = useRef(null);
+
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState("");
     const [replyTarget, setReplyTarget] = useState(null);
@@ -111,6 +121,19 @@ export const useChatPanel = () => {
         return () => subscription?.unsubscribe?.();
     }, [connected, subscribe, classId]);
 
+    useEffect(() => {
+        if (!error) return;
+
+        // 방금 "채팅 보내기"를 시도한 직후에만 채팅 에러로 인정
+        if (!pendingChatSendRef.current) return;
+
+        pendingChatSendRef.current = false;
+
+        const msg = CHAT_ERROR_MAP[error] ?? error;
+        setChatError(msg);
+    }, [error]);
+
+
     // ---------------- 메시지 전송 ----------------
     const handleSubmit = useCallback(
         (e) => {
@@ -122,12 +145,19 @@ export const useChatPanel = () => {
                 return;
             }
 
+            if (inputValue.length > 500) {
+                setChatError("메시지는 500자 이내로 입력해주세요.");
+                return;
+            }
+
             const payload = {
                 classId,
                 content: inputValue,
                 createdAt: new Date().toISOString(),
                 replyToChatId: replyTarget?.chatId ?? null,
             };
+            setChatError(null);
+            pendingChatSendRef.current = true;
 
             publish(`/app/class/${classId}/chat`, payload);
 
@@ -171,6 +201,7 @@ export const useChatPanel = () => {
         }
     }, [messageRefs]);
 
+
     // ---------------- 반환 ----------------
     return {
         messages,
@@ -184,15 +215,13 @@ export const useChatPanel = () => {
         connected,
         error,
         myEmail,
-
+        chatError,
         typingUsers,
         sendTyping,
         stopTyping,
-
         setReplyTarget,
         setInputValue,
         setActiveMenuId,
-
         handleScroll,
         handleSubmit,
         handleDelete,
