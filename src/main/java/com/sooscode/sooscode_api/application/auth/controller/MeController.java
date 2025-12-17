@@ -25,10 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/me")
 @RequiredArgsConstructor
 public class MeController  {
-    private final AuthServiceImpl authService;
-    private final S3FileService s3FileService;
 
     private final S3FileService s3FileService;
+
     /**
      * 현재 로그인 된 유저 정보
      * SecurityContext에 있는 CustomUserDetails 추출됨
