@@ -85,7 +85,8 @@ export default function ChatMessageList({
                                             handleReply,
                                             scrollToMessage,
                                             fetchReactionUsers,
-                                            typingUsers
+                                            typingUsers,
+                                            checkMyReaction
                                         }) {
     return (
         <div
@@ -95,6 +96,8 @@ export default function ChatMessageList({
         >
             {Array.isArray(messages) &&
                 messages.map((msg, idx) => {
+                    const isMine = msg.userId === myUserId;
+
                     // createdAt 사용 (백엔드 DTO 필드명)
                     const created = msg.createdAt || null;
 
@@ -125,6 +128,7 @@ export default function ChatMessageList({
                             <ChatMessageItem
                                 msg={msg}
                                 myUserId={myUserId}  // myEmail → myUserId
+                                isMine={isMine}
                                 created={created}
                                 isSystem={isSystem}
                                 formatTimeOnly={formatTimeOnly}
@@ -138,6 +142,7 @@ export default function ChatMessageList({
                                 scrollToMessage={scrollToMessage}
                                 fetchReactionUsers={fetchReactionUsers}
                                 showTime={showTime}
+                                checkMyReaction={checkMyReaction}
                             />
                         </React.Fragment>
                     );

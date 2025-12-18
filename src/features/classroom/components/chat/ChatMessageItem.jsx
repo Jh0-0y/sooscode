@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, {useState, useCallback, useEffect} from "react";
 import CheckIcon from "./button/ReactionButton.jsx";
 import DeleteButton from "@/features/classroom/components/chat/button/DeleteButton.jsx";
 import CopyButton from "@/features/classroom/components/chat/button/CopyButton.jsx";
@@ -9,6 +9,7 @@ export default function ChatMessageItem({
                                             myUserId,  // myEmail → myUserId
                                             created,
                                             isSystem,
+                                            isMine,
                                             formatTimeOnly,
                                             activeMenuId,
                                             setActiveMenuId,
@@ -19,15 +20,41 @@ export default function ChatMessageItem({
                                             handleReply,
                                             scrollToMessage,
                                             showTime,
-                                            fetchReactionUsers
+                                            fetchReactionUsers,
+                                            checkMyReaction
                                         }) {
     // userId로 내 메시지 판별 (email → userId)
-    const mine = msg.userId === myUserId;
+    const mine = isMine;
     const isDeleted = msg.deleted === true;
 
     // 리액션 유저 툴팁 상태
     const [reactionUsers, setReactionUsers] = useState([]);
     const [showTooltip, setShowTooltip] = useState(false);
+
+    // 내가 리액션했는지 여부
+    const [hasReacted, setHasReacted] = useState(false);
+    const [isCheckingReaction, setIsCheckingReaction] = useState(false);
+
+    // 컴포넌트 마운트 시 내가 리액션했는지 확인
+    useEffect(() => {
+        const checkReaction = async () => {
+            if (!checkMyReaction || !msg.chatId || isCheckingReaction) return;
+
+            setIsCheckingReaction(true);
+
+            try {
+                const reacted = await checkMyReaction(msg.chatId);
+                setHasReacted(reacted);
+                console.log(`[ChatMessageItem] chatId ${msg.chatId} 리액션 상태:`, reacted);
+            } catch (error) {
+                console.error('[ChatMessageItem] 리액션 확인 실패:', error);
+            } finally {
+                setIsCheckingReaction(false);
+            }
+        };
+
+        checkReaction();
+    }, [msg.chatId, msg.reactionCount, checkMyReaction]);
 
     // 마우스 엔터 시 리액션 유저 조회
     const handleMouseEnter = useCallback(async () => {
@@ -42,6 +69,17 @@ export default function ChatMessageItem({
     const handleMouseLeave = useCallback(() => {
         setShowTooltip(false);
     }, []);
+
+    // 리액션 클릭 핸들러
+    const handleReactionClick = () => {
+        if (isDeleted) return;
+
+        // 낙관적 업데이트 (토글)
+        setHasReacted(prev => !prev);
+
+        // 백엔드에 전송
+        sendReaction(msg.chatId);
+    };
 
     // 메시지 복사
     const handleCopy = () => {
@@ -133,8 +171,8 @@ export default function ChatMessageItem({
                 >
                     <button
                         type="button"
-                        className="chat-react-btn"
-                        onClick={() => !isDeleted && sendReaction(msg.chatId)}
+                        className={`chat-react-btn ${hasReacted ? 'is-active' : ''}`}
+                        onClick={() => !isDeleted && handleReactionClick(msg.chatId)}
                         disabled={isDeleted}
                     >
                         <CheckIcon className="chat-react-icon" />

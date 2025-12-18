@@ -17,32 +17,54 @@ export const chatApi = {
      * 채팅 히스토리 조회
      * GET /api/chat/history?classId={classId}
      */
-    getHistory: (classId) => {
-        return api.get(`${BASE_URL}/history?classId=${classId}`);
+    getHistory: async (classId) => {
+        try {
+            const response = await api.get(`${BASE_URL}/history?classId=${classId}`);
+            // ApiResponse 구조: { status, message, data }
+            // data 안에 { classId, messages, totalCount } 있음
+            return response.data || response; // data 필드 확인
+        } catch (error) {
+            throw error;
+        }
     },
 
     /**
      * 리액션한 유저 목록 조회
      * GET /api/chat/{chatId}/reactions
      */
-    getReactionUsers: (chatId) => {
-        return api.get(`${BASE_URL}/${chatId}/reactions`);
+    getReactionUsers: async (chatId) => {
+        try {
+            const response = await api.get(`${BASE_URL}/${chatId}/reactions`);
+            return response.data || response;
+        } catch (error) {
+            throw error;
+        }
     },
 
     /**
      * 내가 리액션했는지 확인
      * GET /api/chat/{chatId}/reacted
      */
-    hasReacted: (chatId) => {
-        return api.get(`${BASE_URL}/${chatId}/reacted`);
+    hasReacted: async (chatId) => {
+        try {
+            const response = await api.get(`${BASE_URL}/${chatId}/reacted`);
+            return response.data || response;
+        } catch (error) {
+            throw error;
+        }
     },
 
     /**
      * 리액션 토글 (REST 방식)
      * POST /api/chat/reaction
      */
-    toggleReactionRest: (chatId) => {
-        return api.post(`${BASE_URL}/reaction`, { chatId });
+    toggleReactionRest: async (chatId) => {
+        try {
+            const response = await api.post(`${BASE_URL}/reaction`, { chatId });
+            return response.data || response;
+        } catch (error) {
+            throw error;
+        }
     },
 
     // ==================== WebSocket 구독 ====================

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 /**
  * 채팅 스크롤 / 자동 스크롤 / messageRefs 관리
  */
-export const useChatScroll = ({ messages, myEmail }) => {
+export const useChatScroll = ({ messages, myUserId }) => {
     const bottomRef = useRef(null);
     const messagesRef = useRef(null);
 
@@ -35,7 +35,7 @@ export const useChatScroll = ({ messages, myEmail }) => {
         }
 
         const lastMsg = messages[messages.length - 1];
-        const isMine = myEmail && lastMsg.email === myEmail;
+        const isMine = myUserId && lastMsg.userId === myUserId;
         const increased = messages.length > prevLengthRef.current;
 
         if (increased && (isMine || isAtBottom)) {
@@ -43,7 +43,7 @@ export const useChatScroll = ({ messages, myEmail }) => {
         }
 
         prevLengthRef.current = messages.length;
-    }, [messages, myEmail, isAtBottom]);
+    }, [messages, myUserId, isAtBottom]);
 
     return {
         bottomRef,

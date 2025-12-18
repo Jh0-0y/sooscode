@@ -104,6 +104,7 @@
 
 .totalCount {
     margin-top: auto;
+    border-top: 1px solid var(--color-border-medium);
     padding: var(--spacing-4);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-medium);

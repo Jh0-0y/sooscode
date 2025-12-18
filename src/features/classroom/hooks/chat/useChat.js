@@ -19,6 +19,8 @@ export const useChat = ({
     const [isLoading, setIsLoading] = useState(false);
 
     const mountedRef = useRef(true);
+    const hasLoadedHistoryRef = useRef(false);
+    const currentClassIdRef = useRef(null);
 
     // 메시지 수신 핸들러
     const handleMessage = useCallback((data) => {
@@ -67,9 +69,11 @@ export const useChat = ({
             const response = await chatApi.getHistory(classId);
             if (response && mountedRef.current) {
                 setMessages(response.messages || []);
+                hasLoadedHistoryRef.current = true;
+                console.log('[useChat] 히스토리 로드 성공:', response.messages?.length || 0, '개');
             }
         } catch (error) {
-            console.error('채팅 히스토리 로드 실패:', error);
+            console.error('[useChat] 채팅 히스토리 로드 실패:', error);
         } finally {
             if (mountedRef.current) {
                 setIsLoading(false);
@@ -95,8 +99,13 @@ export const useChat = ({
 
         mountedRef.current = true;
 
-        // 히스토리 로드
-        loadHistory();
+        // 히스토리를 아직 로드하지 않았을 때만 로드
+        if (!hasLoadedHistoryRef.current) {
+            console.log('[useChat] 히스토리 로드 시작');
+            loadHistory();
+        } else {
+            console.log('[useChat] 히스토리 이미 로드됨, 스킵');
+        }
 
         // 채팅 구독
         chatApi.subscribeChat(classId, handleMessage);
@@ -105,7 +114,7 @@ export const useChat = ({
             mountedRef.current = false;
             chatApi.unsubscribeChat(classId);
         };
-    }, [classId, isConnected, loadHistory, handleMessage]);
+    }, [classId, isConnected, handleMessage]);
 
     return {
         messages,

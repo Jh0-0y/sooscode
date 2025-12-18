@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, {useState, useCallback, useEffect} from "react";
 import "./ChatPanel.css";
 import ChatHeader from "./ChatHeader.jsx";
 import ChatMessageList from "./ChatMessageList.jsx";
@@ -28,9 +28,7 @@ export default function ChatPanel() {
     const [highlightId, setHighlightId] = useState(null);
     const [error, setError] = useState(null);
     const [chatError, setChatError] = useState(null);
-
-    // userId로 내 메시지 판별 (email → userId로 변경)
-    const myUserId = user?.userId;
+    const [myUserId, setMyUserId] = useState(null);
 
     // 채팅 훅 (메시지 전송/수신/삭제)
     const {
@@ -38,10 +36,43 @@ export default function ChatPanel() {
         isLoading,
         sendMessage,
         deleteMessage,
+        checkMyReaction,
     } = useChat({
         classId,
         isConnected,
     });
+
+    // 메시지에서 내 userId 자동 감지
+    useEffect(() => {
+        if (myUserId || !user?.email || messages.length === 0) return;
+
+        // 내가 보낸 메시지 찾기 (email로 비교)
+        // 백엔드에서 email도 함께 보내준다고 가정
+        // 만약 email이 없다면, 가장 최근에 내가 보낸 메시지를 찾아야 함
+
+        // 방법 1: 히스토리에서 찾기 (username으로 비교 - 임시)
+        const myMessage = messages.find(msg =>
+            msg.username === user.name || // name으로 비교
+            msg.email === user.email      // email이 있다면
+        );
+
+        if (myMessage?.userId) {
+            setMyUserId(myMessage.userId);
+        } else {
+        }
+    }, [messages, user, myUserId]);
+
+    // 새 메시지 전송 시 userId 감지
+    useEffect(() => {
+        if (myUserId || messages.length === 0) return;
+
+        // 가장 최근 메시지가 내가 보낸 것이라고 가정 (방금 전송한 경우)
+        const lastMessage = messages[messages.length - 1];
+
+        if (lastMessage?.userId && lastMessage.username === user?.name) {
+            setMyUserId(lastMessage.userId);
+        }
+    }, [messages, myUserId, user]);
 
     // 리액션 훅
     const {
@@ -93,7 +124,6 @@ export default function ChatPanel() {
             stopTyping();
         } catch (err) {
             setChatError('메시지 전송 실패');
-            console.error('메시지 전송 실패:', err);
         }
     }, [inputValue, replyTarget, sendMessage, stopTyping]);
 
@@ -103,7 +133,6 @@ export default function ChatPanel() {
             deleteMessage(chatId);
         } catch (err) {
             setError('메시지 삭제 실패');
-            console.error('메시지 삭제 실패:', err);
         }
     }, [deleteMessage]);
 
@@ -133,7 +162,6 @@ export default function ChatPanel() {
         try {
             toggleReaction(chatId);
         } catch (err) {
-            console.error('리액션 전송 실패:', err);
         }
     }, [toggleReaction]);
 
@@ -142,7 +170,6 @@ export default function ChatPanel() {
         try {
             return await getReactionUsers(chatId);
         } catch (err) {
-            console.error('리액션 유저 조회 실패:', err);
             return [];
         }
     }, [getReactionUsers]);
@@ -150,7 +177,7 @@ export default function ChatPanel() {
     return (
         <aside className="chat-sidebar">
             {/* 상단 헤더 */}
-            <ChatHeader classId={classId} connected={isConnected} />
+            {/*<ChatHeader classId={classId} connected={isConnected} />*/}
 
             {/* 에러 메시지 */}
             {error && <div className="chat-error">{error}</div>}
@@ -158,7 +185,7 @@ export default function ChatPanel() {
             {/* 메시지 리스트 */}
             <ChatMessageList
                 messages={messages}
-                myUserId={myUserId}  // myEmail → myUserId
+                myUserId={myUserId}
                 messagesRef={messagesRef}
                 bottomRef={bottomRef}
                 handleScroll={handleScroll}
@@ -172,6 +199,7 @@ export default function ChatPanel() {
                 scrollToMessage={scrollToMessage}
                 fetchReactionUsers={fetchReactionUsers}
                 typingUsers={typingUsers}
+                checkMyReaction={checkMyReaction}
             />
 
             {/* 답장 프리뷰 */}

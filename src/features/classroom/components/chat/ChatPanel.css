@@ -68,7 +68,6 @@
 
 /* 내가 보낸 말풍선 */
 .chat-bubble.mine .chat-content {
-    width: 80%;
     background: var(--color-gray-900);
     color: var(--color-text-inverse);
     border-radius: var(--radius-md) var(--radius-md) 0 var(--radius-md);
@@ -133,28 +132,32 @@
 }
 
 /* ========== 언급(Reply) 미리보기 UI ========== */
+/* ========== 답장 프리뷰 살짝 강조 (기존 스타일 유지) ========== */
+
+/* 메시지 안 답장 프리뷰 */
 .chat-reply-preview {
-    /* Slack: 얇은 좌측 라인 + 아주 은은한 바탕 */
+    /* 기존 스타일 유지 */
     border-left: var(--spacing-1) solid var(--color-border-medium);
     background: var(--color-bg-tertiary);
-
     padding: var(--spacing-2);
     margin-bottom: var(--spacing-1);
-
     border-radius: var(--radius-md);
     max-width: 100%;
-
     font-size: var(--font-size-xs);
     line-height: var(--line-height-normal);
     color: var(--color-text-secondary);
-
     cursor: pointer;
-}
 
+    /* ✅ 살짝만 추가 */
+    border-left-width: 3px;  /* 조금 더 굵게 */
+    border-left-color: var(--color-primary-500);  /* 파란색으로 */
+    transition: all 0.15s ease;  /* 부드러운 전환 */
+}
 
 .chat-reply-preview-name {
     font-weight: var(--font-weight-semibold);
     margin-bottom: 2px;
+    color: var(--color-primary-600);  /* ✅ 이름만 파란색 */
 }
 
 .chat-reply-preview-content {
@@ -165,8 +168,68 @@
 
 .chat-reply-preview:hover {
     background: var(--color-bg-secondary);
+    border-left-color: var(--color-primary-600);  /* ✅ 호버 시 더 진한 파란색 */
 }
 
+/* ========== 입력창 위 답장 프리뷰 살짝 강조 ========== */
+
+.reply-preview--above {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-3);
+    margin: var(--spacing-2) var(--spacing-3);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.reply-preview__bar {
+    width: 3px;  /* ✅ 조금 더 굵게 (기존 var(--spacing-1)) */
+    align-self: stretch;
+    background: var(--color-primary-500);
+    border-radius: var(--radius-full);
+}
+
+.reply-preview__body {
+    flex: 1;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.reply-preview__name {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary-600);  /* ✅ 파란색 */
+    line-height: var(--line-height-tight);
+    margin-bottom: var(--spacing-1);
+}
+
+.reply-preview__content {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-tight);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.reply-preview__close {
+    width: calc(var(--spacing-8) + var(--spacing-1));
+    height: calc(var(--spacing-8) + var(--spacing-1));
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-light);
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.reply-preview__close:hover {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+}
 /* ========== 공감 + 메뉴 영역 ========== */
 .chat-actions {
     display: flex;
@@ -404,17 +467,17 @@
 
 .chat-react-tooltip{
     position: absolute;
-    bottom: calc(100% + var(--spacing-2));
-    left: 0;
     z-index: 50;
-    padding: var(--spacing-2) var(--spacing-3);
-    background: var(--color-gray-900);
-    color: var(--color-text-inverse);
+    padding: var(--spacing-2);
+    background: var(--color-gray-300);
+    color: var(--color-text-secondary);
     border-radius: var(--radius-md);
     flex-direction: column;
     box-shadow: var(--shadow-base);
     font-size: var(--font-size-xs);
     white-space: nowrap;
+    bottom: 0;
+    left: -58px;
 }
 
 .chat-typing-indicator {

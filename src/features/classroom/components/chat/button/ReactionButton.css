@@ -30,14 +30,16 @@
 .chat-react-icon path{
     stroke-dasharray: 60;
     stroke-dashoffset: 0;
+    fill: var(--color-gray-300);
 }
 
 .chat-react-icon polyline{
     stroke-dasharray: 22;
     stroke-dashoffset: 66;
+    fill: var(--color-gray-300);
 }
 
-/* ✅ 공감 존재하면 체크 표시 */
+/* 공감 존재하면 체크 표시 */
 .chat-react-btn.is-active{
     color: var(--color-primary-500);
 }
@@ -45,6 +47,7 @@
 .chat-react-btn.is-active .chat-react-icon path{
     stroke-dashoffset: 60;
     transition: var(--transition-slow);
+    fill: var(--color-gray-300);
 }
 
 .chat-react-btn.is-active .chat-react-icon polyline{
@@ -73,6 +76,7 @@
 .chat-react-btn.is-active .chat-react-icon polyline {
     stroke-dashoffset: 42;
     transition-delay: var(--transition-fast);
+    fill: var(--color-gray-300);
 }
 
 /* ===== 비활성화로 돌아갈 때 (딜레이 제거 → 자연스럽게 사라짐) ===== */

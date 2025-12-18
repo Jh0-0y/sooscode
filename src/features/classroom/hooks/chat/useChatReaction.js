@@ -40,7 +40,6 @@ export const useChatReaction = ({
             }));
             return users;
         } catch (error) {
-            console.error('리액션 유저 조회 실패:', error);
             return [];
         }
     }, []);
@@ -55,7 +54,6 @@ export const useChatReaction = ({
             }));
             return reacted;
         } catch (error) {
-            console.error('리액션 확인 실패:', error);
             return false;
         }
     }, []);
