@@ -13,7 +13,12 @@ import {
     useInstructorCodeSender
 } from "@/features/classroom/hooks/code/useCode.js";
 
-const DEFAULT_CODE = '// 코드를 작성하세요';
+const DEFAULT_CODE =
+    `class Helloworld {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!"); // 화면에 "Hello, World!"를 출력합니다.
+    }
+}`;
 
 /**
  * 코드 패널 (내 코드 작성)
@@ -35,7 +40,7 @@ const CodePanel = () => {
     const [isInitialized, setIsInitialized] = useState(false);
 
     // 코드 실행 훅 (기존 유지)
-    const { output, run, copy } = useCodeExecution(code);
+    const { output, run, copy, hasResult, isRunning } = useCodeExecution(code);
 
     // 강사용 코드 전송 훅
     const {
@@ -168,7 +173,7 @@ const CodePanel = () => {
                     <div className={styles.resultHeader}>
                         <div className={styles.flex}>
                             {/* 실행 버튼 */}
-                            <button onClick={run} className={styles.runButton} title="코드 실행">
+                            <button onClick={run} className={styles.runButton} title="코드 실행" disabled={!hasResult}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" />
