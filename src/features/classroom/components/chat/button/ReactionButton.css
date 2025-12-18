@@ -2,7 +2,6 @@
     border: none;
     background: transparent;
     cursor: pointer;
-    padding: var(--spacing-1);
     border-radius: var(--radius-md);
     color: var(--color-border-dark);
     transition: var(--transition-fast);

@@ -15,7 +15,7 @@
     overflow: hidden;
 }
 .deleteButton svg {
-    width: 44%;
+    width: 50%;
 }
 .deleteButton:hover {
     background-color: var(--color-error);

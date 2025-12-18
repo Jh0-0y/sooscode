@@ -32,7 +32,7 @@ export const getEditorOptions = (isReadOnly = false) => ({
     fontSize: 14,
     tabSize: 2,
     scrollBeyondLastLine: false,
-    wordWrap: "on",
+    wordWrap: "off",
     lineDecorationsWidth: 1,
     lineNumbersMinChars: 5,
     automaticLayout: true,

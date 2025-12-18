@@ -273,13 +273,37 @@
     font-size: 0.875rem;
     line-height: 1.8;
     position: relative;
+    text-align: left;
 }
-
 .codeLine {
     display: flex;
-    align-items: center;
-    opacity: 0;
-    animation: typeIn 0.3s ease-out forwards;
+    align-items: flex-start;
+}
+
+.lineNumber {
+    width: 32px;
+    min-width: 32px;
+    text-align: right;
+    padding-right: 8px;
+    color: var(--color-text-tertiary);
+    user-select: none;
+}
+
+.codeText {
+    flex: 1;
+    white-space: pre;
+}
+
+.indent1 .codeText {
+    padding-left: 16px;
+}
+
+.indent2 .codeText {
+    padding-left: 32px;
+}
+
+.indent3 .codeText {
+    padding-left: 48px;
 }
 
 @keyframes typeIn {
@@ -326,7 +350,7 @@
 /* ========== 플로팅 요소 ========== */
 .floatingChat {
     position: absolute;
-    bottom: -20px;
+    bottom: -75px;
     left: -40px;
     display: flex;
     flex-direction: column;
