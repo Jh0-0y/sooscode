@@ -42,7 +42,6 @@ public final class CodeValidator {
         validateEncoding(code);
         validateLength(code);
         validateLineCount(code);
-        validateMainClass(code);
         validateForbiddenSyntax(code);
     }
 
