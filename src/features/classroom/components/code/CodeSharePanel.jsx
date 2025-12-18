@@ -55,12 +55,6 @@ const StudentCodeSharePanel = ({ classId, isConnected }) => {
 
     return (
         <div className={`${styles.relative} ${styles.editorWrapper}`}>
-            {/* 헤더 */}
-            <div className={styles.shareHeader}>
-                <span style={{ fontSize: '12px', opacity: 0.7 }}>
-                    실시간 동기화
-                </span>
-            </div>
 
             {/* 읽기 전용 배지 */}
             <div className={styles.readOnlyBadge}>
@@ -68,7 +62,7 @@ const StudentCodeSharePanel = ({ classId, isConnected }) => {
                     <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
                     <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
-                실시간 동기화
+                읽기 전용
             </div>
 
             <PanelGroup direction="vertical">
@@ -135,7 +129,6 @@ const InstructorCodeSharePanel = ({ classId, isConnected }) => {
         isLoading,
         selectStudent,
         clearSelection,
-        editStudentCode,
     } = useStudentCodeViewer({
         classId,
         isConnected,
@@ -143,7 +136,7 @@ const InstructorCodeSharePanel = ({ classId, isConnected }) => {
     });
 
     // 코드 실행
-    const { output, run, copy } = useCodeExecution(studentCode);
+    const { output, run, copy, hasResult, isRunning } = useCodeExecution(studentCode);
 
     // 사이드바에서 선택한 학생과 동기화
     useEffect(() => {
@@ -154,28 +147,11 @@ const InstructorCodeSharePanel = ({ classId, isConnected }) => {
         }
     }, [selectedStudent?.userId, selectStudent, clearSelection]);
 
-    // 강사가 코드 수정 시 처리
-    const handleCodeChange = (newCode) => {
-        if (!selectedStudent) return;
-        editStudentCode(newCode, studentLanguage);
-    };
-
     // 학생 선택 여부
     const hasSelectedStudent = !!selectedStudent;
-    const isEditable = hasSelectedStudent;
-
-    const options = getEditorOptions(!isEditable);
 
     return (
         <div className={`${styles.relative} ${styles.editorWrapper}`}>
-            {/* 헤더 */}
-            <div className={styles.shareHeader}>
-                {selectedStudent && (
-                    <span style={{ fontSize: '12px', opacity: 0.7 }}>
-                        {selectedStudent.username}의 코드
-                    </span>
-                )}
-            </div>
 
             {/* 선택 안내 메시지 */}
             {!hasSelectedStudent && (
@@ -186,21 +162,15 @@ const InstructorCodeSharePanel = ({ classId, isConnected }) => {
 
             {/* 편집 가능/읽기 전용 배지 */}
             {hasSelectedStudent ? (
-                <div className={styles.editableBadge}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M12 20h9"/>
-                        <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>
-                    </svg>
-                    편집 가능
+                <div className={styles.readOnlyBadge}>
+                    {selectedStudent && (
+                        <span style={{ fontSize: '12px', opacity: 0.7 }}>
+                        {selectedStudent.username}의 코드
+                    </span>
+                    )}
                 </div>
             ) : (
-                <div className={styles.readOnlyBadge}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                    </svg>
-                    학생 선택 필요
-                </div>
+             <div />
             )}
 
             {isLoading && (
@@ -214,14 +184,16 @@ const InstructorCodeSharePanel = ({ classId, isConnected }) => {
                 <Panel defaultSize={70} minSize={30}>
                     <Editor
                         language={studentLanguage}
-                        value={studentCode || (hasSelectedStudent
-                                ? `// ${selectedStudent.username}의 코드를 기다리는 중...`
-                                : '// 왼쪽 사이드바에서 학생을 선택하세요'
-                        )}
-                        onChange={handleCodeChange}
+                        value={
+                            studentCode ||
+                            (hasSelectedStudent
+                                    ? `// ${selectedStudent.username}의 코드를 기다리는 중...`
+                                    : '// 왼쪽 사이드바에서 학생을 선택하세요'
+                            )
+                        }
                         options={{
-                            ...options,
-                            readOnly: !isEditable,
+                            ...getEditorOptions(true),
+                            readOnly: true,
                         }}
                         onMount={handleEditorMount}
                         theme="customTheme"
@@ -239,7 +211,7 @@ const InstructorCodeSharePanel = ({ classId, isConnected }) => {
                     <div className={styles.bottomPane}>
                         <div className={styles.resultHeader}>
                             <div className={styles.flex}>
-                                <button onClick={run} className={styles.runButton}>
+                                <button onClick={run} className={styles.runButton}  disabled={!hasResult}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                          fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" />

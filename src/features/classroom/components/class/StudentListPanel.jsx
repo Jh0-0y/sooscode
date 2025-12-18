@@ -47,9 +47,6 @@ const StudentListPanel = () => {
                                     <div className={styles.participantName}>
                                         {instructor.username}
                                     </div>
-                                    <div className={styles.participantStatus}>
-                                        <span className={styles.onlineBadge}>●</span>
-                                    </div>
                                 </div>
                             </div>
                         ))}
@@ -77,9 +74,6 @@ const StudentListPanel = () => {
                                 <div className={styles.participantInfo}>
                                     <div className={styles.participantName}>
                                         {student.username}
-                                    </div>
-                                    <div className={styles.participantStatus}>
-                                        <span className={styles.onlineBadge}>●</span>
                                     </div>
                                 </div>
                             </div>
