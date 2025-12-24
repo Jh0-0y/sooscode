@@ -16,17 +16,6 @@ export default function FileItem({ file ,classId,lectureDate,isStudent }) {
     });
   }
 
-  // // 기능 추가예정
-  // const handleDownload = () => {
-  //   const baseURL = import.meta.env.VITE_API_URL || "http://localhost:8080";
-  //   const downloadUrl = `${baseURL}/${file.fileUrl}`;
-
-  //   const link = document.createElement("a");
-  //   link.href = downloadUrl;
-  //   link.download = file.fileName;
-  //   link.click();
-  // };
-
   return (
     <div className={styles.item}>
       <div className={styles.left}>

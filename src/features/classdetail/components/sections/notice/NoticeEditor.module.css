@@ -97,7 +97,7 @@
 }
 
 .editorWrapper :global(.ProseMirror ::selection) {
-  background: rgba(59, 130, 246, 0.3); /* blue-500 */
+  background: rgba(59, 130, 246, 0.3);
 }
 
 .toolbar {

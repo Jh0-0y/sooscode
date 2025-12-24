@@ -1,11 +1,9 @@
-/* 전체 스테이지 */
 .stage {
   width: 100%;
   height: 100%;
   position: relative;
 }
 
-/* ===== 강사 화면 ===== */
 .teacherVideoContain {
   width: 100%;
   height: 100%;
@@ -29,7 +27,6 @@
   font-size: 18px;
 }
 
-/* ===== 학생 중앙 화면 ===== */
 .studentMainContain {
   width: 100%;
   height: 70%;
@@ -52,21 +49,14 @@
   color: #aaa;
 }
 
-/* ===== 내 화면 미리보기 ===== */
 .myPreviewWrapper {
   position: absolute;
-
-  /* 오른쪽 위 고정 */
   top: 16px;
   right: 16px;
-
-  /* 반응형 크기 */
   width: clamp(180px, 25vw, 420px);
   aspect-ratio: 16 / 9;
-
   border-radius: 12px;
   overflow: hidden;
-
   background: #000;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   z-index: 10;
@@ -82,18 +72,13 @@
   position: absolute;
   top: 8px;
   right: 8px;
-
   z-index: 2; 
-
   background: rgba(0, 0, 0, 0.45);
   color: #fff;
-
   border: none;
   border-radius: 6px;
   padding: 4px 8px;
-
   font-size: 12px;
   cursor: pointer;
-
   backdrop-filter: blur(6px);
 }

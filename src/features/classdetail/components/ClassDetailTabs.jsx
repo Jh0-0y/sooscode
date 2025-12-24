@@ -13,20 +13,6 @@ export default function ClassDetailTabs({ activeTab, onChange }) {
       >
         강의소개
       </div>
-
-      {/* <div
-        className={`${styles.tab} ${activeTab === "snapshot" ? styles.active : ""}`}
-        onClick={() => onChange("snapshot")}
-      >
-        코드 스냅샷
-      </div> */}
-
-      {/* <div
-        className={`${styles.tab} ${activeTab === "files" ? styles.active : ""}`}
-        onClick={() => onChange("files")}
-      >
-        자료실
-      </div> */}
     </div>
   );
 }

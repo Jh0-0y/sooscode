@@ -28,8 +28,6 @@
   justify-content:center;
 }
 
-
-/* ───────── Left Zone ───────── */
 .left {
   display: flex;
   align-items: center;
@@ -63,7 +61,6 @@
   color: var(--color-text-primary);
 }
 
-/* ───────── Center Zone (Tabs) ───────── */
 .center {
   display: flex;
   gap: 20px;
@@ -82,7 +79,6 @@
   border-bottom: 2px solid #6f80ff;
 }
 
-/* ───────── Right Zone ───────── */
 .right {
   display: flex;
   justify-content: flex-end;
@@ -122,15 +118,15 @@
 
 .practiceBtn {
   padding: var(--spacing-2) var(--spacing-4);
-  background: var(--color-primary-600); /* 메인 파란색 */
+  background: var(--color-primary-600); 
   border: none;
   border-radius: var(--radius-base);
-  color: var(--color-text-inverse); /* 흰색 */
+  color: var(--color-text-inverse);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
   transition: var(--transition-base);
-  box-shadow: 0 0 8px rgba(37, 99, 235, 0.35); /* primary-600 글로우 */
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.35);
 }
 
 .practiceBtn:hover {

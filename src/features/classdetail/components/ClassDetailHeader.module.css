@@ -9,7 +9,6 @@
   color: white;
 }
 
-/* 왼쪽 경로 텍스트 */
 .path {
   color: #7da2f8;
   font-size: 13px;
@@ -17,7 +16,6 @@
   white-space: nowrap;
 }
 
-/* 제목 */
 .title {
   font-size: 15px;
   font-weight: 600;
@@ -27,11 +25,10 @@
   white-space: nowrap;
 }
 
-/* 모바일 반응형 */
 @media (max-width: 500px) {
   .title {
     font-size: 14px;
-    white-space: normal; /* 모바일은 말줄임 대신 자동 줄바꿈 */
+    white-space: normal;
   }
 
   .header {

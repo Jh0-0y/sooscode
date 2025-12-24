@@ -9,7 +9,6 @@ export function runInWorker(payload, timeout = 5000) {
   }
 
   return new Promise((resolve, reject) => {
-    // ⏱ 타임아웃 시작 (여기!)
     const timer = setTimeout(() => {
       worker.terminate();
       worker = null;

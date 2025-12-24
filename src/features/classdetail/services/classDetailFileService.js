@@ -1,9 +1,6 @@
 import { api } from "@/services/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-/* ===========================================================
-   1) 전체 파일 목록 조회 (GET /api/classroom/{classId}/files)
-=========================================================== */
 export const fetchClassFiles = async (classId, page = 0, size = 10) => {
   const res = await api.get(
     `/api/mypage/${classId}/files?page=${page}&size=${size}`
@@ -20,9 +17,6 @@ export const useClassFiles = (classId, page = 0, size = 10) => {
   });
 };
 
-/* ===========================================================
-   2) 특정 날짜 파일 조회 (GET /files/by-date)
-=========================================================== */
 export const fetchFilesByDate = async (classId, lectureDate, page = 0, size = 10) => {
   const res = await api.get(
     `/api/mypage/${classId}/files/by-date?lectureDate=${lectureDate}&page=${page}&size=${size}`
@@ -39,10 +33,6 @@ export const useFilesByDate = (classId, lectureDate, page = 0, size = 10) => {
   });
 };
 
-/* ===========================================================
-   3) 파일 업로드 (POST /files/upload)
-   - Multipart/FormData 방식
-=========================================================== */
 export const uploadFiles = async (formData) => {
   const res = await api.post(`/api/mypage/files/upload`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
@@ -76,10 +66,6 @@ export const useUploadFiles = () => {
   });
 };
 
-/* ===========================================================
-   4) 파일 삭제 (DELETE /files/batch)
-   - JSON Body : { teacherId, classId, fileIds: [] }
-=========================================================== */
 export const deleteFiles = async (body) => {
   const res = await api.delete(`/api/mypage/files/batch`, {
     data: body,
@@ -114,33 +100,3 @@ export const useDeleteFiles = () => {
     },
   });
 };
-
-
-
-/* example usage
-1) get
-const { data: files } = useClassFiles(classId, 0, 10);
-2) get by dates
-const { data: dateFiles } = useFilesByDate(classId, "2025-12-09");
-3) upload
-const uploadMutation = useUploadFiles();
-
-const handleUpload = () => {
-  const formData = new FormData();
-  formData.append("classId", classId);
-  formData.append("lectureDate", "2025-12-09");
-  formData.append("files", fileObj1);
-  formData.append("files", fileObj2);
-
-  uploadMutation.mutate(formData);
-};
-
-4) delete
-const deleteMutation = useDeleteFiles();
-
-deleteMutation.mutate({
-  classId,
-  fileIds: [1, 2, 3],
-});
-
-*/

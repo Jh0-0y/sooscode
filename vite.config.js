@@ -10,6 +10,7 @@ export default defineConfig({
     server: {
         host: true,
         allowedHosts: ["sooscode.kro.kr"],
+        
     },
     plugins: [react()],
     define: {

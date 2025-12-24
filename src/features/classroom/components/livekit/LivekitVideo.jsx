@@ -51,7 +51,7 @@ export default function LivekitVideo() {
         data-lk-theme="default"
         style={{ width: "100%", height: "100%" }}
         options={{
-    autoSubscribe: true, // 🔥 이거 필수
+    autoSubscribe: true,
   }}
       >
         <ClassroomStage isTeacher={isTeacher} />

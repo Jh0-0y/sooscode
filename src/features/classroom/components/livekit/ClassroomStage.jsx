@@ -50,12 +50,6 @@ const isTeacherParticipant = (p) => {
   console.groupEnd();
 }, [room]);
 
-
-
-
-  /* ===============================
-     Track 수집
-  =============================== */
   const tracks = useTracks(
     [
       { source: Track.Source.ScreenShare, withPlaceholder: false },
@@ -79,10 +73,6 @@ const isTeacherParticipant = (p) => {
       !t.participant?.isLocal
   );
 
-  /* ===============================
-     멀티뷰 데이터 (선생님 전용)
-     👉 학생 화면공유도 여기서는 보여야 함
-  =============================== */
   const multiViewParticipants = remoteParticipants.map((p) => {
     const screenShareTrackRef = screenShareTrackRefs.find(
       (t) => t.participant?.identity === p.identity
@@ -121,11 +111,6 @@ if (isScreenSharing) {
     };
   });
 
-  
-
-  /* ===============================
-     Local Track
-  =============================== */
   const myCamera = tracks.find(
     (t) =>
       t.publication?.source === Track.Source.Camera &&
@@ -140,10 +125,6 @@ if (isScreenSharing) {
       t.participant?.isLocal
   );
 
-  /* ===============================
-     Remote Track (기존 로직 유지)
-     👉 멀티뷰에서 사용됨
-  =============================== */
   const remoteScreenShareTracks = tracks.filter(
     (t) =>
       t.publication?.source === Track.Source.ScreenShare &&
@@ -158,10 +139,6 @@ if (isScreenSharing) {
       !!t.publication.track
   );
 
-  /* ===============================
-     학생 화면 전용
-     👉 "선생님 트랙만" 필터링
-  =============================== */
   const teacherScreenShareTracks = tracks.filter(
   (t) =>
     t.publication?.source === Track.Source.ScreenShare &&
@@ -180,9 +157,6 @@ if (isScreenSharing) {
     !!t.publication.track
 );
 
-  /* ===============================
-     전체화면
-  =============================== */
   const toggleFullscreen = async () => {
     const el = document.querySelector(`.${styles.myPreviewWrapper}`);
     if (!el) return;
@@ -212,29 +186,6 @@ if (isScreenSharing) {
   console.groupEnd();
 }, [room]);
 
-  /* ===============================
-     Debug
-  =============================== */
-  // useEffect(() => {
-  //   console.group("🎥 Camera Track Status");
-  //   tracks
-  //     .filter((t) => t.publication?.source === Track.Source.Camera)
-  //     .forEach((t) => {
-  //       const isCameraOn =
-  //         !t.publication.isMuted && !!t.publication.track;
-
-  //       console.log(
-  //         `[${t.participant.isLocal ? "LOCAL" : "REMOTE"}] ${t.participant.identity}`,
-  //         {
-  //           camera: isCameraOn ? "ON" : "OFF",
-  //           muted: t.publication.isMuted,
-  //           hasTrack: !!t.publication.track,
-  //         }
-  //       );
-  //     });
-  //   console.groupEnd();
-  // }, [tracks]);
-
   useEffect(() => {
   tracks.forEach((t) => {
     console.log("🎯 TRACK CHECK", {
@@ -250,12 +201,6 @@ if (isScreenSharing) {
   });
 }, [tracks]);
 
-
-
-
-  /* ===============================
-     Render
-  =============================== */
   return (
     <div className={styles.stage}>
       {isTeacher ? (
@@ -265,10 +210,6 @@ if (isScreenSharing) {
             className={styles.teacherVideoContain}
           />
         ) : isMultiView ? (
-          // <MultiView
-          //   participants={multiViewParticipants}
-          //   onSelectParticipant={setFocusedParticipant}
-          // />
           <MultiView
   participants={multiViewParticipants}
   onSelectParticipant={(trackRef) => {
@@ -293,10 +234,6 @@ if (isScreenSharing) {
         )
       ) : (
         <>
-          {/* ===============================
-              학생 메인 화면
-              👉 선생님 화면만 표시
-          =============================== */}
           {teacherScreenShareTracks.length > 0 ? (
             <VideoTrack
               trackRef={teacherScreenShareTracks[0]}
@@ -313,7 +250,6 @@ if (isScreenSharing) {
             </div>
           )}
 
-          {/* 내 화면 미리보기 */}
           {showMyPreview && (myScreenShare || myCamera) && (
             <div className={styles.myPreviewWrapper}>
               <button

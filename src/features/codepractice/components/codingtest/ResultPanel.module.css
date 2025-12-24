@@ -6,7 +6,6 @@
   border-top: 1px solid var(--color-border-light);
 }
 
-/* 헤더 */
 .resultHeader {
   height: 100%;
   padding: 0 var(--spacing-4);
@@ -21,7 +20,6 @@
   color: var(--color-text-secondary);
 }
 
-/* 결과 영역 */
 .resultBody {
   flex: 1;
   padding: var(--spacing-3);

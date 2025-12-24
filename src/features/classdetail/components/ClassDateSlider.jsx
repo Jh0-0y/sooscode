@@ -44,13 +44,11 @@ export default function ClassDateSlider({ dates, selected, onSelect }) {
       setStartIndex(pageStart);
       onSelect(today);
     }
-  }, []); //  처음 마운트 시 1회
+  }, []); 
   
 
   return (
   <div className={styles.container}>
-
-    {/* 날짜 선택 버튼을 위로 올린다 */}
     <div className={styles.topArea}>
       <button className={styles.pickButton} onClick={() => setOpenPicker(true)}>
         날짜 선택
@@ -72,7 +70,6 @@ export default function ClassDateSlider({ dates, selected, onSelect }) {
       )}
     </div>
 
-    {/* 아래는 기존 슬라이더 디자인 그대로 */}
     <div className={styles.wrapper}>
       <button className={styles.arrow} onClick={goPrev}>
         <FaChevronLeft />

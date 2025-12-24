@@ -14,12 +14,9 @@ export default function DateCarousel({ dates, selected, onSelect }) {
 
   return (
     <div className={styles.wrapper}>
-      {/* 왼쪽 버튼 */}
       <button className={styles.arrow} onClick={scrollLeft}>
         ‹
       </button>
-
-      {/* 날짜 리스트 */}
       <div className={styles.list} ref={scrollRef}>
         {dates.map((d) => (
           <div
@@ -34,8 +31,6 @@ export default function DateCarousel({ dates, selected, onSelect }) {
           </div>
         ))}
       </div>
-
-      {/* 오른쪽 버튼 */}
       <button className={styles.arrow} onClick={scrollRight}>
         ›
       </button>

@@ -17,7 +17,6 @@
     box-shadow 0.2s ease;
 }
 
-/* hover 효과 (transform 제거) */
 .wrapper:hover {
   background: #2a2a2f;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
@@ -29,7 +28,6 @@
   font-weight: 600;
 }
 
-/* picker 정확히 중앙 정렬 */
 .picker {
   position: absolute;
   top: calc(100% + 8px);
@@ -46,7 +44,7 @@
   flex-direction: column;   
   align-items: center;   
 }
-/* 닫기 버튼 */
+
 .closeBtn {
   width: 100%;
   margin-top: 6px;

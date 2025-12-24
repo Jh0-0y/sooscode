@@ -3,10 +3,6 @@
 import { api } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
 
-/**
- * 단일 ClassRoom 정보 조회 API
- * GET /api/classroom/{classId}
- */
 export const fetchClassInfo = async (classId) => {
   const res = await api.get(`/api/mypage/detail/${classId}`);
   return res.data; // ResponseEntity.ok(payload)
@@ -32,7 +28,6 @@ export const uploadClassThumbnail = async (classId, file) => {
     `/api/mypage/classroom/${classId}/thumbnail`,
     formData,
     {
-      // ❗ headers 명시하지 마라 (axios가 자동 설정)
       withCredentials: true,
     }
   );
