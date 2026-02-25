@@ -1,0 +1,39 @@
+.item {
+  background: #2f3035;
+  padding: 14px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.left {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width:100%;
+}
+
+.icon {
+  font-size: 22px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.date {
+  font-size: 13px;
+  color: #a0a0a0;
+  margin-top: 3px;
+}
+
+.deleteBtn{
+  display:flex;
+  margin-left: auto;
+}

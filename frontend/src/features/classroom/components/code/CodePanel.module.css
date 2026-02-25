@@ -1,0 +1,247 @@
+/* common/components/classroom/CodePanel.module.css */
+.container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-2) var(--spacing-4);
+    background-color: var(--color-bg-secondary);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.title {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.editorWrapper {
+    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
+}
+
+.editorWrapperRight {
+    width: 100%;
+}
+
+.editor {
+    width: 100%;
+    height: 100%;
+    font-family: var(--font-family-code);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-primary);
+    resize: none;
+}
+
+.editor.readOnly {
+    background-color: var(--color-bg-secondary);
+    cursor: default;
+}
+
+.bottomPane {
+    width: 100%;
+    height: 100%;
+    padding: var(--spacing-3) var(--spacing-6);
+    box-sizing: border-box;
+    background: var(--color-bg-secondary);
+    border-top: 1px solid var(--color-border-medium);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+}
+
+.bottomPane button {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--color-gray-200);
+    color: var(--color-text-primary);
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    transition: var(--transition-base);
+    box-shadow: var(--shadow-sm);
+}
+
+.bottomPane button:hover {
+    transform: translateY(-2px);
+    background-color: var(--color-gray-300);
+}
+
+.bottomPane button svg {
+    width: 55%;
+}
+
+.runButton {
+    background: var(--color-warning) !important;
+    color: var(--color-text-inverse) !important;
+}
+
+.runButton:hover {
+    background: var(--color-warning) !important;
+    background-color: var(--color-gray-300);
+}
+
+.relative {
+    position: relative;
+    height: 100%;
+}
+
+.resultHeader {
+    position: relative;
+}
+
+.resultHeader:after {
+    display: block;
+    width: calc(100% + 3rem);
+    height: 1px;
+    background-color: var(--color-border-medium);
+    content: "";
+    position: absolute;
+    bottom: -14px;
+    left: -1.5rem;
+}
+
+.resultOutput {
+    flex: 1;
+    overflow: auto;
+    white-space: pre-wrap;
+    font-family: var(--font-family-code);
+    font-size: 13px;
+}
+
+.flex {
+    display: flex;
+    gap: var(--spacing-3);
+}
+
+.indigator {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    background-color: var(--color-bg-secondary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    z-index: 10;
+}
+
+.indigator svg {
+    width: 16px;
+}
+
+.readOnlyBadge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(255, 193, 7, 0.15);
+    border: 1px solid rgba(255, 193, 7, 0.4);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #ffc107;
+    backdrop-filter: blur(8px);
+}
+
+.readOnlyBadge svg {
+    flex-shrink: 0;
+}
+
+.shareHeader {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 10;
+    background: var(--color-bg-secondary);
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.shareHeader h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.shareHeader span {
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+/* 학생 선택 안내 */
+.selectionGuide {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    padding: var(--spacing-4);
+    background: var(--color-bg-tertiary);
+    border: 2px dashed var(--color-border-medium);
+    border-radius: var(--radius-lg);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+    text-align: center;
+    pointer-events: none;
+}
+
+/* 배지 수정 */
+.editableBadge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 6px;
+    color: #22c55e;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.readOnlyBadge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(148, 163, 184, 0.15);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    border-radius: 6px;
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+}

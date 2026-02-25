@@ -1,0 +1,157 @@
+/* 테이블 컨테이너 */
+.tableContainer {
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-base);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+}
+
+/* 데이터 테이블 */
+.dataTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.dataTable thead {
+    background: var(--color-bg-secondary);
+    border-bottom: 2px solid var(--color-border-light);
+}
+
+.dataTable th {
+    padding: var(--spacing-3);
+    text-align: left;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    text-align: center;
+}
+
+.dataTable tbody tr {
+    border-bottom: 1px solid var(--color-border-light);
+    transition: background-color var(--transition-fast);
+}
+
+.dataTable tbody tr:hover:not(.skeletonRow) {
+    background: var(--color-bg-secondary);
+}
+
+.dataTable td {
+    padding: var(--spacing-3);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+    text-align: center;
+}
+
+.clickableRow {
+    cursor: pointer;
+}
+
+/* 셀 스타일 */
+.titleCell {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+.dateCell {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+.typeBadge {
+    display: inline-block;
+    padding: var(--spacing-1) var(--spacing-3);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+}
+
+.typeBadge.online {
+    color: var(--color-text-secondary);
+}
+
+.typeBadge.offline {
+    color: var(--color-text-secondary);
+}
+
+/* 메시지 셀 (에러/빈상태용) */
+.messageCell {
+    padding: 0 !important;
+    height: 400px;
+}
+
+/* 빈 상태 */
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-20) var(--spacing-5);
+    color: var(--color-text-secondary);
+    height: 100%;
+}
+
+.emptyState svg {
+    margin-bottom: var(--spacing-4);
+    opacity: 0.5;
+}
+
+.emptyState p {
+    font-size: var(--font-size-base);
+    margin: 0;
+}
+
+/* 에러 상태 */
+.errorState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-20) var(--spacing-5);
+    color: var(--color-error);
+    height: 100%;
+}
+
+.errorState svg {
+    margin-bottom: var(--spacing-4);
+    opacity: 0.7;
+}
+
+.errorState p {
+    font-size: var(--font-size-base);
+    margin: 0;
+}
+
+/* ========== 스켈레톤 UI ========== */
+.skeletonWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.skeletonRow {
+    pointer-events: none;
+}
+
+.skeleton {
+    height: var(--spacing-4);
+    background: linear-gradient(
+            90deg,
+            var(--color-gray-100) 25%,
+            var(--color-gray-200) 50%,
+            var(--color-gray-100) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-sm);
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}

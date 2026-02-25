@@ -1,0 +1,117 @@
+.profileContainer {
+  width: 100%;
+  max-width: 1200px;
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-md);
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+  margin-top:10px;
+}
+
+/* ===== 상단 배경 ===== */
+.profileBackground {
+  width: 100%;
+  height: 140px;
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-secondary),
+    var(--color-bg-secondary)
+  );
+}
+.imageOverlay {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: var(--radius-full);
+  background: rgba(17, 24, 39, 0.55); /* gray-900 */
+  backdrop-filter: blur(2px);
+
+  opacity: 0;
+  transition: opacity var(--transition-base);
+
+  pointer-events: none;
+}
+
+.overlayText {
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ===== 프로필 이미지 ===== */
+.profileImage {
+  width: 110px;
+  height: 110px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  position: absolute;
+  top: 70px;
+  left: 30px;
+  border: 2px solid var(--color-gray-800);
+  background-color:var(--color-primary-900);
+}
+.profileImage:hover {
+  filter: brightness(0.7);
+  transform: scale(1.02);
+}
+
+/* ===== 정보 섹션 ===== */
+.profileContentSection {
+  padding: 70px 30px 30px;
+  background: var(--color-bg-secondary);
+}
+
+.label {
+  font-size: 13px;
+  color: var(--color-text-primary);
+  margin-bottom: 6px;
+}
+
+.value {
+  display:flex;
+  align-item:center;
+  font-size: 18px;
+  color: var(--color-text-primary);
+}
+
+.nameContainer,
+.emailContainer {
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+
+.nameContent {
+  display: flex;
+  color: var(--color-text-primary);
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.editButton {
+  margin-top: 3px;
+  cursor: pointer;
+  color: var(--color-primary-400);
+  transition: color var(--transition-fast);
+}
+
+.editButton:hover {
+  color: var(--color-primary-500);
+}
+
+
+
+
+
+
+@media (max-width: 480px) {
+  .profileContainer {
+    width: calc(100% - 32px);
+    margin: 16px auto 0;
+  }
+}

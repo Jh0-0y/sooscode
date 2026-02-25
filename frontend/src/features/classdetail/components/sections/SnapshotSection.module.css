@@ -1,0 +1,31 @@
+.detailSnapshotWrapper{
+    display:flex;
+    justify-content:center;
+    flex-direction:column;
+    align-items: center;
+    width:100%;
+}
+
+.mobileDatePicker {
+  display: none;
+}
+
+.detailSnapshotSection{
+    display:flex;
+    width:65%;
+    flex-direction:column;
+}
+
+@media (max-width: 768px) {
+  .slider {
+    display:none;
+  }
+  .detailSnapshotSection{
+    width:100%;
+    height:100vh;
+  }
+  .mobileDatePicker {
+    display: block;
+    margin-bottom: 12px;
+  }
+}

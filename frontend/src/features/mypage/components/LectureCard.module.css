@@ -1,0 +1,149 @@
+.card {
+  width: 100%;
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
+}
+
+/* 썸네일 */
+.thumbnail {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--radius-base);
+  transition:
+    filter var(--transition-base),
+    transform var(--transition-base);
+}
+
+.thumbnailWrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.body {
+  padding: var(--spacing-3);
+}
+
+.title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: 4px;
+  color: var(--color-text-primary);
+}
+
+.teacher {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.buttonBox {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--spacing-3) var(--spacing-3);
+  margin-top: auto;
+}
+
+.buttonWrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* 기본 버튼 */
+.detailButton {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--color-primary-600);
+  border: none;
+  border-radius: var(--radius-base);
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  transition: background var(--transition-fast);
+}
+
+/* 비활성 버튼 */
+.disabledButton {
+  background: var(--color-gray-600);
+  color: var(--color-text-tertiary);
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* 버튼 위 오버레이 */
+.buttonOverlay {
+  position: absolute;
+  inset: 0;
+
+  background: rgba(17, 24, 39, 0.65); /* gray-900 */
+  backdrop-filter: blur(2px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  border-radius: var(--radius-base);
+
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  pointer-events: none;
+}
+
+/* hover 시만 표시 */
+.buttonWrapper:hover .buttonOverlay {
+  opacity: 1;
+}
+
+/* 상태 뱃지 */
+.statusBadge {
+  position: absolute;
+  top: var(--spacing-2);
+  left: var(--spacing-2);
+
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+
+  backdrop-filter: blur(4px);
+  z-index: 5;
+}
+
+/* LIVE */
+.online {
+  background: rgba(239, 68, 68, 0.9); /* error */
+  color: var(--color-text-inverse);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
+}
+
+/* OFFLINE */
+.offline {
+  background: rgba(17, 24, 39, 0.6); /* gray-900 */
+  color: var(--color-text-tertiary);
+}
+
+.period,
+.time{
+  font-size:12px;
+  color: var(--color-text-tertiary);
+}
+
+@media (max-width: 480px) {
+  .detailButton {
+    font-size: var(--font-size-xs);
+    padding: 8px 10px;
+  }
+}

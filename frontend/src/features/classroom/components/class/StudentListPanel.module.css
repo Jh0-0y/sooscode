@@ -1,0 +1,124 @@
+/* StudentListPanel.module.css - Modern Clean */
+
+.participantSection {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: var(--spacing-6);
+}
+
+.participantGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.groupTitle {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-tertiary);
+    margin: 0;
+    padding: 0 var(--spacing-1);
+    letter-spacing: 0.5px;
+}
+
+.studentList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.studentItem {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-3) var(--spacing-4);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-light);
+    transition: all var(--transition-fast);
+}
+
+.studentItem.instructor {
+    background: var(--color-primary-50);
+    border-color: var(--color-primary-200);
+}
+
+.studentItem.clickable {
+    cursor: pointer;
+}
+
+.studentItem.clickable:hover {
+    border-color: var(--color-primary-300);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.studentItem.selected {
+    background: var(--color-primary-100);
+    border-color: var(--color-primary-500);
+    box-shadow: 0 0 0 3px var(--color-primary-100);
+}
+
+.participantInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.participantName {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+.participantStatus {
+    display: flex;
+    align-items: center;
+}
+
+.onlineBadge {
+    width: 8px;
+    height: 8px;
+    background: var(--color-success);
+    border-radius: var(--radius-full);
+    box-shadow: 0 0 0 2px var(--color-bg-secondary);
+}
+
+.offlineBadge {
+    width: 8px;
+    height: 8px;
+    background: var(--color-gray-400);
+    border-radius: var(--radius-full);
+    box-shadow: 0 0 0 2px var(--color-bg-secondary);
+}
+
+.emptyMessage {
+    padding: var(--spacing-8) var(--spacing-4);
+    text-align: center;
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-sm);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--color-border-light);
+}
+
+.totalCount {
+    margin-top: auto;
+    border-top: 1px solid var(--color-border-medium);
+    padding: var(--spacing-4);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-light);
+}
+
+.selectedInfo {
+    margin-top: var(--spacing-2);
+    padding-top: var(--spacing-2);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary-600);
+    font-size: var(--font-size-xs);
+    border-top: 1px solid var(--color-border-light);
+}

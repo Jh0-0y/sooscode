@@ -1,0 +1,332 @@
+.title {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    text-align: center;
+}
+
+.subtitle {
+    font-size: var(--font-size-base);
+    margin-top: var(--spacing-2);
+    margin-bottom: var(--spacing-6);
+    color: var(--color-text-secondary);
+    text-align: center;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+    text-align: left;
+}
+
+.label {
+    display: block;
+    margin-bottom: var(--spacing-1);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+}
+
+.inputWrapper {
+    position: relative;
+}
+
+.inputIcon {
+    position: absolute;
+    left: var(--spacing-3);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-lg);
+}
+
+.input {
+    width: 100%;
+    padding: var(--spacing-4) var(--spacing-4) var(--spacing-4) calc(var(--spacing-10));
+    border-radius: var(--radius-base);
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border-medium);
+    font-size: var(--font-size-base);
+    transition: border-color var(--transition-fast);
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--color-primary-500);
+}
+
+.input::placeholder {
+    color: var(--color-text-tertiary);
+}
+
+.primaryButton {
+    width: 100%;
+    margin-top: var(--spacing-4);
+    padding: var(--spacing-3) 0;
+    background: linear-gradient(
+            90deg,
+            var(--color-primary-500),
+            var(--color-primary-600)
+    );
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-inverse);
+    cursor: pointer;
+    border: none;
+    transition: opacity var(--transition-fast);
+}
+
+.primaryButton:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+.primaryButton:disabled {
+    background: var(--color-gray-400);
+    cursor: not-allowed;
+}
+
+.dividerArea {
+    margin: var(--spacing-6) 0 var(--spacing-5);
+    display: flex;
+    align-items: center;
+}
+
+.line {
+    flex: 1;
+    height: 1px;
+    background: var(--color-border-light);
+}
+
+.orText {
+    padding: 0 var(--spacing-3);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-sm);
+}
+
+/* Google Login 버튼 */
+.googleButton {
+    width: 100%;
+    padding: var(--spacing-3) 0;
+    background: var(--color-gray-50);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    border-radius: var(--radius-base);
+    border: 1px solid var(--color-border-medium);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    transition: background-color var(--transition-fast);
+    box-shadow: var(--shadow-xs);
+}
+
+.googleButton:hover {
+    background: var(--color-gray-100);
+}
+
+/* Footer */
+.footerText {
+    margin-top: var(--spacing-5);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    text-align: center;
+}
+
+.link {
+    position: relative;
+    color: var(--color-primary-500);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+}
+
+/* 밑줄 대신 before로 라인 생성 */
+.link::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px; /* 글자와 살짝 떨어지게 */
+    width: 100%;    /* 기본은 0% */
+    height: 1px;
+    background-color: var(--color-primary-500);
+    opacity: 0np;
+    transition: opacity 0.1s ease-in-out; /* 요청한 0.1초 */
+}
+
+/* hover 시 밑줄 생성 */
+.link:hover::before {
+    opacity: 1;
+}
+
+.fieldError {
+    font-size: var(--font-size-xs);
+    color: var(--color-error);
+    margin-top: var(--spacing-1);
+    line-height: 1.4;
+}
+
+/* Password Strength */
+.strong {
+    font-size: var(--font-size-xs);
+    color: var(--color-success);
+    margin-top: var(--spacing-1);
+}
+
+.medium {
+    font-size: var(--font-size-xs);
+    color: var(--color-warning);
+    margin-top: var(--spacing-1);
+}
+
+.weak {
+    font-size: var(--font-size-xs);
+    color: var(--color-error);
+    margin-top: var(--spacing-1);
+}
+
+.subButton {
+    width: 70px;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-base);
+    background: var(--color-primary-500);
+    color: var(--color-text-inverse);
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color var(--transition-fast), transform 0.1s ease;
+}
+
+.outlineButton {
+    width: 70px;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-base);
+    background: var(--color-bg-primary);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color var(--transition-fast), transform 0.1s ease;
+    border: 1px solid var(--color-primary-600);
+    color: var(--color-primary-600);
+}
+
+
+.subButton:hover:not(:disabled) {
+    background: var(--color-primary-600);
+    transform: translateY(-1px);
+}
+
+.subButton:disabled {
+    background: var(--color-gray-400);
+    cursor: not-allowed;
+}
+.timer {
+    position: absolute;
+    right: 1px;
+    bottom: -1.5rem;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+}
+
+.row {
+    display: flex;
+    gap: 0.5rem;
+}
+.relative {
+    position: relative;
+}
+
+/* 체크박스 wrapper */
+.checkboxWrapper {
+    display: flex;
+    align-items: center;
+    margin-top: var(--spacing-2);
+}
+
+/* 숨겨진 실제 체크박스 */
+.checkbox {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* 커스텀 체크박스 */
+.customCheckbox {
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--color-border-medium);
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: -1px;
+    margin-right: 8px;
+    transition: all 0.2s ease;
+    background-color: var(--color-bg-secondary);
+    cursor: pointer;
+}
+
+/* 체크 상태일 때 */
+.checkbox:checked + .customCheckbox {
+    background-color: var(--color-primary-500);
+    border-color: var(--color-primary-500);
+}
+
+/* 체크 표시 (체크 아이콘 모양) */
+.checkbox:checked + .customCheckbox::after {
+    content: "";
+    position: relative;
+    display: block;
+    left: 4px;
+    top: 0px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* hover */
+.checkbox:hover + .customCheckbox {
+    border-color: var(--color-primary-500);
+}
+
+/* label 스타일 */
+.checkboxLabel {
+    display: flex;
+    align-items: center;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    cursor: pointer;
+}
+
+.errorBox {
+    background: rgba(255, 76, 76, 0.1);
+    border: 1px solid rgba(255, 76, 76, 0.3);
+    padding: var(--spacing-3);
+    border-radius: var(--radius-base);
+    color: var(--color-error);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-2);
+}
+
+.inputError {
+    border-color: var(--color-error) !important;
+    box-shadow: 0 0 0 3px rgba(255, 76, 76, 0.15);
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--color-primary-500);
+    box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.2);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--color-text-primary);
+    -webkit-box-shadow: 0 0 0px 1000px var(--color-bg-secondary) inset;
+    transition: background-color 5000s ease-in-out 0s;
+}

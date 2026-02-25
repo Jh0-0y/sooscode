@@ -1,0 +1,115 @@
+/* src/features/snapshot/styles/SnapshotPanel.module.css */
+
+.container {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-bg-secondary);
+    border-bottom: 1px solid var(--color-border-light);
+    overflow: hidden;
+}
+
+.header {
+    width: 100%;
+    padding: var(--spacing-2);
+    flex-shrink: 0;
+}
+
+.listArea {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: var(--spacing-4);
+}
+
+.emptyMessage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+
+    text-align: center;
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-4);
+}
+
+.resetSearchBtn {
+    margin-top: var(--spacing-1);
+    background: none;
+    border: none;
+
+    color: var(--color-primary-500);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+
+    cursor: pointer;
+    text-decoration: underline;
+
+    transition: color var(--transition-fast);
+}
+
+.resetSearchBtn:hover {
+    color: var(--color-primary-600);
+}
+
+.infoBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: var(--color-bg-tertiary);
+    border-bottom: solid var(--color-border-light);
+
+    flex-shrink: 0;
+}
+
+.infoText {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+}
+
+.viewModeBtn {
+    background: none;
+    border: none;
+
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    padding: var(--spacing-1) var(--spacing-3);
+
+    border-radius: var(--radius-sm);
+
+    color: var(--color-text-secondary);
+
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.viewModeBtn:hover {
+    color: var(--color-text-primary);
+}
+
+.viewModeBtn:active {
+    transform: translateY(1px);
+}
+
+.loadingMessage {
+    padding: var(--spacing-2);
+    text-align: center;
+    font-size: var(--font-size-xs);
+    color: var(--color-primary-500);
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-2);
+}

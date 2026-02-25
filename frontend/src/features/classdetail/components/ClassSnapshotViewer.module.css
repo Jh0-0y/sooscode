@@ -1,0 +1,51 @@
+.container {
+  background: var(--color-gray-50);
+  color: var(--color-text-primary);
+  padding: 16px;
+  border-radius: 10px;
+  width: 100%;
+  font-family: "JetBrains Mono", monospace;
+  font-weight:bold;
+  margin-top:5px;
+  border:2px solid var(--color-border-light);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.filename {
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon {
+  cursor: pointer;
+  opacity: 0.7;
+  transition: 0.15s;
+  font-size: 18px;
+}
+
+.icon:hover {
+  opacity: 1;
+}
+
+.codeBlock {
+  background: var(--color-gray-100);
+  padding: 12px;
+  border-radius: 6px;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+  cursor: pointer;
+}

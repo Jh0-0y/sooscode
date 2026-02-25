@@ -1,0 +1,257 @@
+/* ClassroomFilter.module.css */
+
+.filterContainer {
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-4);
+    margin-bottom: var(--spacing-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+}
+
+/* 상단 행: 날짜/시간 + 액션 버튼 */
+.topRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--spacing-4);
+    flex-wrap: wrap;
+}
+
+.dateTimeFilters {
+    display: flex;
+    gap: var(--spacing-4);
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.filterGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.filterLabel {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    padding-left: var(--spacing-1);
+}
+
+/* 날짜 그룹 */
+.dateGroup {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.dateInput {
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    outline: none;
+    min-width: 140px;
+}
+
+.dateInput:focus {
+    border-color: var(--color-primary-500);
+    background-color: var(--color-bg-primary);
+}
+
+/* 시간 그룹 */
+.timeGroup {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.timeInput {
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    outline: none;
+    min-width: 110px;
+}
+
+.timeInput:focus {
+    border-color: var(--color-primary-500);
+    background-color: var(--color-bg-primary);
+}
+
+.separator {
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-sm);
+}
+
+/* 하단 행: 검색 + 필터 옵션 */
+.bottomRow {
+    display: flex;
+    gap: var(--spacing-3);
+    align-items: center;
+}
+
+/* 검색 박스 */
+.searchBox {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-base);
+    flex: 1;
+}
+
+.searchBox svg {
+    color: var(--color-text-tertiary);
+    flex-shrink: 0;
+}
+
+.searchBox input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    outline: none;
+}
+
+.searchBox input::placeholder {
+    color: var(--color-text-tertiary);
+}
+
+.btnClear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.btnClear:hover {
+    color: var(--color-text-primary);
+}
+
+/* 필터 옵션 */
+.filterOptions {
+    display: flex;
+    gap: var(--spacing-3);
+    align-items: center;
+}
+
+.typeSelect,
+.sortSelect {
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    outline: none;
+    min-width: 120px;
+}
+
+.typeSelect:focus,
+.sortSelect:focus {
+    border-color: var(--color-primary-500);
+    background-color: var(--color-bg-primary);
+}
+
+/* 초기화 버튼 */
+.btnReset {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.btnReset:hover {
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    border-color: var(--color-border-dark);
+}
+
+/* 반응형 */
+@media (max-width: 1200px) {
+    .topRow {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .actionButtons {
+        align-self: flex-end;
+    }
+}
+
+@media (max-width: 768px) {
+    .filterContainer {
+        padding: var(--spacing-3);
+    }
+
+    .topRow {
+        gap: var(--spacing-3);
+    }
+
+    .dateTimeFilters {
+        flex-direction: column;
+        gap: var(--spacing-3);
+    }
+
+    .actionButtons {
+        width: 100%;
+        align-self: stretch;
+    }
+
+    .actionButtons button {
+        flex: 1;
+        justify-content: center;
+    }
+
+    .bottomRow {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .searchBox {
+        max-width: none;
+    }
+
+    .filterOptions {
+        flex-wrap: wrap;
+    }
+
+    .typeSelect,
+    .sortSelect {
+        flex: 1;
+        min-width: 100px;
+    }
+
+    .btnReset {
+        width: 100%;
+        justify-content: center;
+    }
+}

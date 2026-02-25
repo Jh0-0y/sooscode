@@ -1,0 +1,30 @@
+.card {
+  border: 1px solid var(--color-border-light);
+  border-radius: 6px;
+  padding: 8px;
+  background: var(--color-bg-secondary);
+  cursor: pointer;
+}
+
+.card:hover {
+  background: var(--color-bg-hover);
+}
+
+.title {
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.system {
+  font-size: 11px;
+  color: #facc15;
+}
+
+.desc {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}

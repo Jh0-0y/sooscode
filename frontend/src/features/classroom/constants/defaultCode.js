@@ -1,0 +1,1 @@
+const DEFAULT_CODE = '// 코드를 작성하세요';

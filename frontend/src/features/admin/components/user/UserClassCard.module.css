@@ -1,0 +1,239 @@
+/* UserClassCard.module.css */
+
+.card {
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.cardHeader {
+    padding: var(--spacing-4);
+    background-color: var(--color-bg-secondary);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.headerContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cardTitle {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.classCount {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-primary-600);
+    background-color: var(--color-primary-50);
+    padding: 0 var(--spacing-2);
+    border-radius: var(--radius-full);
+}
+
+.cardBody {
+    padding: var(--spacing-5);
+}
+
+.classList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+    max-height: 320px; /* 2개 아이템만 보이도록 조절 */
+    overflow-y: auto;
+}
+
+.classList::-webkit-scrollbar {
+    width: 6px;
+}
+
+.classList::-webkit-scrollbar-track {
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-base);
+}
+
+.classList::-webkit-scrollbar-thumb {
+    background: var(--color-border-medium);
+    border-radius: var(--radius-base);
+}
+
+.classList::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-dark);
+}
+
+.classItem {
+    padding: var(--spacing-4);
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-base);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.classItem:hover {
+    border-color: var(--color-primary-500);
+    background-color: var(--color-bg-secondary);
+}
+
+.classHeader {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+}
+
+.classIconWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: var(--color-primary-50);
+    border-radius: var(--radius-base);
+    color: var(--color-primary-600);
+    flex-shrink: 0;
+}
+
+.classInfo {
+    flex: 1;
+    min-width: 0;
+}
+
+.classTitle {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--spacing-1) 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.classInstructor {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+.classProgress {
+    margin-bottom: var(--spacing-3);
+}
+
+.progressHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-2);
+}
+
+.progressLabel {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-tertiary);
+}
+
+.progressText {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary-600);
+}
+
+.progressBar {
+    height: 6px;
+    background-color: var(--color-bg-tertiary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background-color: var(--color-primary-500);
+    border-radius: var(--radius-full);
+    transition: width var(--transition-base);
+}
+
+.classFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.enrolledInfo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+}
+
+.enrolledInfo svg {
+    color: var(--color-text-tertiary);
+}
+
+.enrolledDate {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+}
+
+.arrowIcon {
+    color: var(--color-text-tertiary);
+    transition: transform var(--transition-fast);
+}
+
+.classItem:hover .arrowIcon {
+    transform: translateX(4px);
+    color: var(--color-primary-600);
+}
+
+/* 빈 상태 */
+.emptyState {
+    text-align: center;
+    padding: var(--spacing-12) var(--spacing-5);
+}
+
+.emptyIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    background-color: var(--color-bg-tertiary);
+    border-radius: var(--radius-full);
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--spacing-4);
+}
+
+.emptyText {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--spacing-1) 0;
+}
+
+.emptySubtext {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    margin: 0;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .classList {
+        max-height: 280px; /* 모바일에서는 조금 더 작게 */
+    }
+
+    .classItem {
+        padding: var(--spacing-3);
+    }
+}

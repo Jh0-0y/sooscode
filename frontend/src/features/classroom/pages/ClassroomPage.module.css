@@ -1,0 +1,55 @@
+.container {
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ============================================
+   토글 버튼 (라이트 모드 기준 밝은 톤으로 전체 교체)
+   ============================================ */
+.toggleBtn {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 299px;
+    width: 24px;
+    height: 120px;
+
+    /* 기존: var(--color-gray-800) → 너무 어두움 */
+    background: var(--color-bg-secondary);
+
+    /* 기존: border-dark → 너무 어두움 */
+    border: 1px solid var(--color-border-medium);
+
+    border-radius: 0 var(--radius-base) var(--radius-base) 0;
+
+    /* 기존: tertiary(회색) → 라이트 모드에 더 어울리는 텍스트 */
+    color: var(--color-text-secondary);
+
+    cursor: pointer;
+    z-index: 95;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: var(--font-size-sm);
+    padding: 0;
+
+    transition:
+            left var(--transition-slow),
+            background var(--transition-base);
+
+    box-shadow: var(--shadow-sm);
+}
+
+/* Hover */
+.toggleBtn:hover {
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+}
+
+/* 접힘 시 버튼 위치 */
+.sidebar.collapsed ~ .toggleBtn {
+    left: -1px;
+    border-left: 1px solid var(--color-border-medium);
+}

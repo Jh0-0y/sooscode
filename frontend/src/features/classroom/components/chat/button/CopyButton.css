@@ -1,0 +1,78 @@
+.copy {
+    /* button */
+    --button-bg: var(--color-gray-800);
+    --button-hover-bg: var(--color-gray-700);
+    --button-text-color: var(--color-gray-300);
+    --button-hover-text-color: var(--color-primary-300);
+    --button-border-radius: 10px;
+    --button-diameter: 40px;
+    --button-outline-width: 1px;
+    --button-outline-color: var(--color-border-dark);
+
+    /* tooltip */
+    --tooltip-bg: var(--color-bg-secondary);
+    --toolptip-border-radius: 4px;
+    --tooltip-font-family: var(--font-family-code);
+    --tooltip-font-size: 12px;
+    --tootip-text-color: var(--color-text-primary);
+    --tooltip-padding-x: 7px;
+    --tooltip-padding-y: 7px;
+    --tooltip-offset: 8px;
+}
+
+.copy {
+    box-sizing: border-box;
+    width: var(--button-diameter);
+    height: var(--button-diameter);
+    border-radius: var(--button-border-radius);
+    background-color: var(--button-bg);
+    color: var(--button-text-color);
+    border: none;
+    cursor: pointer;
+    position: relative;
+    outline: none;
+}
+.copy svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.checkmark {
+    display: none;
+}
+
+/* actions */
+
+.copy:hover .tooltip,
+.copy:focus:not(:focus-visible) .tooltip {
+    opacity: 1;
+    visibility: visible;
+    top: calc((100% + var(--tooltip-offset)) * -1);
+}
+
+.copy:focus:not(:focus-visible) .tooltip::before {
+    content: attr(data-text-end);
+}
+
+.copy:focus:not(:focus-visible) .clipboard {
+    display: none;
+}
+
+.copy:focus:not(:focus-visible) .checkmark {
+    display: block;
+}
+
+.copy:hover,
+.copy:focus {
+    background-color: var(--button-hover-bg);
+}
+
+.copy:active {
+    outline: var(--button-outline-width) solid var(--button-outline-color);
+}
+
+.copy:hover svg {
+    color: var(--button-hover-text-color);
+}

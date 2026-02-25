@@ -1,0 +1,48 @@
+.practicePanel{
+  display:flex;
+  flex-direction:column;
+  border-radius:5px;
+  
+  flex:1;
+  width:100%;
+  margin:5px;
+  margin-left:0px;
+  border-bottom:0px;
+  background-color:var(--color-bg-primary);
+}
+
+.codeContainer {
+  flex: 8;
+  border: 2px solid var(--color-border-light);
+  min-height: 0;      /* flex shrink 허용 */
+  overflow: hidden;   /* Monaco 강제 확장 방지 */
+  
+}
+
+.codeEditor {
+  flex: 1;
+  background: #151515;
+  color: #fff;
+  border: 1px solid #333;
+  border-radius: 5px;
+  padding: 10px;
+  font-family: monospace;
+  font-size: 14px;
+  resize: none;
+  width:100%;
+}
+
+.preview {
+  width: 250px;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.compileContainer{
+  display:flex;
+  flex:2;
+  width:100%;
+  border:2px solid var(--color-gray-900);
+}

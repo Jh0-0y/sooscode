@@ -1,0 +1,61 @@
+/* ===== Admin Classroom Detail Page Styles ===== */
+
+.pageContainer {
+    padding: var(--spacing-6);
+    background-color: var(--color-bg-secondary);
+    min-height: 100%;
+}
+
+.loadingState {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+}
+
+.loadingState p {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+}
+
+.emptyState {
+    text-align: center;
+    padding: var(--spacing-8);
+    color: var(--color-text-secondary);
+}
+
+.emptyState svg {
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--spacing-4);
+}
+
+.emptyState p {
+    font-size: var(--font-size-base);
+    margin: 0 0 var(--spacing-4);
+}
+
+.btnPrimary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-4);
+    background-color: var(--color-primary-600);
+    color: var(--color-text-inverse);
+    border: none;
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.btnPrimary:hover {
+    background-color: var(--color-primary-700);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .pageContainer {
+        padding: var(--spacing-4);
+    }
+}

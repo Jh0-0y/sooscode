@@ -1,0 +1,43 @@
+/* wrapper: 화면 전체, 중앙 정렬 역할 */
+.wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+
+/* gridContainer: 카드들이 들어가는 박스 */
+.gridContainer {
+  display: grid;
+  gap: 20px;
+
+  /* 인프런처럼 중앙 고정되는 너비 */
+  width: 100%;
+  max-width: 1200px; 
+  padding: 20px 0 0;
+  
+}
+
+
+
+/* PC — 4칸 */
+@media (min-width: 1200px) {
+  .gridContainer {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Tablet — 3칸 */
+@media (min-width: 900px) and (max-width: 1199px) {
+  .gridContainer {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Mobile — 최소 2칸 */
+@media (max-width: 899px) {
+  .gridContainer {
+    grid-template-columns: repeat(2, 1fr);
+    margin-left:4%;
+  }
+}
