@@ -1,4 +1,4 @@
-package com.sooscode.sooscode_api.global.websocket.config;
+package com.sooscode.sooscode_api.infra.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
