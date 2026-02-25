@@ -1,0 +1,12 @@
+# Dockerfile.runner
+FROM eclipse-temurin:17-jdk-alpine
+
+RUN addgroup -S sandbox && adduser -S sandbox -G sandbox
+
+WORKDIR /work
+RUN chown -R sandbox:sandbox /work
+
+USER sandbox
+
+CMD ["sh", "-c", "while true; do sleep 3600; done"]
+WORKDIR /tmp/compiler
