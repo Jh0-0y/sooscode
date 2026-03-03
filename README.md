@@ -106,6 +106,8 @@
       <img width="480" alt="강사 브라우저" src="https://github.com/user-attachments/assets/6bd75ad5-a44c-4aef-b068-8ad6f4e2c763" />
       <br/><sub><b>강사 화면</b></sub>
     </td>
+  </tr>
+  <tr style="vertical-align:bottom">
     <td align="center">
       <img width="480" alt="학생 브라우저" src="https://github.com/user-attachments/assets/bda41919-9179-427e-8a32-11646364c9f1" />
       <br/><sub><b>학생 화면</b></sub>
